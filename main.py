@@ -26,3 +26,10 @@ Dylan To Do List;
 
 
 """
+
+import pygame as pg
+
+
+pg.init()
+game_state = '__menu__'
+FPS = 60
