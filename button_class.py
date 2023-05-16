@@ -1,14 +1,12 @@
 # Imports
 import sys
 import pygame
-
-
 pygame.font.init()
 
 
 class Button():
-    def __init__(self, x, y, width, height, buttonText='Button', onclickFunction=None, onePress=False, font = pygame.font.Font('texts\menu_sub.ttf', 40)):
-        
+    def __init__(self, x, y, width, height, buttonText='Button', onclickFunction=None, onePress=False, text = 'texts\menu_sub.ttf'):
+        font = pygame.font.Font(text, 40)
         super().__init__() 
         self.x = x
         self.y = y
