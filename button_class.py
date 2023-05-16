@@ -4,10 +4,11 @@ import pygame
 
 
 pygame.font.init()
-font = pygame.font.Font('slkscr.ttf', 30)
+
 
 class Button():
-    def __init__(self, x, y, width, height, buttonText='Button', onclickFunction=None, onePress=False):
+    def __init__(self, x, y, width, height, buttonText='Button', onclickFunction=None, onePress=False, font = pygame.font.Font('texts\menu_sub.ttf', 40)):
+        
         super().__init__() 
         self.x = x
         self.y = y

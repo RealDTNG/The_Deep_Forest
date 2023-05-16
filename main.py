@@ -40,20 +40,24 @@ WINDOW_HEIGHT = 900
 WINDOW = pg.display.set_mode((WINDOW_WIDTH,WINDOW_HEIGHT), pg.HWSURFACE)
 pg.display.set_caption("Game")
 
-btn_start = Button(30, 300, 300, 100, 'Start')
+def close_program():
+    pg.quit()
+    sys.exit()
+
+btn_exit = Button(30, 300, 300, 100, 'Exit', close_program)
 
 def display():
     WINDOW.fill((255,255,255)) #White background
 
     pg.Surface.blit(WINDOW,img.menu_backdrop,(0,0))
+    btn_exit.process(WINDOW)
    
 
 while True:
     display()
     for event in pg.event.get():
         if event.type == pg.QUIT:
-            pg.quit()
-            sys.exit()
+            close_program()
   
 
     pg.display.update() #update the display
