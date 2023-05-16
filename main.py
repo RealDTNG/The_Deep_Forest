@@ -33,6 +33,8 @@ from button_class import Button
 
 pg.init()
 game_state = '__menu__'
+curent_font = 1
+fonts =
 FPS = 60
 fpsClock = pg.time.Clock()
 WINDOW_WIDTH = 1440
