@@ -82,6 +82,7 @@ start_text = Text((WINDOW_WIDTH/2),350,"Start",70,fonts[current_font],start)
 how_to_play_text = Text((WINDOW_WIDTH/2),450,"How To Play",70,fonts[current_font],how_to_play)
 settings_text = Text((WINDOW_WIDTH/2),550,"Settings",70,fonts[current_font],settings)
 exit_text = Text((WINDOW_WIDTH/2),650,"Exit To Desktop",70,fonts[current_font],close_program)
+return_text = Text(125,60,"Return",70,fonts[current_font],return_to_main)
 
 current_font = 1
 the_font = pg.font.Font(fonts[current_font],140)
@@ -125,9 +126,11 @@ def display():
                 temp_width_htp_text = t.get_width()
                 temp_height_htp_text = t.get_height()
                 WINDOW.blit(t, ((WINDOW_WIDTH/2)-(temp_width_htp_text/2),350+i*60-(temp_height_htp_text/2)))
+            return_text.process(WINDOW,(117, 61, 8),(158, 84, 14),(64, 39, 8))
         elif menu_optn == "settings":
-            pass
-    
+            return_text.process(WINDOW,(117, 61, 8),(158, 84, 14),(64, 39, 8))
+        elif menu_optn == "start":
+            return_text.process(WINDOW,(117, 61, 8),(158, 84, 14),(64, 39, 8))
    
 
 while True:
