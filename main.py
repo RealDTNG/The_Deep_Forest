@@ -38,14 +38,14 @@ fpsClock = pg.time.Clock()
 WINDOW_WIDTH = 1440
 WINDOW_HEIGHT = 900
 WINDOW = pg.display.set_mode((WINDOW_WIDTH,WINDOW_HEIGHT), pg.HWSURFACE)
-pg.display.set_caption("Game")
+pg.display.set_caption("The Deep Forest")
 
 
 game_state = 'menu'
 menu_optn = "main"
-curent_font = 3
+current_font = 1
 fonts = {1:'texts\menu_main.ttf',2:'texts\menu_sec.ttf',3:'texts\extra.ttf'}
-the_font = pg.font.Font(fonts[curent_font],140)
+the_font = pg.font.Font(fonts[current_font],140)
 
 
 #v-------------------Button Functions-------------------v
@@ -75,11 +75,31 @@ def close_program():
 #v-----------------------Buttons------------------------v
 
 game_text = the_font.render("The Deep Forest", True, (133, 69, 9))
-curent_font = 1
-start_text = Text((WINDOW_WIDTH/2),350,"Start",70,fonts[curent_font],start)
-how_to_play_text = Text((WINDOW_WIDTH/2),450,"How To Play",70,fonts[curent_font],how_to_play)
-settings_text = Text((WINDOW_WIDTH/2),550,"Settings",70,fonts[curent_font],settings)
-exit_text = Text((WINDOW_WIDTH/2),650,"Exit To Desktop",70,fonts[curent_font],close_program)
+
+current_font = 2
+
+start_text = Text((WINDOW_WIDTH/2),350,"Start",70,fonts[current_font],start)
+how_to_play_text = Text((WINDOW_WIDTH/2),450,"How To Play",70,fonts[current_font],how_to_play)
+settings_text = Text((WINDOW_WIDTH/2),550,"Settings",70,fonts[current_font],settings)
+exit_text = Text((WINDOW_WIDTH/2),650,"Exit To Desktop",70,fonts[current_font],close_program)
+
+current_font = 1
+the_font = pg.font.Font(fonts[current_font],140)
+htp_title_text = the_font.render("How To Play", True, (117, 61, 8))
+
+current_font = 2
+the_font = pg.font.Font(fonts[current_font],50)
+
+htp_text = []
+
+htp_text.append(the_font.render("Use WASD to move.", True, (117, 61, 8)))
+htp_text.append(the_font.render("Press SPACEBAR to jump.", True, (117, 61, 8)))
+htp_text.append(the_font.render("Press CTRL to crouch.", True, (117, 61, 8)))
+htp_text.append(the_font.render("Move the mouse to aim your weapon.", True, (117, 61, 8)))
+htp_text.append(the_font.render("Use LEFT CLICK to attack with your weapon.", True, (117, 61, 8)))
+htp_text.append(the_font.render("Press SHIFT to run.", True, (117, 61, 8)))
+
+
 
 #^-----------------------Buttons------------------------^
 
@@ -98,7 +118,13 @@ def display():
             settings_text.process(WINDOW,(117, 61, 8),(158, 84, 14),(64, 39, 8))
             exit_text.process(WINDOW,(117, 61, 8),(158, 84, 14),(64, 39, 8))
         elif menu_optn == "htp":
-            pass
+            temp_width2 = htp_title_text.get_width()
+            temp_height2 = htp_title_text.get_height()
+            WINDOW.blit(htp_title_text, ((WINDOW_WIDTH/2)-(temp_width2/2),200-(temp_height2/2)))
+            for i,t in enumerate(htp_text):
+                temp_width_htp_text = t.get_width()
+                temp_height_htp_text = t.get_height()
+                WINDOW.blit(t, ((WINDOW_WIDTH/2)-(temp_width_htp_text/2),350+i*60-(temp_height_htp_text/2)))
         elif menu_optn == "settings":
             pass
     
