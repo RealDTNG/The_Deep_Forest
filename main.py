@@ -54,11 +54,9 @@ def start():
     global game_state, menu_optn
     menu_optn = "start"
 
-
 def how_to_play():
     global menu_optn
     menu_optn = "htp"
-
 
 def settings():
     global menu_optn
@@ -67,7 +65,6 @@ def settings():
 def return_to_main():
     global menu_optn
     menu_optn = "main"
-
 
 def close_program():
     pg.quit()
