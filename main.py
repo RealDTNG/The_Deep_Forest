@@ -27,14 +27,14 @@ Dylan To Do List;
 
 """
 
-import pygame as pg, sys, img, data_fuctions
+import pygame as pg, sys, img, data_functions
 from button_class import Button
 from text_class import Text
 
 
 pg.init()
-data_fuctions
-connection = data_fuctions.create_connection('player_save_data.db')
+data_functions
+connection = data_functions.create_connection('player_save_data.db')
 FPS = 60
 fpsClock = pg.time.Clock()
 WINDOW_WIDTH = 1440
@@ -53,8 +53,14 @@ the_font = pg.font.Font(fonts[current_font],140)
 #v-------------------Button Functions-------------------v
 
 def start():
-    global game_state, menu_optn
+    global game_state, menu_optn, save_datas, current_font, the_font
+    current_font = 2
+    the_font = pg.font.Font(fonts[current_font],50)
+    
     menu_optn = "start"
+    
+    save_datas = data_functions.select_db(connection,"Player_Save_Info").fetchall()
+    htp_text.append(the_font.render("Use WASD to move.", True, (117, 61, 8)))
 
 def how_to_play():
     global menu_optn
