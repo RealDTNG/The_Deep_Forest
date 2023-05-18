@@ -19,12 +19,12 @@ class Player(pygame.sprite.Sprite):
             self.jump = 1
             self.jumpcount = 1
         
-    def move(self,barriers):
+    def move(self,keys,keybinds,barriers):
         self.image = pygame.transform.scale(self.imgld, (self.w, self.h)).convert_alpha()
         keyvalu = {True : 1, False: 0}
         key_input = pygame.key.get_pressed()
         
-        self.movex = int((-0.5*(keyvalu[key_input[pygame.K_LEFT]]+keyvalu[key_input[pygame.K_a]])**2)+(1.5*(keyvalu[key_input[pygame.K_LEFT]]+keyvalu[key_input[pygame.K_a]])))*-2 + ((-0.5*(keyvalu[key_input[pygame.K_RIGHT]]+keyvalu[key_input[pygame.K_d]])**2)+(1.5*(keyvalu[key_input[pygame.K_RIGHT]]+keyvalu[key_input[pygame.K_d]])))*2
+        self.movex = 2*(keyvalu[key_input[keys[keybinds['RIGHT']]]]-keyvalu[key_input[keys[keybinds['LEFT']]]])
         self.rect.x += self.movex
         
         if self.rect.colliderect(b.rect for b in barriers):
@@ -32,7 +32,7 @@ class Player(pygame.sprite.Sprite):
 
         self.movey+=1
 
-        if key_input[pygame.K_SPACE] and self.jump >0:
+        if key_input[keys[keybinds['JUMP']]] and self.jump >0:
             self.movey -= 10
             self.jump -= 1
         
@@ -42,6 +42,9 @@ class Player(pygame.sprite.Sprite):
             if self.rect.colliderect(b.rect):
                 self.y = b.rect.y + self.h
                 self.jump+=self.jumpcount
+
+        if key_input[keys[keybinds['CROUCH']]]:
+            pass
 
     def hit(self,dmg):
         self.hp -= dmg

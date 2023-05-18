@@ -26,11 +26,13 @@ Dylan To Do List;
 
 
 """
+#v---------------------Imports------------------------v
 
 import pygame as pg, sys, img, data_functions
 from button_class import Button
 from text_class import Text
 
+#^---------------------Imports------------------------^
 
 pg.init()
 data_functions
@@ -48,7 +50,15 @@ menu_optn = "main"
 current_font = 1
 fonts = {1:'texts\menu_main.ttf',2:'texts\menu_sec.ttf',3:'texts\extra.ttf'}
 the_font = pg.font.Font(fonts[current_font],140)
-
+keys = {"~":pg.K_BACKQUOTE,1:pg.K_1,2:pg.K_2,3:pg.K_3,4:pg.K_4,5:pg.K_5,6:pg.K_6,7:pg.K_7,8:pg.K_8,9:pg.K_9,0:pg.K_0,
+        "-":pg.K_MINUS,"=":pg.K_EQUALS,"BACKSPACE":pg.K_BACKSPACE,"TAB":pg.K_TAB,"Q":pg.K_q,"W":pg.K_w,"E":pg.K_e,
+        "R":pg.K_r,"T":pg.K_t,"Y":pg.K_y,"U":pg.K_u,"I":pg.K_i,"O":pg.K_o,"P":pg.K_p,"[":pg.K_LEFTBRACKET,"]":pg.K_RIGHTBRACKET,
+        "BACKSLASH":pg.K_BACKSLASH,"CAPS LOCK":pg.K_CAPSLOCK,"A":pg.K_a,"S":pg.K_s,"D":pg.K_d,"F":pg.K_f,"G":pg.K_g,"H":pg.K_h,
+        "J":pg.K_j,"K":pg.K_k,"L":pg.K_l,";":pg.K_SEMICOLON,"'":pg.KSCAN_APOSTROPHE,"LEFT SHIFT":pg.K_LSHIFT,"Z":pg.K_z,"X":pg.K_x,
+        "C":pg.K_c,"V":pg.K_v,"B":pg.K_b,"N":pg.K_n,"M":pg.K_m,",":pg.K_COMMA,".":pg.K_PERIOD,"SLASH":pg.K_SLASH,
+        "RIGHT SHIFT":pg.K_RSHIFT,"LEFT CTRL":pg.K_LCTRL,"LEFT ALT":pg.K_LALT,"SPACE":pg.K_SPACE,"RIGHT ALT":pg.K_RALT,
+        "RIGHT CTRL":pg.K_RCTRL}
+keybinds = {"LEFT":"A","RIGHT":"D","JUMP":"SPACE","CROUCH":"LEFT CTRL","SPRINT":"LEFT SHIFT"}
 
 #v-------------------Button Functions-------------------v
 
@@ -101,14 +111,19 @@ the_font = pg.font.Font(fonts[current_font],50)
 
 htp_text = []
 
-htp_text.append(the_font.render("Use WASD to move.", True, (117, 61, 8)))
-htp_text.append(the_font.render("Press SPACEBAR to jump.", True, (117, 61, 8)))
-htp_text.append(the_font.render("Press CTRL to crouch.", True, (117, 61, 8)))
-htp_text.append(the_font.render("Move the mouse to aim your weapon.", True, (117, 61, 8)))
-htp_text.append(the_font.render("Use LEFT CLICK to attack with your weapon.", True, (117, 61, 8)))
-htp_text.append(the_font.render("Press SHIFT to run.", True, (117, 61, 8)))
+htp_text.append(the_font.render(f"Use {keybinds['LEFT']} to move left and {keybinds['RIGHT']} to move right", True, (117, 61, 8)))
+htp_text.append(the_font.render(f"Press {keybinds['JUMP']} to jump.", True, (117, 61, 8)))
+htp_text.append(the_font.render(f"Press {keybinds['CROUCH']} to crouch.", True, (117, 61, 8)))
+htp_text.append(the_font.render(f"Move the mouse to aim your weapon.", True, (117, 61, 8)))
+htp_text.append(the_font.render(f"Use LEFT CLICK to attack with your weapon.", True, (117, 61, 8)))
+htp_text.append(the_font.render(f"Press {keybinds['SPRINT']} to sprint.", True, (117, 61, 8)))
 
+kb_text =[]
 
+kb_text.append(the_font.render("Left:", True, (117, 61, 8)))
+kb_text.append(the_font.render("Right:", True, (117, 61, 8)))
+kb_text.append(the_font.render("Jump:", True, (117, 61, 8)))
+kb_text.append(the_font.render("Crouch:", True, (117, 61, 8)))
 
 #^-----------------------Buttons------------------------^
 
@@ -136,6 +151,8 @@ def display():
                 WINDOW.blit(t, ((WINDOW_WIDTH/2)-(temp_width_htp_text/2),350+i*60-(temp_height_htp_text/2)))
             return_text.process(WINDOW,(117, 61, 8),(158, 84, 14),(64, 39, 8))
         elif menu_optn == "settings":
+            for i,t in enumerate(kb_text):
+                WINDOW.blit(t, (200,350+i*60))
             return_text.process(WINDOW,(117, 61, 8),(158, 84, 14),(64, 39, 8))
         elif menu_optn == "start":
             return_text.process(WINDOW,(117, 61, 8),(158, 84, 14),(64, 39, 8))
