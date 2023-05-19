@@ -5,7 +5,7 @@ pygame.font.init()
 
 
 class Button():
-    def __init__(self, x, y, width, height, buttonText='Button', onclickFunction=None, onePress=False, text = 'texts\menu_sub.ttf'):
+    def __init__(self, x, y, width, height, buttonText='Button', onclickFunction=None, onePress=False, text = 'texts\menu_sec.ttf'):
         font = pygame.font.Font(text, 40)
         super().__init__() 
         self.x = x
@@ -14,8 +14,6 @@ class Button():
         self.height = height
         self.onclickFunction = onclickFunction
         self.onePress = onePress
-
-
 
         self.buttonSurface = pygame.Surface((self.width, self.height))
         self.buttonRect = pygame.Rect(self.x, self.y, self.width, self.height)

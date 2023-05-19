@@ -63,14 +63,21 @@ keybinds = {"LEFT":"A","RIGHT":"D","JUMP":"SPACE","CROUCH":"LEFT CTRL","SPRINT":
 #v-------------------Button Functions-------------------v
 
 def start():
-    global game_state, menu_optn, save_datas, current_font, the_font
+    global game_state, menu_optn, save_datas, current_font, the_font, save_num, save_hp, save_time
     current_font = 2
     the_font = pg.font.Font(fonts[current_font],50)
     
     menu_optn = "start"
     
+    save_num = []
+    save_time = []
+    save_hp = []
     save_datas = data_functions.select_db(connection,"Player_Save_Info").fetchall()
-    htp_text.append(the_font.render("Use WASD to move.", True, (117, 61, 8)))
+    for id in save_datas:
+            save_num.append(the_font.render(f"Save {id[1]}", True, (0, 0, 0)))
+            save_time.append(the_font.render(f"Play Time: [{id[2]}s]", True, (0, 0, 0)))
+            save_hp.append(the_font.render(f"Current Health: [{id[3]}]", True, (0, 0, 0)))
+        
 
 def how_to_play():
     global menu_optn
@@ -83,6 +90,18 @@ def settings():
 def return_to_main():
     global menu_optn
     menu_optn = "main"
+    
+def select_save1():
+    pass
+def select_save2():
+    pass
+def select_save3():
+    pass
+
+def draw_rect_alpha(surface, color, rect):
+    shape_surf = pg.Surface(pg.Rect(rect).size, pg.SRCALPHA)
+    pg.draw.rect(shape_surf, color, shape_surf.get_rect())
+    surface.blit(shape_surf, rect)
 
 def close_program():
     pg.quit()
@@ -155,7 +174,25 @@ def display():
                 WINDOW.blit(t, (200,350+i*60))
             return_text.process(WINDOW,(117, 61, 8),(158, 84, 14),(64, 39, 8))
         elif menu_optn == "start":
+            mousePos = pg.mouse.get_pos()
+            if  mousePos[0] > 165 and mousePos[0] < 515 and mousePos[1] > 375 and mousePos[1] < 580:
+                draw_rect_alpha(WINDOW, (161, 161, 161, 130), ((WINDOW_WIDTH/4)-20-175, 375, 350, 205))
+            elif  mousePos[0] > 905 and mousePos[0] < 1255 and mousePos[1] > 375 and mousePos[1] < 580:
+                draw_rect_alpha(WINDOW, (161, 161, 161, 130), ((WINDOW_WIDTH/4)+720-175, 375, 350, 205))
+            elif  mousePos[0] > 165 and mousePos[0] < 515 and mousePos[1] > 375 and mousePos[1] < 580:
+                draw_rect_alpha(WINDOW, (161, 161, 161, 130), ((WINDOW_WIDTH/4)-20-175, 375, 350, 205))
+            for i,t in enumerate(save_time):
+                temp_saves_width = t.get_width()
+                WINDOW.blit(t, (((-20+(20*i))+(WINDOW_WIDTH/4)+(WINDOW_WIDTH/4)*i)-(temp_saves_width/2),450))
+            for i,t in enumerate(save_num):
+                temp_saves_width = t.get_width()
+                WINDOW.blit(t, (((-20+(20*i))+(WINDOW_WIDTH/4)+(WINDOW_WIDTH/4)*i)-(temp_saves_width/2),375))
+            for i,t in enumerate(save_hp):
+                temp_saves_width = t.get_width()
+                WINDOW.blit(t, (((-20+(20*i))+(WINDOW_WIDTH/4)+(WINDOW_WIDTH/4)*i)-(temp_saves_width/2),525))
             return_text.process(WINDOW,(117, 61, 8),(158, 84, 14),(64, 39, 8))
+            
+            
    
 
 while True:
