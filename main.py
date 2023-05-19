@@ -48,6 +48,8 @@ pg.display.set_caption("The Deep Forest")
 game_state = 'menu'
 menu_optn = "main"
 current_font = 1
+count = 0
+loading_text = "Loading"
 fonts = {1:'texts\menu_main.ttf',2:'texts\menu_sec.ttf',3:'texts\extra.ttf'}
 the_font = pg.font.Font(fonts[current_font],140)
 keys = {"~":pg.K_BACKQUOTE,1:pg.K_1,2:pg.K_2,3:pg.K_3,4:pg.K_4,5:pg.K_5,6:pg.K_6,7:pg.K_7,8:pg.K_8,9:pg.K_9,0:pg.K_0,
@@ -74,9 +76,9 @@ def start():
     save_hp = []
     save_datas = data_functions.select_db(connection,"Player_Save_Info").fetchall()
     for id in save_datas:
-            save_num.append(the_font.render(f"Save {id[1]}", True, (0, 0, 0)))
-            save_time.append(the_font.render(f"Play Time: [{id[2]}s]", True, (0, 0, 0)))
-            save_hp.append(the_font.render(f"Current Health: [{id[3]}]", True, (0, 0, 0)))
+            save_num.append(the_font.render(f"Save {id[1]}", True, (130, 93, 14)))
+            save_time.append(the_font.render(f"Play Time: [{id[2]}s]", True, (130, 93, 14)))
+            save_hp.append(the_font.render(f"Current Health: [{id[3]}]", True, (130, 93, 14)))
         
 
 def how_to_play():
@@ -90,13 +92,6 @@ def settings():
 def return_to_main():
     global menu_optn
     menu_optn = "main"
-    
-def select_save1():
-    pass
-def select_save2():
-    pass
-def select_save3():
-    pass
 
 def draw_rect_alpha(surface, color, rect):
     shape_surf = pg.Surface(pg.Rect(rect).size, pg.SRCALPHA)
@@ -109,7 +104,6 @@ def close_program():
     
 #^-------------------Button Functions-------------------^
 
-#v-----------------------Buttons------------------------v
 
 game_text = the_font.render("The Deep Forest", True, (133, 69, 9))
 
@@ -144,10 +138,9 @@ kb_text.append(the_font.render("Right:", True, (117, 61, 8)))
 kb_text.append(the_font.render("Jump:", True, (117, 61, 8)))
 kb_text.append(the_font.render("Crouch:", True, (117, 61, 8)))
 
-#^-----------------------Buttons------------------------^
 
 def display():
-    global game_state, menu_optn
+    global game_state, menu_optn, current_save, count, loading_text
     WINDOW.fill((255,255,255)) #White background
 
     if game_state == "menu":
@@ -176,11 +169,29 @@ def display():
         elif menu_optn == "start":
             mousePos = pg.mouse.get_pos()
             if  mousePos[0] > 165 and mousePos[0] < 515 and mousePos[1] > 375 and mousePos[1] < 580:
-                draw_rect_alpha(WINDOW, (161, 161, 161, 130), ((WINDOW_WIDTH/4)-20-175, 375, 350, 205))
+                if pg.mouse.get_pressed(num_buttons=3)[0]:
+                    rec1 = draw_rect_alpha(WINDOW, (161, 161, 161, 160), ((WINDOW_WIDTH/4)-20-175, 375, 350, 205))
+                    current_save = "1"
+                    pg.time.delay(750)
+                    game_state = "playing"
+                else:
+                    rec1 = draw_rect_alpha(WINDOW, (161, 161, 161, 100), ((WINDOW_WIDTH/4)-20-175, 375, 350, 205))
+            elif  mousePos[0] > 545 and mousePos[0] < 895 and mousePos[1] > 375 and mousePos[1] < 580:
+                if pg.mouse.get_pressed(num_buttons=3)[0]:
+                    rec2 = draw_rect_alpha(WINDOW, (161, 161, 161, 160), (545, 375, 350, 205))
+                    current_save = "2"
+                    pg.time.delay(750)
+                    game_state = "playing"
+                else:
+                    rec2 = draw_rect_alpha(WINDOW, (161, 161, 161, 100), (545, 375, 350, 205))
             elif  mousePos[0] > 905 and mousePos[0] < 1255 and mousePos[1] > 375 and mousePos[1] < 580:
-                draw_rect_alpha(WINDOW, (161, 161, 161, 130), ((WINDOW_WIDTH/4)+720-175, 375, 350, 205))
-            elif  mousePos[0] > 165 and mousePos[0] < 515 and mousePos[1] > 375 and mousePos[1] < 580:
-                draw_rect_alpha(WINDOW, (161, 161, 161, 130), ((WINDOW_WIDTH/4)-20-175, 375, 350, 205))
+                if pg.mouse.get_pressed(num_buttons=3)[0]:
+                    rec3 = draw_rect_alpha(WINDOW, (161, 161, 161, 160), (905, 375, 350, 205))
+                    current_save = "3"
+                    pg.time.delay(750)
+                    game_state = "playing"
+                else:
+                    rec3 = draw_rect_alpha(WINDOW, (161, 161, 161, 100), (905, 375, 350, 205))
             for i,t in enumerate(save_time):
                 temp_saves_width = t.get_width()
                 WINDOW.blit(t, (((-20+(20*i))+(WINDOW_WIDTH/4)+(WINDOW_WIDTH/4)*i)-(temp_saves_width/2),450))
@@ -191,7 +202,26 @@ def display():
                 temp_saves_width = t.get_width()
                 WINDOW.blit(t, (((-20+(20*i))+(WINDOW_WIDTH/4)+(WINDOW_WIDTH/4)*i)-(temp_saves_width/2),525))
             return_text.process(WINDOW,(117, 61, 8),(158, 84, 14),(64, 39, 8))
-            
+    elif game_state == "playing":
+        count += 1
+        pg.Surface.blit(WINDOW,img.menu_backdrop,(0,0))
+        if count >= 40:
+            if loading_text == "Loading":
+                loading_text = "Loading."
+            elif loading_text == "Loading.":
+                loading_text = "Loading.."
+            elif loading_text == "Loading..":
+                loading_text = "Loading..."
+            elif loading_text == "Loading...":
+                loading_text = "Loading"
+            count = 0
+        load_text = the_font.render(loading_text,True,(117, 61, 8))
+        load_temp_width = load_text.get_width()
+        current_save_text = the_font.render(f"Save {current_save}", True, (133, 69, 9))
+        save_temp_width = current_save_text.get_width()
+        WINDOW.blit(load_text,((WINDOW_WIDTH/2)-(load_temp_width/2),450))
+        WINDOW.blit(current_save_text,((WINDOW_WIDTH/2)-(save_temp_width/2),300))
+        
             
    
 
