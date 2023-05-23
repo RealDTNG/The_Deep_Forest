@@ -184,14 +184,14 @@ def display():
                     game_state = "playing"
                 else:
                     rec2 = draw_rect_alpha(WINDOW, (161, 161, 161, 100), (545, 375, 350, 205))
-            elif  mousePos[0] > 905 and mousePos[0] < 1255 and mousePos[1] > 375 and mousePos[1] < 580:
+            elif  mousePos[0] > 925 and mousePos[0] < 1275 and mousePos[1] > 375 and mousePos[1] < 580:
                 if pg.mouse.get_pressed(num_buttons=3)[0]:
-                    rec3 = draw_rect_alpha(WINDOW, (161, 161, 161, 160), (905, 375, 350, 205))
+                    rec3 = draw_rect_alpha(WINDOW, (161, 161, 161, 160), (925, 375, 350, 205))
                     current_save = "3"
                     pg.time.delay(750)
                     game_state = "playing"
                 else:
-                    rec3 = draw_rect_alpha(WINDOW, (161, 161, 161, 100), (905, 375, 350, 205))
+                    rec3 = draw_rect_alpha(WINDOW, (161, 161, 161, 100), (925, 375, 350, 205))
             for i,t in enumerate(save_time):
                 temp_saves_width = t.get_width()
                 WINDOW.blit(t, (((-20+(20*i))+(WINDOW_WIDTH/4)+(WINDOW_WIDTH/4)*i)-(temp_saves_width/2),450))
@@ -217,7 +217,7 @@ def display():
             count = 0
         load_text = the_font.render(loading_text,True,(117, 61, 8))
         load_temp_width = load_text.get_width()
-        current_save_text = the_font.render(f"Save {current_save}", True, (133, 69, 9))
+        current_save_text = the_font.render(f"Save {current_save}", True, (117, 61, 8))
         save_temp_width = current_save_text.get_width()
         WINDOW.blit(load_text,((WINDOW_WIDTH/2)-(load_temp_width/2),450))
         WINDOW.blit(current_save_text,((WINDOW_WIDTH/2)-(save_temp_width/2),300))
