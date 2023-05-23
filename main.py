@@ -44,6 +44,7 @@ WINDOW_HEIGHT = 900
 WINDOW = pg.display.set_mode((WINDOW_WIDTH,WINDOW_HEIGHT), pg.HWSURFACE)
 pg.display.set_caption("The Deep Forest")
 
+#v-----------------------Variables-----------------------v
 
 game_state = 'menu'
 menu_optn = "main"
@@ -52,15 +53,19 @@ count = 0
 loading_text = "Loading"
 fonts = {1:'texts\menu_main.ttf',2:'texts\menu_sec.ttf',3:'texts\extra.ttf'}
 the_font = pg.font.Font(fonts[current_font],140)
-keys = {"~":pg.K_BACKQUOTE,1:pg.K_1,2:pg.K_2,3:pg.K_3,4:pg.K_4,5:pg.K_5,6:pg.K_6,7:pg.K_7,8:pg.K_8,9:pg.K_9,0:pg.K_0,
-        "-":pg.K_MINUS,"=":pg.K_EQUALS,"BACKSPACE":pg.K_BACKSPACE,"TAB":pg.K_TAB,"Q":pg.K_q,"W":pg.K_w,"E":pg.K_e,
+keys = {"~":pg.K_BACKQUOTE,"1":pg.K_1,"2":pg.K_2,"3":pg.K_3,"4":pg.K_4,"5":pg.K_5,"6":pg.K_6,"7":pg.K_7,"8":pg.K_8,"9":pg.K_9,
+        "0":pg.K_0,"-":pg.K_MINUS,"=":pg.K_EQUALS,"BACKSPACE":pg.K_BACKSPACE,"TAB":pg.K_TAB,"Q":pg.K_q,"W":pg.K_w,"E":pg.K_e,
         "R":pg.K_r,"T":pg.K_t,"Y":pg.K_y,"U":pg.K_u,"I":pg.K_i,"O":pg.K_o,"P":pg.K_p,"[":pg.K_LEFTBRACKET,"]":pg.K_RIGHTBRACKET,
         "BACKSLASH":pg.K_BACKSLASH,"CAPS LOCK":pg.K_CAPSLOCK,"A":pg.K_a,"S":pg.K_s,"D":pg.K_d,"F":pg.K_f,"G":pg.K_g,"H":pg.K_h,
         "J":pg.K_j,"K":pg.K_k,"L":pg.K_l,";":pg.K_SEMICOLON,"'":pg.KSCAN_APOSTROPHE,"LEFT SHIFT":pg.K_LSHIFT,"Z":pg.K_z,"X":pg.K_x,
         "C":pg.K_c,"V":pg.K_v,"B":pg.K_b,"N":pg.K_n,"M":pg.K_m,",":pg.K_COMMA,".":pg.K_PERIOD,"SLASH":pg.K_SLASH,
         "RIGHT SHIFT":pg.K_RSHIFT,"LEFT CTRL":pg.K_LCTRL,"LEFT ALT":pg.K_LALT,"SPACE":pg.K_SPACE,"RIGHT ALT":pg.K_RALT,
         "RIGHT CTRL":pg.K_RCTRL}
+unkeys = dict([reversed(i) for i in keys.items()])
 keybinds = {"LEFT":"A","RIGHT":"D","JUMP":"SPACE","CROUCH":"LEFT CTRL","SPRINT":"LEFT SHIFT"}
+choosing_key=[False]
+
+#^-----------------------Variables-----------------------^
 
 #v-------------------Button Functions-------------------v
 
@@ -88,7 +93,29 @@ def how_to_play():
 def settings():
     global menu_optn
     menu_optn = "settings"
-    
+
+def key_change_left():
+    global choosing_key
+    left_key_btn.update_text('press new binding')
+    choosing_key=[True,'LEFT',left_key_btn]
+
+def key_change_right():
+    global choosing_key
+    right_key_btn.update_text('press new binding')
+    choosing_key=[True,'RIGHT',right_key_btn]
+
+def key_change_jump():
+    global choosing_key
+    jump_key_btn.update_text('press new binding')
+    choosing_key=[True,'JUMP',jump_key_btn]
+
+def key_change_crouch():
+    global choosing_key
+    crouch_key_btn.update_text('press new binding')
+    choosing_key=[True,'CROUCH',crouch_key_btn]
+
+
+
 def return_to_main():
     global menu_optn
     menu_optn = "main"
@@ -131,6 +158,7 @@ htp_text.append(the_font.render(f"Move the mouse to aim your weapon.", True, (11
 htp_text.append(the_font.render(f"Use LEFT CLICK to attack with your weapon.", True, (117, 61, 8)))
 htp_text.append(the_font.render(f"Press {keybinds['SPRINT']} to sprint.", True, (117, 61, 8)))
 
+
 kb_text =[]
 
 kb_text.append(the_font.render("Left:", True, (117, 61, 8)))
@@ -138,9 +166,13 @@ kb_text.append(the_font.render("Right:", True, (117, 61, 8)))
 kb_text.append(the_font.render("Jump:", True, (117, 61, 8)))
 kb_text.append(the_font.render("Crouch:", True, (117, 61, 8)))
 
+left_key_btn = Text(500,375,keybinds['LEFT'],50,fonts[current_font],key_change_left)
+right_key_btn = Text(500,435,keybinds['RIGHT'],50,fonts[current_font],key_change_right)
+jump_key_btn = Text(500,495,keybinds['JUMP'],50,fonts[current_font],key_change_jump)
+crouch_key_btn = Text(500,555,keybinds['CROUCH'],50,fonts[current_font],key_change_crouch)
 
 def display():
-    global game_state, menu_optn, current_save, count, loading_text
+    global game_state, menu_optn, current_save, count, loading_text,choosing_key
     WINDOW.fill((255,255,255)) #White background
 
     if game_state == "menu":
@@ -162,10 +194,26 @@ def display():
                 temp_height_htp_text = t.get_height()
                 WINDOW.blit(t, ((WINDOW_WIDTH/2)-(temp_width_htp_text/2),350+i*60-(temp_height_htp_text/2)))
             return_text.process(WINDOW,(117, 61, 8),(158, 84, 14),(64, 39, 8))
+        
         elif menu_optn == "settings":
             for i,t in enumerate(kb_text):
                 WINDOW.blit(t, (200,350+i*60))
             return_text.process(WINDOW,(117, 61, 8),(158, 84, 14),(64, 39, 8))
+            
+            
+            left_key_btn.process(WINDOW,(117, 61, 8),(158, 84, 14),(64, 39, 8))
+            right_key_btn.process(WINDOW,(117, 61, 8),(158, 84, 14),(64, 39, 8))
+            jump_key_btn.process(WINDOW,(117, 61, 8),(158, 84, 14),(64, 39, 8))
+            crouch_key_btn.process(WINDOW,(117, 61, 8),(158, 84, 14),(64, 39, 8))
+            if choosing_key[0]:
+                key_input = pg.key.get_pressed()
+                for key in key_input:
+                    if key:
+                        keybinds[choosing_key[1]] = unkeys[key]
+                        choosing_key[2].update_text(keybinds[choosing_key[1]])
+                        choosing_key = [False]
+                        break
+
         elif menu_optn == "start":
             mousePos = pg.mouse.get_pos()
             if  mousePos[0] > 165 and mousePos[0] < 515 and mousePos[1] > 375 and mousePos[1] < 580:
