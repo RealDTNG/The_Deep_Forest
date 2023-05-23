@@ -168,33 +168,59 @@ def display():
             return_text.process(WINDOW,(117, 61, 8),(158, 84, 14),(64, 39, 8))
         elif menu_optn == "start":
             mousePos = pg.mouse.get_pos()
-            if  mousePos[0] > 165 and mousePos[0] < 515 and mousePos[1] > 375 and mousePos[1] < 580:
-                if pg.mouse.get_pressed(num_buttons=3)[0]:
-                    rec1 = draw_rect_alpha(WINDOW, (161, 161, 161, 160), ((WINDOW_WIDTH/4)-20-175, 375, 350, 205))
-                    current_save = "1"
-                    pg.time.delay(750)
-                    game_state = "playing"
-                else:
-                    rec1 = draw_rect_alpha(WINDOW, (161, 161, 161, 100), ((WINDOW_WIDTH/4)-20-175, 375, 350, 205))
-            elif  mousePos[0] > 545 and mousePos[0] < 895 and mousePos[1] > 375 and mousePos[1] < 580:
-                if pg.mouse.get_pressed(num_buttons=3)[0]:
-                    rec2 = draw_rect_alpha(WINDOW, (161, 161, 161, 160), (545, 375, 350, 205))
-                    current_save = "2"
-                    pg.time.delay(750)
-                    game_state = "playing"
-                else:
-                    rec2 = draw_rect_alpha(WINDOW, (161, 161, 161, 100), (545, 375, 350, 205))
-            elif  mousePos[0] > 925 and mousePos[0] < 1275 and mousePos[1] > 375 and mousePos[1] < 580:
-                if pg.mouse.get_pressed(num_buttons=3)[0]:
-                    rec3 = draw_rect_alpha(WINDOW, (161, 161, 161, 160), (925, 375, 350, 205))
-                    current_save = "3"
-                    pg.time.delay(750)
-                    game_state = "playing"
-                else:
-                    rec3 = draw_rect_alpha(WINDOW, (161, 161, 161, 100), (925, 375, 350, 205))
             for i,t in enumerate(save_time):
-                temp_saves_width = t.get_width()
-                WINDOW.blit(t, (((-20+(20*i))+(WINDOW_WIDTH/4)+(WINDOW_WIDTH/4)*i)-(temp_saves_width/2),450))
+                if i == 0:
+                    temp_saves_width1 = t.get_width()
+                    temp_x = ((-20+(20*i))+(WINDOW_WIDTH/4)+(WINDOW_WIDTH/4)*i)
+                    if temp_saves_width1 < 350:
+                        rec1x = 350
+                    else:
+                        rec1x = temp_saves_width1
+                    
+                    if  mousePos[0] > (temp_x-(rec1x/2)) and mousePos[0] < (temp_x + rec1x/2) and mousePos[1] > 375 and mousePos[1] < 580:
+                        if pg.mouse.get_pressed(num_buttons=3)[0]:
+                            rec1 = draw_rect_alpha(WINDOW, (161, 161, 161, 160), (temp_x-(rec1x/2), 375, rec1x, 205))
+                            current_save = "1"
+                            pg.time.delay(750)
+                            game_state = "playing"
+                        else:
+                            rec1 = draw_rect_alpha(WINDOW, (161, 161, 161, 100), (temp_x-(rec1x/2), 375, rec1x, 205))
+                    WINDOW.blit(t, (temp_x-(temp_saves_width1/2),450))
+            for i,t in enumerate(save_time):
+                if i == 1:
+                    temp_saves_width2 = t.get_width()
+                    temp_x = ((-20+(20*i))+(WINDOW_WIDTH/4)+(WINDOW_WIDTH/4)*i)
+                    if temp_saves_width2 < 350:
+                        rec2x = 350
+                    else:
+                        rec2x = temp_saves_width2
+                    if  mousePos[0] > (temp_x-(rec2x/2)) and mousePos[0] < (temp_x + rec2x/2) and mousePos[1] > 375 and mousePos[1] < 580:
+                        if pg.mouse.get_pressed(num_buttons=3)[0]:
+                            rec2 = draw_rect_alpha(WINDOW, (161, 161, 161, 160), (temp_x-(rec2x/2), 375, rec2x, 205))
+                            current_save = "2"
+                            pg.time.delay(750)
+                            game_state = "playing"
+                        else:
+                            rec2 = draw_rect_alpha(WINDOW, (161, 161, 161, 100), (temp_x-(rec2x/2), 375, rec2x, 205))
+                    WINDOW.blit(t, (temp_x-(temp_saves_width2/2),450))
+            for i,t in enumerate(save_time):
+                if i == 2:
+                    temp_saves_width3 = t.get_width()
+                    temp_x = ((-20+(20*i))+(WINDOW_WIDTH/4)+(WINDOW_WIDTH/4)*i)
+                    
+                    if temp_saves_width2 < 350:
+                        rec3x = 350
+                    else:
+                        rec3x = temp_saves_width2
+                    if  mousePos[0] > (temp_x-(rec3x/2)) and mousePos[0] < (temp_x + rec3x/2) and mousePos[1] > 375 and mousePos[1] < 580:
+                        if pg.mouse.get_pressed(num_buttons=3)[0]:
+                            rec3 = draw_rect_alpha(WINDOW, (161, 161, 161, 160), (temp_x-(rec3x/2), 375, rec3x, 205))
+                            current_save = "3"
+                            pg.time.delay(750)
+                            game_state = "playing"
+                        else:
+                            rec3 = draw_rect_alpha(WINDOW, (161, 161, 161, 100), (temp_x-(rec3x/2), 375, rec3x, 205))
+                    WINDOW.blit(t, (temp_x-(temp_saves_width3/2) ,450))
             for i,t in enumerate(save_num):
                 temp_saves_width = t.get_width()
                 WINDOW.blit(t, (((-20+(20*i))+(WINDOW_WIDTH/4)+(WINDOW_WIDTH/4)*i)-(temp_saves_width/2),375))
