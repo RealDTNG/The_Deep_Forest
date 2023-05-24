@@ -31,6 +31,10 @@ Dylan To Do List;
 import pygame as pg, sys, img, data_functions
 from button_class import Button
 from text_class import Text
+from wall_class import Barrier
+from player_class import Player
+from enemy_class import Enemy
+from bullet_class import Bullet
 
 #^---------------------Imports------------------------^
 
@@ -50,6 +54,7 @@ game_state = 'menu'
 menu_optn = "main"
 current_font = 1
 count = 0
+load_time = 0
 loading_text = "Loading"
 fonts = {1:'texts\menu_main.ttf',2:'texts\menu_sec.ttf',3:'texts\extra.ttf'}
 the_font = pg.font.Font(fonts[current_font],140)
@@ -114,7 +119,12 @@ def key_change_crouch():
     crouch_key_btn.update_text('press new binding')
     choosing_key=[True,'CROUCH',crouch_key_btn]
 
-
+def load_game():
+    global wall_group,player_group,enemy_group
+    wall_group = pg.sprite.Group()
+    player_group = pg.sprite.Group()
+    enemy_group = pg.sprite.Group()
+    wall_group.add(Barrier(0,700,1440,200,img.grass))
 
 def return_to_main():
     global menu_optn
@@ -172,7 +182,7 @@ jump_key_btn = Text(500,495,keybinds['JUMP'],50,fonts[current_font],key_change_j
 crouch_key_btn = Text(500,555,keybinds['CROUCH'],50,fonts[current_font],key_change_crouch)
 
 def display():
-    global game_state, menu_optn, current_save, count, loading_text,choosing_key,htp_text
+    global game_state, menu_optn, current_save, count, load_time, loading_text, choosing_key, htp_text, wall_group
     WINDOW.fill((255,255,255)) #White background
 
     if game_state == "menu":
@@ -241,6 +251,7 @@ def display():
                             current_save = "1"
                             pg.time.delay(750)
                             game_state = "playing"
+                            load_game()
                         else:
                             rec1 = draw_rect_alpha(WINDOW, (161, 161, 161, 100), (temp_x-(rec1x/2), 375, rec1x, 205))
                     WINDOW.blit(t, (temp_x-(temp_saves_width1/2),450))
@@ -258,6 +269,7 @@ def display():
                             current_save = "2"
                             pg.time.delay(750)
                             game_state = "playing"
+                            load_game()
                         else:
                             rec2 = draw_rect_alpha(WINDOW, (161, 161, 161, 100), (temp_x-(rec2x/2), 375, rec2x, 205))
                     WINDOW.blit(t, (temp_x-(temp_saves_width2/2),450))
@@ -276,6 +288,7 @@ def display():
                             current_save = "3"
                             pg.time.delay(750)
                             game_state = "playing"
+                            load_game()
                         else:
                             rec3 = draw_rect_alpha(WINDOW, (161, 161, 161, 100), (temp_x-(rec3x/2), 375, rec3x, 205))
                     WINDOW.blit(t, (temp_x-(temp_saves_width3/2) ,450))
@@ -287,24 +300,29 @@ def display():
                 WINDOW.blit(t, (((-20+(20*i))+(WINDOW_WIDTH/4)+(WINDOW_WIDTH/4)*i)-(temp_saves_width/2),525))
             return_text.process(WINDOW,(117, 61, 8),(158, 84, 14),(64, 39, 8))
     elif game_state == "playing":
+        load_time += 1
         count += 1
         pg.Surface.blit(WINDOW,img.menu_backdrop,(0,0))
-        if count >= 40:
-            if loading_text == "Loading":
-                loading_text = "Loading."
-            elif loading_text == "Loading.":
-                loading_text = "Loading.."
-            elif loading_text == "Loading..":
-                loading_text = "Loading..."
-            elif loading_text == "Loading...":
-                loading_text = "Loading"
-            count = 0
-        load_text = the_font.render(loading_text,True,(117, 61, 8))
-        load_temp_width = load_text.get_width()
-        current_save_text = the_font.render(f"Save {current_save}", True, (117, 61, 8))
-        save_temp_width = current_save_text.get_width()
-        WINDOW.blit(load_text,((WINDOW_WIDTH/2)-(load_temp_width/2),450))
-        WINDOW.blit(current_save_text,((WINDOW_WIDTH/2)-(save_temp_width/2),300))
+        if load_time <= 300:
+            if count >= 40:
+                if loading_text == "Loading":
+                    loading_text = "Loading."
+                elif loading_text == "Loading.":
+                    loading_text = "Loading.."
+                elif loading_text == "Loading..":
+                    loading_text = "Loading..."
+                elif loading_text == "Loading...":
+                    loading_text = "Loading"
+                count = 0
+            load_text = the_font.render(loading_text,True,(117, 61, 8))
+            load_temp_width = load_text.get_width()
+            current_save_text = the_font.render(f"Save {current_save}", True, (117, 61, 8))
+            save_temp_width = current_save_text.get_width()
+            WINDOW.blit(load_text,((WINDOW_WIDTH/2)-(load_temp_width/2),450))
+            WINDOW.blit(current_save_text,((WINDOW_WIDTH/2)-(save_temp_width/2),300))
+        else:
+            wall_group.draw(WINDOW)
+
         
             
    
