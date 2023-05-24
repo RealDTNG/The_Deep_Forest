@@ -172,7 +172,7 @@ jump_key_btn = Text(500,495,keybinds['JUMP'],50,fonts[current_font],key_change_j
 crouch_key_btn = Text(500,555,keybinds['CROUCH'],50,fonts[current_font],key_change_crouch)
 
 def display():
-    global game_state, menu_optn, current_save, count, loading_text,choosing_key
+    global game_state, menu_optn, current_save, count, loading_text,choosing_key,htp_text
     WINDOW.fill((255,255,255)) #White background
 
     if game_state == "menu":
@@ -206,13 +206,23 @@ def display():
             jump_key_btn.process(WINDOW,(117, 61, 8),(158, 84, 14),(64, 39, 8))
             crouch_key_btn.process(WINDOW,(117, 61, 8),(158, 84, 14),(64, 39, 8))
             if choosing_key[0]:
-                key_input = pg.key.get_pressed()
-                for key in key_input:
-                    if key:
-                        keybinds[choosing_key[1]] = unkeys[key]
-                        choosing_key[2].update_text(keybinds[choosing_key[1]])
-                        choosing_key = [False]
-                        break
+                for event in pg.event.get():
+                    if event.type == pg.KEYDOWN:
+                        key_name = pg.key.name(event.key)
+                        if key_name.upper() in keys:
+                            keybinds[choosing_key[1]] = key_name.upper()
+                            choosing_key[2].update_text(keybinds[choosing_key[1]])
+                            #v-------------reset htp------------v
+                            htp_text = []
+                            htp_text.append(the_font.render(f"Use {keybinds['LEFT']} to move left and {keybinds['RIGHT']} to move right", True, (117, 61, 8)))
+                            htp_text.append(the_font.render(f"Press {keybinds['JUMP']} to jump.", True, (117, 61, 8)))
+                            htp_text.append(the_font.render(f"Press {keybinds['CROUCH']} to crouch.", True, (117, 61, 8)))
+                            htp_text.append(the_font.render(f"Move the mouse to aim your weapon.", True, (117, 61, 8)))
+                            htp_text.append(the_font.render(f"Use LEFT CLICK to attack with your weapon.", True, (117, 61, 8)))
+                            htp_text.append(the_font.render(f"Press {keybinds['SPRINT']} to sprint.", True, (117, 61, 8)))
+                            #^-------------reset htp------------^
+                            choosing_key = [False]
+                            break
 
         elif menu_optn == "start":
             mousePos = pg.mouse.get_pos()

@@ -27,6 +27,7 @@ class Text(pygame.sprite.Sprite):
         self.alreadyPressed = False
     
     def update_text(self,text):
+        self.text = text
         self.buttonSurf = self.font.render(text,True,(255,255,255))
 
     def process(self,window,none = (255,255,25), hover = (255,255,255), click = (255,255,255)):
