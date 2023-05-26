@@ -424,10 +424,6 @@ def display_play():
                             #^-------------reset htp------------^
                             choosing_key = [False]
                             break
-        else:
-            pass
-            
-
 
 while True:
     if game_state == "playing":
