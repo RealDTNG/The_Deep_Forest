@@ -5,10 +5,10 @@
 
 import time
 import os
-import pygame
-import numpy
-import cv2
-from ffpyplayer.player import MediaPlayer
+import pygame #pip install pygame
+import numpy #pip install numpy
+import cv2 #pip install opencv-python
+from ffpyplayer.player import MediaPlayer #pip install ffpyplayer
 
 
 __version__ = "1.0.0"
