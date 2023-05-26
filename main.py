@@ -129,11 +129,17 @@ def key_change_crouch():
 
 
 def load_game():
-    global wall_group,player_group,enemy_group
+    global wall_group,player_group,enemy_group,player
     wall_group = pg.sprite.Group()
     player_group = pg.sprite.Group()
     enemy_group = pg.sprite.Group()
+    player = Player(100,300,70,100,img.grass,img.grass,5,True)
+    player_group.add(player)
     wall_group.add(Barrier(0,700,1440,200,img.grass))
+    wall_group.add(Barrier(0,0,10,700,img.grass))
+    wall_group.add(Barrier(1430,0,10,700,img.grass))
+    wall_group.add(Barrier(10,200,1420,100,img.grass))
+    
 
 
 def return_to_main():
@@ -354,7 +360,10 @@ def display_play():
         if key_press[pg.K_ESCAPE] and pause_delay >= 40:
             play_pause()
         wall_group.draw(WINDOW)
-        if pause == True:
+        player_group.draw(WINDOW)
+        if not pause:
+            player.move(keys,keybinds,wall_group)
+        else:
             pause_rec = draw_rect_alpha(WINDOW, (0, 0, 0, 190), (0, 0, WINDOW_WIDTH, WINDOW_HEIGHT))
             if menu_optn == "main":
                 current_font = 1

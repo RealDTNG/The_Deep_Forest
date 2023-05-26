@@ -12,36 +12,53 @@ class Player(pygame.sprite.Sprite):
         self.imgdmg = img_dmg
         self.hp = health
         self.movey = 0
+        self.movex = 0
         if double_jump_unlock:
             self.jump = 2
             self.jumpcount = 2
         else:
             self.jump = 1
             self.jumpcount = 1
+        self.jump_CD = 0
         
     def move(self,keys,keybinds,barriers):
         self.image = pygame.transform.scale(self.imgld, (self.w, self.h)).convert_alpha()
         keyvalu = {True : 1, False: 0}
         key_input = pygame.key.get_pressed()
         
-        self.movex = 2*(keyvalu[key_input[keys[keybinds['RIGHT']]]]-keyvalu[key_input[keys[keybinds['LEFT']]]])
-        self.rect.x += self.movex
+        if self.movex >4:
+            self.movex-=1
+        elif self.movex < -4:
+            self.movex+=1
+        elif key_input[keys[keybinds['RIGHT']]] or key_input[keys[keybinds['LEFT']]]:
+            self.movex += 1*(keyvalu[key_input[keys[keybinds['RIGHT']]]]-keyvalu[key_input[keys[keybinds['LEFT']]]])
+            self.rect.x += self.movex
+        else:
+            try:
+                self.movex -= self.movex/abs(self.movex)
+            except:
+                pass
         
-        if self.rect.colliderect(b.rect for b in barriers):
-            self.rect.x -= self.movex
+        for b in barriers:
+            if pygame.sprite.collide_mask(self,b):
+                self.rect.x -= self.movex
 
-        self.movey+=1
+        self.movey += 1
 
-        if key_input[keys[keybinds['JUMP']]] and self.jump >0:
-            self.movey -= 10
+        self.jump_CD -= 1
+        if key_input[keys[keybinds['JUMP']]] and self.jump >0 and self.jump_CD <=0:
+            self.movey = -25
             self.jump -= 1
+            self.jump_CD = 40
         
         self.rect.y += self.movey
         
         for b in barriers:
-            if self.rect.colliderect(b.rect):
-                self.y = b.rect.y + self.h
-                self.jump+=self.jumpcount
+            if pygame.sprite.collide_mask(self,b):
+                self.rect.y = b.rect.y - self.h
+                #self.rect.y -= self.movey
+                self.movey = 0
+                self.jump=self.jumpcount
 
         if key_input[keys[keybinds['CROUCH']]]:
             pass
