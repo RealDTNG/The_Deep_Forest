@@ -27,6 +27,19 @@ def create_table(conn,table, columns):
     conn.execute(sql)
 
 
+def update_keys(conn,table,coll,new_val,curr_val):
+    cur=conn.cursor()
+    com = f"UPDATE {table} SET {coll} = '{new_val}' WHERE {coll} = '{curr_val}'"
+    try:
+        cur.execute(com)
+
+        conn.commit()
+
+    except:
+
+        print('error')
+        conn.rollback()
+
 def select_db(conn,table,columns_and_data=None):
     if not columns_and_data==None:
         col = " AND ".join(columns_and_data)
@@ -61,11 +74,16 @@ def delete_db(conn,table,column,what_to_remove):
     conn.commit()  
     
     
-connection = create_connection('player_save_data.db')
+connection = create_connection('game_data.db')
 create_table(connection,"Player_Save_Info",["Save_Number INTEGER","Play_Time FLOAT", "Player_Hp INTEGER","Player_Max_Hp INTEGER","Player_Dmg_Mult FLOAT","P_Loc_X INTEGER","P_Loc_Y INTEGER","Slash_Unlock BOOLEAN","Sprint_Unlock BOOLEAN","Djump_Unlock BOOLEAN","Shoot_Unlock BOOLEAN"])   
+create_table(connection,"Keybinds", ["LEFT STRING","RIGHT STRING","JUMP STRING","CROUCH STRING","ATTACK STRING","SPRINT STRING"])
 
-#def intitial():
+
+#def save_initial():
 #    insert_db(connection,"Player_Save_Info",["Save_Number","Play_Time", "Player_Hp","Player_Max_Hp","Player_Dmg_Mult","P_Loc_X","P_Loc_Y","Slash_Unlock","Sprint_Unlock","Djump_Unlock","Shoot_Unlock"],[int(1),float(0.00),int(5),int(5),float(0.0),int(0),int(0),bool(False),bool(False),bool(False),bool(False)])
 #    insert_db(connection,"Player_Save_Info",["Save_Number","Play_Time", "Player_Hp","Player_Max_Hp","Player_Dmg_Mult","P_Loc_X","P_Loc_Y","Slash_Unlock","Sprint_Unlock","Djump_Unlock","Shoot_Unlock"],[int(2),float(0.00),int(5),int(5),float(0.0),int(0),int(0),bool(False),bool(False),bool(False),bool(False)])
 #    insert_db(connection,"Player_Save_Info",["Save_Number","Play_Time", "Player_Hp","Player_Max_Hp","Player_Dmg_Mult","P_Loc_X","P_Loc_Y","Slash_Unlock","Sprint_Unlock","Djump_Unlock","Shoot_Unlock"],[int(2),float(0.00),int(5),int(5),float(0.0),int(0),int(0),bool(False),bool(False),bool(False),bool(False)])
-
+#save_initial
+#def keys_initial():
+#    insert_db(connection,"Keybinds",["LEFT","RIGHT","JUMP","CROUCH","ATTACK","SPRINT"],["A","D","SPACE","LEFT CTRL","E","LEFT SHIFT"])
+#keys_initial()

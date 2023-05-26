@@ -28,7 +28,7 @@ Dylan To Do List;
 """
 #v---------------------Imports------------------------v
 
-import pygame as pg, sys, img, data_functions
+import pygame as pg, data_functions as data, sys, Imgs.img as img # pip install pygame
 from button_class import Button
 from text_class import Text
 from wall_class import Barrier
@@ -39,8 +39,8 @@ from bullet_class import Bullet
 #^---------------------Imports------------------------^
 
 pg.init()
-data_functions
-connection = data_functions.create_connection('player_save_data.db')
+data
+connection = data.create_connection('game_data.db')
 FPS = 60
 fpsClock = pg.time.Clock()
 WINDOW_WIDTH = 1440
@@ -69,7 +69,9 @@ keys = {"~":pg.K_BACKQUOTE,"1":pg.K_1,"2":pg.K_2,"3":pg.K_3,"4":pg.K_4,"5":pg.K_
         "RIGHT SHIFT":pg.K_RSHIFT,"LEFT CTRL":pg.K_LCTRL,"LEFT ALT":pg.K_LALT,"SPACE":pg.K_SPACE,"RIGHT ALT":pg.K_RALT,
         "RIGHT CTRL":pg.K_RCTRL}
 unkeys = dict([reversed(i) for i in keys.items()])
-keybinds = {"LEFT":"A","RIGHT":"D","JUMP":"SPACE","CROUCH":"LEFT CTRL","SPRINT":"LEFT SHIFT"}
+saved_keys = data.select_db(connection,"Keybinds").fetchall()
+for id in saved_keys:
+    keybinds = {"LEFT":id[1],"RIGHT":id[2],"JUMP":id[3],"CROUCH":id[4],"SPRINT":id[6],"ATTACK":id[5]}
 choosing_key=[False]
 
 #^-----------------------Variables-----------------------^
@@ -87,7 +89,7 @@ def start():
     save_num = []
     save_time = []
     save_hp = []
-    save_datas = data_functions.select_db(connection,"Player_Save_Info").fetchall()
+    save_datas = data.select_db(connection,"Player_Save_Info").fetchall()
     for id in save_datas:
             save_num.append(the_font.render(f"Save {id[1]}", True, (130, 93, 14)))
             save_time.append(the_font.render(f"Play Time: [{id[2]}s]", True, (130, 93, 14)))
@@ -211,7 +213,7 @@ crouch_key_btn = Text(500,555,keybinds['CROUCH'],50,fonts[current_font],key_chan
 
 
 def display_menu():
-    global WINDOW, game_state, menu_optn, current_save, count, load_time, loading_text, choosing_key, htp_text, wall_group
+    global WINDOW, game_state, menu_optn, current_save, count, load_time, loading_text, choosing_key, htp_text, wall_group, keybinds
     WINDOW.fill((255,255,255)) #White background
 
     pg.Surface.blit(WINDOW,img.menu_backdrop,(0,0))
@@ -243,23 +245,25 @@ def display_menu():
         jump_key_btn.process(WINDOW,(117, 61, 8),(158, 84, 14),(64, 39, 8))
         crouch_key_btn.process(WINDOW,(117, 61, 8),(158, 84, 14),(64, 39, 8))
         if choosing_key[0]:
-            for event in pg.event.get():
-                if event.type == pg.KEYDOWN:
-                    key_name = pg.key.name(event.key)
-                    if key_name.upper() in keys:
-                        keybinds[choosing_key[1]] = key_name.upper()
-                        choosing_key[2].update_text(keybinds[choosing_key[1]])
-                        #v-------------reset htp------------v
-                        htp_text = []
-                        htp_text.append(the_font.render(f"Use {keybinds['LEFT']} to move left and {keybinds['RIGHT']} to move right", True, (117, 61, 8)))
-                        htp_text.append(the_font.render(f"Press {keybinds['JUMP']} to jump.", True, (117, 61, 8)))
-                        htp_text.append(the_font.render(f"Press {keybinds['CROUCH']} to crouch.", True, (117, 61, 8)))
-                        htp_text.append(the_font.render(f"Move the mouse to aim your weapon.", True, (117, 61, 8)))
-                        htp_text.append(the_font.render(f"Use LEFT CLICK to attack with your weapon.", True, (117, 61, 8)))
-                        htp_text.append(the_font.render(f"Press {keybinds['SPRINT']} to sprint.", True, (117, 61, 8)))
-                        #^-------------reset htp------------^
-                        choosing_key = [False]
-                        break
+            for event in pg.event.get(pg.KEYDOWN):
+                key_name = pg.key.name(event.key)
+                if key_name.upper() in keys:
+                    data.update_keys(connection, "Keybinds", choosing_key[1], key_name.upper(), keybinds[choosing_key[1]])
+                    saved_keys = data.select_db(connection,"Keybinds").fetchall()
+                    for id in saved_keys:
+                        keybinds = {"LEFT":id[1],"RIGHT":id[2],"JUMP":id[3],"CROUCH":id[4],"SPRINT":id[6],"ATTACK":id[5]}
+                    choosing_key[2].update_text(keybinds[choosing_key[1]])
+                    #v-------------reset htp------------v
+                    htp_text = []
+                    htp_text.append(the_font.render(f"Use {keybinds['LEFT']} to move left and {keybinds['RIGHT']} to move right", True, (117, 61, 8)))
+                    htp_text.append(the_font.render(f"Press {keybinds['JUMP']} to jump.", True, (117, 61, 8)))
+                    htp_text.append(the_font.render(f"Press {keybinds['CROUCH']} to crouch.", True, (117, 61, 8)))
+                    htp_text.append(the_font.render(f"Move the mouse to aim your weapon.", True, (117, 61, 8)))
+                    htp_text.append(the_font.render(f"Use LEFT CLICK to attack with your weapon.", True, (117, 61, 8)))
+                    htp_text.append(the_font.render(f"Press {keybinds['SPRINT']} to sprint.", True, (117, 61, 8)))
+                    #^-------------reset htp------------^
+                    choosing_key = [False]
+                    break
 
     elif menu_optn == "start":
         mousePos = pg.mouse.get_pos()
@@ -401,23 +405,27 @@ def display_play():
                 jump_key_btn.process(WINDOW,(117, 61, 8),(158, 84, 14),(64, 39, 8))
                 crouch_key_btn.process(WINDOW,(117, 61, 8),(158, 84, 14),(64, 39, 8))
                 if choosing_key[0]:
-                    for event in pg.event.get():
-                        if event.type == pg.KEYDOWN:
-                            key_name = pg.key.name(event.key)
-                            if key_name.upper() in keys:
-                                keybinds[choosing_key[1]] = key_name.upper()
-                                choosing_key[2].update_text(keybinds[choosing_key[1]])
-                                #v-------------reset htp------------v
-                                htp_text = []
-                                htp_text.append(the_font.render(f"Use {keybinds['LEFT']} to move left and {keybinds['RIGHT']} to move right", True, (117, 61, 8)))
-                                htp_text.append(the_font.render(f"Press {keybinds['JUMP']} to jump.", True, (117, 61, 8)))
-                                htp_text.append(the_font.render(f"Press {keybinds['CROUCH']} to crouch.", True, (117, 61, 8)))
-                                htp_text.append(the_font.render(f"Move the mouse to aim your weapon.", True, (117, 61, 8)))
-                                htp_text.append(the_font.render(f"Use LEFT CLICK to attack with your weapon.", True, (117, 61, 8)))
-                                htp_text.append(the_font.render(f"Press {keybinds['SPRINT']} to sprint.", True, (117, 61, 8)))
-                                #^-------------reset htp------------^
-                                choosing_key = [False]
-                                break
+                    for event in pg.event.get(pg.KEYDOWN):
+                        key_name = pg.key.name(event.key)
+                        if key_name.upper() in keys:
+                            data.update_keys(connection, "Keybinds", choosing_key[1], key_name.upper(), keybinds[choosing_key[1]])
+                            saved_keys = data.select_db(connection,"Keybinds").fetchall()
+                            for id in saved_keys:
+                                keybinds = {"LEFT":id[1],"RIGHT":id[2],"JUMP":id[3],"CROUCH":id[4],"SPRINT":id[6],"ATTACK":id[5]}
+                            choosing_key[2].update_text(keybinds[choosing_key[1]])
+                            #v-------------reset htp------------v
+                            htp_text = []
+                            htp_text.append(the_font.render(f"Use {keybinds['LEFT']} to move left and {keybinds['RIGHT']} to move right", True, (117, 61, 8)))
+                            htp_text.append(the_font.render(f"Press {keybinds['JUMP']} to jump.", True, (117, 61, 8)))
+                            htp_text.append(the_font.render(f"Press {keybinds['CROUCH']} to crouch.", True, (117, 61, 8)))
+                            htp_text.append(the_font.render(f"Move the mouse to aim your weapon.", True, (117, 61, 8)))
+                            htp_text.append(the_font.render(f"Use LEFT CLICK to attack with your weapon.", True, (117, 61, 8)))
+                            htp_text.append(the_font.render(f"Press {keybinds['SPRINT']} to sprint.", True, (117, 61, 8)))
+                            #^-------------reset htp------------^
+                            choosing_key = [False]
+                            break
+        else:
+            pass
             
 
 
