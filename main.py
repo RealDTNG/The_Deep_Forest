@@ -35,6 +35,7 @@ from wall_class import Barrier
 from player_class import Player
 from enemy_class import Enemy
 from bullet_class import Bullet
+from sword_class import Sword
 
 #^---------------------Imports------------------------^
 
@@ -141,12 +142,15 @@ def key_change_sprint():
 
 
 def load_game():
-    global wall_group,player_group,enemy_group,player
+    global wall_group,player_group,tool_group,enemy_group,player,sword
     wall_group = pg.sprite.Group()
     player_group = pg.sprite.Group()
+    tool_group = pg.sprite.Group()
     enemy_group = pg.sprite.Group()
     player = Player(100,300,70,100,img.grass,img.grass,5,True)
     player_group.add(player)
+    sword = Sword(player,10,60,img.grass)
+    tool_group.add(sword)
     wall_group.add(Barrier(0,700,1440,200,img.grass))
     wall_group.add(Barrier(0,0,10,700,img.grass))
     wall_group.add(Barrier(1430,0,10,700,img.grass))
@@ -350,7 +354,8 @@ def display_menu():
             
             
 def display_play():
-    global load_time, count, WINDOW, load_text, loading_text, pause, WINDOW_HEIGHT, WINDOW_WIDTH, pause_delay, game_state, menu_optn, save_datas, current_font, the_font, save_num, save_hp, save_time, choosing_key, htp_text, keybinds
+    global load_time, count, WINDOW, load_text, loading_text, pause, WINDOW_HEIGHT, WINDOW_WIDTH, pause_delay, game_state
+    global menu_optn, save_datas, current_font, the_font, save_num, save_hp, save_time, choosing_key, htp_text, keybinds
     WINDOW.fill((255,255,255)) #White background
     key_press = pg.key.get_pressed()
     if load_time <= 300:
@@ -379,8 +384,10 @@ def display_play():
             play_pause()
         wall_group.draw(WINDOW)
         player_group.draw(WINDOW)
+        WINDOW.blit(sword.surf, sword.rect)
         if not pause:
             player.move(keys,keybinds,wall_group)
+            sword.process(player)
         else:
             pause_rec = draw_rect_alpha(WINDOW, (0, 0, 0, 190), (0, 0, WINDOW_WIDTH, WINDOW_HEIGHT))
             if menu_optn == "main":
