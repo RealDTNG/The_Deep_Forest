@@ -129,6 +129,16 @@ def key_change_crouch():
     crouch_key_btn.update_text('press new binding')
     choosing_key=[True,'CROUCH',crouch_key_btn]
 
+def key_change_attack():
+    global choosing_key
+    crouch_key_btn.update_text('press new binding')
+    choosing_key=[True,'ATTACK',attack_key_btn]
+
+def key_change_sprint():
+    global choosing_key
+    crouch_key_btn.update_text('press new binding')
+    choosing_key=[True,'SPRINT',sprint_key_btn]
+
 
 def load_game():
     global wall_group,player_group,enemy_group,player
@@ -140,7 +150,7 @@ def load_game():
     wall_group.add(Barrier(0,700,1440,200,img.grass))
     wall_group.add(Barrier(0,0,10,700,img.grass))
     wall_group.add(Barrier(1430,0,10,700,img.grass))
-    wall_group.add(Barrier(10,200,1420,100,img.grass))
+    wall_group.add(Barrier(10,250,1020,50,img.grass))
     
 
 
@@ -205,11 +215,15 @@ kb_text.append(the_font.render("Left:", True, (117, 61, 8)))
 kb_text.append(the_font.render("Right:", True, (117, 61, 8)))
 kb_text.append(the_font.render("Jump:", True, (117, 61, 8)))
 kb_text.append(the_font.render("Crouch:", True, (117, 61, 8)))
+kb_text.append(the_font.render("Attack:", True, (117, 61, 8)))
+kb_text.append(the_font.render("Sprint:", True, (117, 61, 8)))
 
 left_key_btn = Text(500,375,keybinds['LEFT'],50,fonts[current_font],key_change_left)
 right_key_btn = Text(500,435,keybinds['RIGHT'],50,fonts[current_font],key_change_right)
 jump_key_btn = Text(500,495,keybinds['JUMP'],50,fonts[current_font],key_change_jump)
 crouch_key_btn = Text(500,555,keybinds['CROUCH'],50,fonts[current_font],key_change_crouch)
+attack_key_btn = Text(500,555,keybinds['ATTACK'],50,fonts[current_font],key_change_attack)
+sprint_key_btn = Text(500,555,keybinds['SPRINT'],50,fonts[current_font],key_change_sprint)
 
 
 def display_menu():
