@@ -30,14 +30,12 @@ class Player(pygame.sprite.Sprite):
             self.movex-=1
         elif self.movex < -4:
             self.movex+=1
-        elif key_input[keys[keybinds['RIGHT']]] or key_input[keys[keybinds['LEFT']]]:
+        if key_input[keys[keybinds['RIGHT']]] or key_input[keys[keybinds['LEFT']]]:
             self.movex += 1*(keyvalu[key_input[keys[keybinds['RIGHT']]]]-keyvalu[key_input[keys[keybinds['LEFT']]]])
             self.rect.x += self.movex
         else:
-            try:
+            if self.movex != 0:
                 self.movex -= self.movex/abs(self.movex)
-            except:
-                pass
         
         for b in barriers:
             if pygame.sprite.collide_mask(self,b):
@@ -47,18 +45,20 @@ class Player(pygame.sprite.Sprite):
 
         self.jump_CD -= 1
         if key_input[keys[keybinds['JUMP']]] and self.jump >0 and self.jump_CD <=0:
-            self.movey = -25
+            self.movey = -22
             self.jump -= 1
-            self.jump_CD = 40
+            self.jump_CD = 20
         
         self.rect.y += self.movey
         
         for b in barriers:
             if pygame.sprite.collide_mask(self,b):
-                self.rect.y = b.rect.y - self.h
-                #self.rect.y -= self.movey
+                if self.movey >0:
+                    self.rect.y = b.rect.y - self.h
+                    self.jump=self.jumpcount
+                else:
+                    self.rect.y = b.rect.y + b.rect.height
                 self.movey = 0
-                self.jump=self.jumpcount
 
         if key_input[keys[keybinds['CROUCH']]]:
             pass
