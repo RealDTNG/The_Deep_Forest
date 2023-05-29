@@ -32,11 +32,8 @@ def update_keys(conn,table,coll,new_val,curr_val):
     com = f"UPDATE {table} SET {coll} = '{new_val}' WHERE {coll} = '{curr_val}'"
     try:
         cur.execute(com)
-
         conn.commit()
-
     except:
-
         print('error')
         conn.rollback()
 
