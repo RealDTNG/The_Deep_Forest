@@ -4,25 +4,25 @@ Dawson Hoyle + Dylan Baker
 Start: 5/16/2023     End: N/A
 
 Dawson To Do List;
-    - Start/Menu
-    - Database
-    - Animations
-    - Ability Unlock
-    - Level Design
-    - Game Map
-    - Game Ending
-    - Bug Fixing/ Testing
+    - Start/Menu                >DONE
+    - Database                  >WIP
+    - Animations                >PENDING DYLAN...
+    - Ability Unlock            >
+    - Level Design              >
+    - Game Map                  >
+    - Game Ending               >
+    - Bug Fixing/ Testing       >
     
-Dylan To Do List;
-    - Menu Settings
-    - Resolution
-    - Sprites
-    - Camera
-    - Sound
-    - Test Map
-    - Game Map
-    - Game Ending
-    - Bug Fixing/ Testing
+Dylan To Do List;   
+    - Menu Settings             >DONE
+    - Resolution                >DONE
+    - Sprites                   >PLEASE DO
+    - Camera                    >
+    - Sound                     >
+    - Test Map                  >
+    - Game Map                  >
+    - Game Ending               >
+    - Bug Fixing/ Testing       >
 
 
 """
