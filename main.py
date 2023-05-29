@@ -131,12 +131,12 @@ def key_change_crouch():
 
 def key_change_attack():
     global choosing_key
-    crouch_key_btn.update_text('press new binding')
+    attack_key_btn.update_text('press new binding')
     choosing_key=[True,'ATTACK',attack_key_btn]
 
 def key_change_sprint():
     global choosing_key
-    crouch_key_btn.update_text('press new binding')
+    sprint_key_btn.update_text('press new binding')
     choosing_key=[True,'SPRINT',sprint_key_btn]
 
 
@@ -174,6 +174,40 @@ def play_pause():
     else:
         pause = True
         pause_delay = 0
+
+
+def keybindings():
+    global resume_text, keybinds, WINDOW, choosing_key
+    for i,t in enumerate(kb_text):
+        WINDOW.blit(t, (200,350+i*60))
+    return_text.process(WINDOW,(117, 61, 8),(158, 84, 14),(64, 39, 8))
+        
+    left_key_btn.process(WINDOW,(117, 61, 8),(158, 84, 14),(64, 39, 8))
+    right_key_btn.process(WINDOW,(117, 61, 8),(158, 84, 14),(64, 39, 8))
+    jump_key_btn.process(WINDOW,(117, 61, 8),(158, 84, 14),(64, 39, 8))
+    crouch_key_btn.process(WINDOW,(117, 61, 8),(158, 84, 14),(64, 39, 8))
+    attack_key_btn.process(WINDOW,(117, 61, 8),(158, 84, 14),(64, 39, 8))
+    sprint_key_btn.process(WINDOW,(117, 61, 8),(158, 84, 14),(64, 39, 8))
+    if choosing_key[0]:
+        for event in pg.event.get(pg.KEYDOWN):
+            key_name = pg.key.name(event.key)
+            if key_name.upper() in keys:
+                data.update_keys(connection, "Keybinds", choosing_key[1], key_name.upper(), keybinds[choosing_key[1]])
+                saved_keys = data.select_db(connection,"Keybinds").fetchall()
+                for id in saved_keys:
+                    keybinds = {"LEFT":id[1],"RIGHT":id[2],"JUMP":id[3],"CROUCH":id[4],"SPRINT":id[6],"ATTACK":id[5]}
+                choosing_key[2].update_text(keybinds[choosing_key[1]])
+                #v-------------reset htp------------v
+                htp_text = []
+                htp_text.append(the_font.render(f"Use {keybinds['LEFT']} to move left and {keybinds['RIGHT']} to move right", True, (117, 61, 8)))
+                htp_text.append(the_font.render(f"Press {keybinds['JUMP']} to jump.", True, (117, 61, 8)))
+                htp_text.append(the_font.render(f"Press {keybinds['CROUCH']} to crouch.", True, (117, 61, 8)))
+                htp_text.append(the_font.render(f"Move the mouse to aim your weapon.", True, (117, 61, 8)))
+                htp_text.append(the_font.render(f"Use LEFT CLICK to attack with your weapon.", True, (117, 61, 8)))
+                htp_text.append(the_font.render(f"Press {keybinds['SPRINT']} to sprint.", True, (117, 61, 8)))
+                #^-------------reset htp------------^
+                choosing_key = [False]
+                break
 
 
 def close_program():
@@ -223,8 +257,8 @@ left_key_btn = Text(500,375,keybinds['LEFT'],50,fonts[current_font],key_change_l
 right_key_btn = Text(500,435,keybinds['RIGHT'],50,fonts[current_font],key_change_right)
 jump_key_btn = Text(500,495,keybinds['JUMP'],50,fonts[current_font],key_change_jump)
 crouch_key_btn = Text(500,555,keybinds['CROUCH'],50,fonts[current_font],key_change_crouch)
-attack_key_btn = Text(500,555,keybinds['ATTACK'],50,fonts[current_font],key_change_attack)
-sprint_key_btn = Text(500,555,keybinds['SPRINT'],50,fonts[current_font],key_change_sprint)
+attack_key_btn = Text(500,615,keybinds['ATTACK'],50,fonts[current_font],key_change_attack)
+sprint_key_btn = Text(500,675,keybinds['SPRINT'],50,fonts[current_font],key_change_sprint)
 
 
 def display_menu():
@@ -251,34 +285,7 @@ def display_menu():
         return_text.process(WINDOW,(117, 61, 8),(158, 84, 14),(64, 39, 8))
     
     elif menu_optn == "settings":
-        for i,t in enumerate(kb_text):
-            WINDOW.blit(t, (200,350+i*60))
-        return_text.process(WINDOW,(117, 61, 8),(158, 84, 14),(64, 39, 8))
-        
-        left_key_btn.process(WINDOW,(117, 61, 8),(158, 84, 14),(64, 39, 8))
-        right_key_btn.process(WINDOW,(117, 61, 8),(158, 84, 14),(64, 39, 8))
-        jump_key_btn.process(WINDOW,(117, 61, 8),(158, 84, 14),(64, 39, 8))
-        crouch_key_btn.process(WINDOW,(117, 61, 8),(158, 84, 14),(64, 39, 8))
-        if choosing_key[0]:
-            for event in pg.event.get(pg.KEYDOWN):
-                key_name = pg.key.name(event.key)
-                if key_name.upper() in keys:
-                    data.update_keys(connection, "Keybinds", choosing_key[1], key_name.upper(), keybinds[choosing_key[1]])
-                    saved_keys = data.select_db(connection,"Keybinds").fetchall()
-                    for id in saved_keys:
-                        keybinds = {"LEFT":id[1],"RIGHT":id[2],"JUMP":id[3],"CROUCH":id[4],"SPRINT":id[6],"ATTACK":id[5]}
-                    choosing_key[2].update_text(keybinds[choosing_key[1]])
-                    #v-------------reset htp------------v
-                    htp_text = []
-                    htp_text.append(the_font.render(f"Use {keybinds['LEFT']} to move left and {keybinds['RIGHT']} to move right", True, (117, 61, 8)))
-                    htp_text.append(the_font.render(f"Press {keybinds['JUMP']} to jump.", True, (117, 61, 8)))
-                    htp_text.append(the_font.render(f"Press {keybinds['CROUCH']} to crouch.", True, (117, 61, 8)))
-                    htp_text.append(the_font.render(f"Move the mouse to aim your weapon.", True, (117, 61, 8)))
-                    htp_text.append(the_font.render(f"Use LEFT CLICK to attack with your weapon.", True, (117, 61, 8)))
-                    htp_text.append(the_font.render(f"Press {keybinds['SPRINT']} to sprint.", True, (117, 61, 8)))
-                    #^-------------reset htp------------^
-                    choosing_key = [False]
-                    break
+        keybindings()
 
     elif menu_optn == "start":
         mousePos = pg.mouse.get_pos()
@@ -411,45 +418,18 @@ def display_play():
                 return_text.process(WINDOW,(117, 61, 8),(158, 84, 14),(64, 39, 8))
             
             elif menu_optn == "settings":
-                for i,t in enumerate(kb_text):
-                    WINDOW.blit(t, (200,350+i*60))
-                return_text.process(WINDOW,(117, 61, 8),(158, 84, 14),(64, 39, 8))
-                
-                left_key_btn.process(WINDOW,(117, 61, 8),(158, 84, 14),(64, 39, 8))
-                right_key_btn.process(WINDOW,(117, 61, 8),(158, 84, 14),(64, 39, 8))
-                jump_key_btn.process(WINDOW,(117, 61, 8),(158, 84, 14),(64, 39, 8))
-                crouch_key_btn.process(WINDOW,(117, 61, 8),(158, 84, 14),(64, 39, 8))
-                if choosing_key[0]:
-                    for event in pg.event.get(pg.KEYDOWN):
-                        key_name = pg.key.name(event.key)
-                        if key_name.upper() in keys:
-                            data.update_keys(connection, "Keybinds", choosing_key[1], key_name.upper(), keybinds[choosing_key[1]])
-                            saved_keys = data.select_db(connection,"Keybinds").fetchall()
-                            for id in saved_keys:
-                                keybinds = {"LEFT":id[1],"RIGHT":id[2],"JUMP":id[3],"CROUCH":id[4],"SPRINT":id[6],"ATTACK":id[5]}
-                            choosing_key[2].update_text(keybinds[choosing_key[1]])
-                            #v-------------reset htp------------v
-                            htp_text = []
-                            htp_text.append(the_font.render(f"Use {keybinds['LEFT']} to move left and {keybinds['RIGHT']} to move right", True, (117, 61, 8)))
-                            htp_text.append(the_font.render(f"Press {keybinds['JUMP']} to jump.", True, (117, 61, 8)))
-                            htp_text.append(the_font.render(f"Press {keybinds['CROUCH']} to crouch.", True, (117, 61, 8)))
-                            htp_text.append(the_font.render(f"Move the mouse to aim your weapon.", True, (117, 61, 8)))
-                            htp_text.append(the_font.render(f"Use LEFT CLICK to attack with your weapon.", True, (117, 61, 8)))
-                            htp_text.append(the_font.render(f"Press {keybinds['SPRINT']} to sprint.", True, (117, 61, 8)))
-                            #^-------------reset htp------------^
-                            choosing_key = [False]
-                            break
+                keybindings()
 
 
 while True:
     if game_state == "playing":
-        display_play()
+        display_play()       
     elif game_state == "menu":
         display_menu()
+
     for event in pg.event.get():
         if event.type == pg.QUIT:
             close_program()
-  
 
     pg.display.update() #update the display
     fpsClock.tick(FPS) #speed of redraw
