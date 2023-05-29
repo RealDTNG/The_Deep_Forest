@@ -156,10 +156,11 @@ def draw_rect_alpha(surface, color, rect):
     
 
 def play_pause():
-    global pause_delay, pause
+    global pause_delay, pause, menu_optn
     if pause == True:
         pause = False
         pause_delay = 0
+        menu_optn = "main"
     else:
         pause = True
         pause_delay = 0
@@ -425,12 +426,12 @@ def display_play():
                             choosing_key = [False]
                             break
 
+
 while True:
     if game_state == "playing":
         display_play()
     elif game_state == "menu":
         display_menu()
-    
     for event in pg.event.get():
         if event.type == pg.QUIT:
             close_program()
