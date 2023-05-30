@@ -22,8 +22,8 @@ class Sword(pygame.sprite.Sprite):
         self.rect.x = player.rect.x + player.rect.width
         self.rect.y = player.rect.y + player.rect.height/2
         mousePos = pygame.mouse.get_pos()
-        run = (self.rect.x + mousePos[0])/2  
-        rise = (self.rect.y + mousePos[1])/2
+        run = |self.rect.x - mousePos[0]|
+        rise = |self.rect.y - mousePos[1]|
         if rise != 0:
             self.angle = math.atan(run/rise)
             
