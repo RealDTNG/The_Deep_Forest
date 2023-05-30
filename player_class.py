@@ -13,6 +13,7 @@ class Player(pygame.sprite.Sprite):
         self.hp = health
         self.movey = 0
         self.movex = 0
+        self.happend_once = False
         if double_jump_unlock:
             self.jump = 2
             self.jumpcount = 2
@@ -25,6 +26,7 @@ class Player(pygame.sprite.Sprite):
         self.image = pygame.transform.scale(self.imgld, (self.w, self.h)).convert_alpha()
         keyvalu = {True : 1, False: 0}
         key_input = pygame.key.get_pressed()
+        
         
         if self.movex >4:
             self.movex-=1
@@ -52,12 +54,16 @@ class Player(pygame.sprite.Sprite):
         self.rect.y += self.movey
         
         if key_input[keys[keybinds['CROUCH']]]:
-            self.rect.y += self.h/2
+            if not self.happend_once:
+                self.rect.y += self.h/2
+                self.happend_once = True
             self.image = pygame.transform.scale(self.imgld, (self.w, self.h/2)).convert_alpha()
             self.mask  = pygame.mask.from_surface(self.image)
             x,y = self.rect.x,self.rect.y
             self.rect = self.image.get_rect(topleft=(x,y))
         else:
+            if self.happend_once:
+                self.happend_once = False
             self.image = pygame.transform.scale(self.imgld, (self.w, self.h)).convert_alpha()
             self.mask  = pygame.mask.from_surface(self.image)
             x,y = self.rect.x,self.rect.y
