@@ -387,7 +387,7 @@ def display_play():
     key_press = pg.key.get_pressed()
     if load_time <= 300:
         load_time += 1
-        count += 1  
+        count += 1
         pg.Surface.blit(WINDOW,img.menu_backdrop,(0,0))
         if count >= 40:
             if loading_text == "Loading":

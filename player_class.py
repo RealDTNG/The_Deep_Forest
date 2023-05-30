@@ -51,17 +51,26 @@ class Player(pygame.sprite.Sprite):
         
         self.rect.y += self.movey
         
+        if key_input[keys[keybinds['CROUCH']]]:
+            self.rect.y += self.h/2
+            self.image = pygame.transform.scale(self.imgld, (self.w, self.h/2)).convert_alpha()
+            self.mask  = pygame.mask.from_surface(self.image)
+            x,y = self.rect.x,self.rect.y
+            self.rect = self.image.get_rect(topleft=(x,y))
+        else:
+            self.image = pygame.transform.scale(self.imgld, (self.w, self.h)).convert_alpha()
+            self.mask  = pygame.mask.from_surface(self.image)
+            x,y = self.rect.x,self.rect.y
+            self.rect = self.image.get_rect(topleft=(x,y))
+
         for b in barriers:
             if pygame.sprite.collide_mask(self,b):
                 if self.movey >0:
-                    self.rect.y = b.rect.y - self.h
+                    self.rect.y = b.rect.y - self.rect.h
                     self.jump=self.jumpcount
                 else:
                     self.rect.y = b.rect.y + b.rect.height
                 self.movey = 0
-
-        if key_input[keys[keybinds['CROUCH']]]:
-            pass
 
     def hit(self,dmg):
         self.hp -= dmg
