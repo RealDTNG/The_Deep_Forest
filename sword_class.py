@@ -12,8 +12,7 @@ class Sword(pygame.sprite.Sprite):
         
     def __init__(self,player,width,height,image_load):
             super(Sword, self).__init__()
-            self.og_surf = pygame.transform.smoothscale(image_load.convert(), (width, height))
-            self.surf = self.og_surf
+            self.surf = pygame.transform.smoothscale(image_load.convert(), (width, height))
             self.rect = self.surf.get_rect(center=(player.rect.x, player.rect.y))
             self.angle = 0
             self.change_angle = 0
@@ -23,13 +22,12 @@ class Sword(pygame.sprite.Sprite):
         self.rect.x = player.rect.x + player.rect.width
         self.rect.y = player.rect.y + player.rect.height/2
         mousePos = pygame.mouse.get_pos()
-        run = mousePos[0] - self.rect.x
-        rise = mousePos[1] - self.rect.y
+        run = |self.rect.x - mousePos[0]|
+        rise = |self.rect.y - mousePos[1]|
         if rise != 0:
             self.angle = math.atan(run/rise)
-        self.surf = pygame.transform.rotate(self.og_surf, self.angle)
-        self.angle += self.change_angle
-        self.angle = self.angle % 360
+            
+        self.surf = pygame.transform.rotate(self.surf, self.angle)
         self.rect = self.surf.get_rect(center=self.rect.center)
 
 '''

@@ -18,7 +18,7 @@ class Enemy(pygame.sprite.Sprite):
         self.image = pygame.transform.scale(self.imgld, (self.w, self.h)).convert_alpha()
         
         if ((player.rect.x + player.rect.width/2 - (self.rect.x + self.w))**2 + (player.rect.y + player.rect.height/2 - (self.rect.y + self.h))**2)**(1/2) <= self.agro_range:
-            self.movex = 2(player.rect.x-self.rect.x)/abs(player.rect.x-self.rect.x)
+            self.movex = 2*(player.rect.x-self.rect.x)/abs(player.rect.x-self.rect.x)
         
         self.rect.x += self.movex
 

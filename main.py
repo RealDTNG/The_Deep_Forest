@@ -5,10 +5,10 @@ Start: 5/16/2023     End: N/A
 
 Dawson To Do List;
     - Start/Menu                >DONE
-    - Database                  >WIP
+    - Database                  >EHH
     - Animations                >PENDING DYLAN...
     - Ability Unlock            >
-    - Level Design              >
+    - Level Design              >WIP
     - Game Map                  >
     - Game Ending               >
     - Bug Fixing/ Testing       >
@@ -16,10 +16,9 @@ Dawson To Do List;
 Dylan To Do List;   
     - Menu Settings             >DONE
     - Resolution                >DONE
-    - Sprites                   >PLEASE DO
-    - Camera                    >
+    - Sprites                   >WIP
     - Sound                     >
-    - Test Map                  >
+    - Test Map                  >DONE
     - Game Map                  >
     - Game Ending               >
     - Bug Fixing/ Testing       >
@@ -47,7 +46,7 @@ T1-T2 -- L1-4 - L1-5 _ L1-6 -- L2-4 - L2-5 _ L2-6
 """
 #v---------------------Imports------------------------v
 
-import pygame as pg, data_functions as data, sys, Imgs.img as img # pip install pygame
+import pygame as pg, data_functions as data, sys,  Imgs.img as img # pip install pygame
 from button_class import Button
 from text_class import Text
 from wall_class import Barrier
@@ -55,6 +54,7 @@ from player_class import Player
 from enemy_class import Enemy
 from bullet_class import Bullet
 from sword_class import Sword
+from spritesheet import spritesheet
 
 #^---------------------Imports------------------------^
 
@@ -149,10 +149,12 @@ def key_change_crouch():
     crouch_key_btn.update_text('press new binding')
     choosing_key=[True,'CROUCH',crouch_key_btn]
 
+
 def key_change_attack():
     global choosing_key
     attack_key_btn.update_text('press new binding')
     choosing_key=[True,'ATTACK',attack_key_btn]
+
 
 def key_change_sprint():
     global choosing_key
@@ -175,7 +177,6 @@ def load_game():
     wall_group.add(Barrier(1430,0,10,700,img.grass))
     wall_group.add(Barrier(10,250,1020,50,img.grass))
     
-
 
 def return_to_main():
     global menu_optn
@@ -415,6 +416,10 @@ def display_play():
         if not pause:
             player.move(keys,keybinds,wall_group)
             sword.process(player)
+            #tree_sheet = spritesheet('Imgs\Tree_SpriteSheet_Outlined.png')
+            #tree1 = tree_sheet.image_at((0, 41, 71, 86))
+            #tree1 = pg.transform.scale_by(tree1, 2)
+            #WINDOW.blit(tree1, (700,400))
         else:
             pause_rec = draw_rect_alpha(WINDOW, (0, 0, 0, 190), (0, 0, WINDOW_WIDTH, WINDOW_HEIGHT))
             if menu_optn == "main":
