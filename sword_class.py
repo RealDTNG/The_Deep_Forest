@@ -13,22 +13,45 @@ class Sword(pygame.sprite.Sprite):
     def __init__(self,player,width,height,image_load):
             super(Sword, self).__init__()
             self.surf = pygame.transform.smoothscale(image_load.convert(), (width, height))
-            self.rect = self.surf.get_rect(center=(player.rect.x, player.rect.y))
-            self.angle = 0
+            self.img = image_load.convert_alpha()
+            self.img = pygame.transform.scale(self.img, (width, height))
+            self.angle = 50
             self.change_angle = 0
+            self.w = width
+            self.h = height
 
     # THE MAIN ROTATE FUNCTION
-    def process(self,player):
-        self.rect.x = player.rect.x + player.rect.width
-        self.rect.y = player.rect.y + player.rect.height/2
+    def process(self,player, screen):
+        self.x = player.rect.x + player.rect.width
+        self.y = player.rect.y + player.rect.height/2
         mousePos = pygame.mouse.get_pos()
-        run = |self.rect.x - mousePos[0]|
-        rise = |self.rect.y - mousePos[1]|
-        if rise != 0:
-            self.angle = math.atan(run/rise)
-            
-        self.surf = pygame.transform.rotate(self.surf, self.angle)
-        self.rect = self.surf.get_rect(center=self.rect.center)
+        run = self.x - mousePos[0]
+        rise = self.y - mousePos[1]
+        if run != 0:
+            self.angle = math.atan(rise/run)
+        self.temp_img = self.img
+        self.surf = pygame.transform.rotate(self.temp_img, self.angle)
+        screen.blit(self.surf, (self.x, self.y))
+        
+
+
+    def update(self,player,screen):
+        self.x = player.rect.x + player.rect.width
+        self.y = player.rect.y + player.rect.height/2
+        self.origin=[self.x,self.y]
+        mousePos = pygame.mouse.get_pos()
+        run = self.x - mousePos[0]
+        rise = self.y - mousePos[1]
+        if run != 0:
+            self.angle = -math.degrees(math.atan(rise/run))+90
+        print(self.angle)
+        image_rect = self.img.get_rect(topleft = (self.origin[0] , self.origin[1]))
+        offset_center_to_pivot = pygame.math.Vector2(self.origin) - image_rect.center
+        rotated_offset = offset_center_to_pivot.rotate(-self.angle)
+        rotated_image_center = (self.origin[0] - rotated_offset.x, self.origin[1] - rotated_offset.y)
+        self.image = pygame.transform.rotate(self.img, self.angle)
+        self.rect = self.image.get_rect(center = rotated_image_center)
+        screen.blit(self.image, self.rect)
 
 '''
     # Move for keypresses

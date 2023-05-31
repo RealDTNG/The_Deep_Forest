@@ -412,10 +412,9 @@ def display_play():
             play_pause()
         wall_group.draw(WINDOW)
         player_group.draw(WINDOW)
-        WINDOW.blit(sword.surf, sword.rect)
         if not pause:
             player.move(keys,keybinds,wall_group)
-            sword.process(player)
+            sword.update(player,WINDOW)
             #tree_sheet = spritesheet('Imgs\Tree_SpriteSheet_Outlined.png')
             #tree1 = tree_sheet.image_at((0, 41, 71, 86))
             #tree1 = pg.transform.scale_by(tree1, 2)
@@ -454,7 +453,7 @@ def display_play():
 
 while True:
     if game_state == "playing":
-        display_play()       
+        display_play()   
     elif game_state == "menu":
         display_menu()
 
