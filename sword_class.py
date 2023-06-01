@@ -20,7 +20,7 @@ class Sword(pygame.sprite.Sprite):
             self.w = width
             self.h = height
 
-    def update(self,player,screen):
+    def update(self,player):
         mousePos = pygame.mouse.get_pos()
         if mousePos[0] > player.rect.x + player.rect.width: 
             self.x = player.rect.x + player.rect.width
@@ -35,14 +35,20 @@ class Sword(pygame.sprite.Sprite):
             self.angle = -math.degrees(math.atan(rise/run))+90
             if mousePos[0] < player.rect.x + player.rect.width:
                 self.angle += 180
-        print(self.angle)
+        #print(self.angle)
         image_rect = self.img.get_rect(topleft = (self.origin[0] , self.origin[1]))
         offset_center_to_pivot = pygame.math.Vector2(self.origin) - image_rect.center
         rotated_offset = offset_center_to_pivot.rotate(-self.angle)
         rotated_image_center = (self.origin[0] - rotated_offset.x, self.origin[1] - rotated_offset.y)
         self.image = pygame.transform.rotate(self.img, self.angle)
         self.rect = self.image.get_rect(center = rotated_image_center)
-        screen.blit(self.image, self.rect)
+        
+    
+    def draw(self, screen):
+        try:
+            screen.blit(self.image, self.rect)
+        except:
+            pass
 
 '''
     # Move for keypresses
