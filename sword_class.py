@@ -44,7 +44,6 @@ class Sword(pygame.sprite.Sprite):
         rise = self.y - mousePos[1]
         if run != 0:
             self.angle = -math.degrees(math.atan(rise/run))+90
-        print(self.angle)
         image_rect = self.img.get_rect(topleft = (self.origin[0] , self.origin[1]))
         offset_center_to_pivot = pygame.math.Vector2(self.origin) - image_rect.center
         rotated_offset = offset_center_to_pivot.rotate(-self.angle)
