@@ -20,30 +20,22 @@ class Sword(pygame.sprite.Sprite):
             self.w = width
             self.h = height
 
-    # THE MAIN ROTATE FUNCTION
-    def process(self,player, screen):
-        self.x = player.rect.x + player.rect.width
-        self.y = player.rect.y + player.rect.height/2
-        mousePos = pygame.mouse.get_pos()
-        run = self.x - mousePos[0]
-        rise = self.y - mousePos[1]
-        if run != 0:
-            self.angle = math.atan(rise/run)
-        self.temp_img = self.img
-        self.surf = pygame.transform.rotate(self.temp_img, self.angle)
-        screen.blit(self.surf, (self.x, self.y))
-        
-
-
     def update(self,player,screen):
-        self.x = player.rect.x + player.rect.width
+        mousePos = pygame.mouse.get_pos()
+        if mousePos[0] > player.rect.x + player.rect.width: 
+            self.x = player.rect.x + player.rect.width
+        else:
+            self.x = player.rect.x
         self.y = player.rect.y + player.rect.height/2
         self.origin=[self.x,self.y]
-        mousePos = pygame.mouse.get_pos()
+        
         run = self.x - mousePos[0]
         rise = self.y - mousePos[1]
         if run != 0:
             self.angle = -math.degrees(math.atan(rise/run))+90
+            if mousePos[0] < player.rect.x + player.rect.width:
+                self.angle += 180
+        print(self.angle)
         image_rect = self.img.get_rect(topleft = (self.origin[0] , self.origin[1]))
         offset_center_to_pivot = pygame.math.Vector2(self.origin) - image_rect.center
         rotated_offset = offset_center_to_pivot.rotate(-self.angle)
