@@ -46,7 +46,8 @@ T1-T2 -- L1-4 - L1-5 _ L1-6 -- L2-4 - L2-5 _ L2-6
 """
 #v---------------------Imports------------------------v
 
-import pygame as pg, data_functions as data, sys,  Imgs.img as img # pip install pygame
+import pygame as pg, data_functions as data, sys, Imgs.img as img
+ # pip install pygame
 from button_class import Button
 from text_class import Text
 from wall_class import Barrier
@@ -55,7 +56,6 @@ from enemy_class import Enemy
 from bullet_class import Bullet
 from sword_class import Sword
 from spritesheet import spritesheet
-
 #^---------------------Imports------------------------^
 
 pg.init()
@@ -78,6 +78,13 @@ load_time = 0
 pause = False
 pause_delay = 40
 loading_text = "Loading"
+location = "T1"
+tree_sheet = spritesheet('Imgs\Tree_SpriteSheet_Outlined.png')
+img.imgs()
+wall_group = pg.sprite.Group()
+player_group = pg.sprite.Group()
+tool_group = pg.sprite.Group()
+enemy_group = pg.sprite.Group()
 fonts = {1:'texts\menu_main.ttf',2:'texts\menu_sec.ttf',3:'texts\extra.ttf'}
 the_font = pg.font.Font(fonts[current_font],140)
 keys = {"~":pg.K_BACKQUOTE,"1":pg.K_1,"2":pg.K_2,"3":pg.K_3,"4":pg.K_4,"5":pg.K_5,"6":pg.K_6,"7":pg.K_7,"8":pg.K_8,"9":pg.K_9,
@@ -164,18 +171,22 @@ def key_change_sprint():
 
 def load_game():
     global wall_group,player_group,tool_group,enemy_group,player,sword
-    wall_group = pg.sprite.Group()
-    player_group = pg.sprite.Group()
-    tool_group = pg.sprite.Group()
-    enemy_group = pg.sprite.Group()
+    
+    wall_group.empty()
+    player_group.empty()
+    tool_group.empty()
+    enemy_group.empty()
+
     player = Player(100,300,70,100,img.grass,img.grass,5,True)
     player_group.add(player)
     sword = Sword(player,10,60,img.grass)
+    
     tool_group.add(sword)
-    wall_group.add(Barrier(0,700,1440,200,img.grass))
-    wall_group.add(Barrier(0,0,10,700,img.grass))
-    wall_group.add(Barrier(1430,0,10,700,img.grass))
-    wall_group.add(Barrier(10,250,1020,50,img.grass))
+    wall_group.add(Barrier(0,0,10,700,img.logg))
+    wall_group.add(Barrier(1430,0,10,700,img.logg))
+    logg_rotated = pg.transform.rotate(img.logg, 90)
+    wall_group.add(Barrier(0,700,1440,200,logg_rotated))
+    wall_group.add(Barrier(10,250,1020,50,logg_rotated))
     
 
 def return_to_main():
@@ -384,6 +395,7 @@ def display_menu():
 def display_play():
     global load_time, count, WINDOW, load_text, loading_text, pause, WINDOW_HEIGHT, WINDOW_WIDTH, pause_delay, game_state
     global menu_optn, save_datas, current_font, the_font, save_num, save_hp, save_time, choosing_key, htp_text, keybinds
+    global tree_sheet
     WINDOW.fill((255,255,255)) #White background
     key_press = pg.key.get_pressed()
     if load_time <= 300:
@@ -410,16 +422,14 @@ def display_play():
         pause_delay += 1
         if key_press[pg.K_ESCAPE] and pause_delay >= 40:
             play_pause()
-        wall_group.draw(WINDOW)
-        player_group.draw(WINDOW)
+        if location == "T1":
+            wall_group.draw(WINDOW)
+            player_group.draw(WINDOW)
+            sword.draw(WINDOW)
         if not pause:
             player.move(keys,keybinds,wall_group)
-            sword.update(player,WINDOW)
-            #tree_sheet = spritesheet('Imgs\Tree_SpriteSheet_Outlined.png')
-            #tree1 = tree_sheet.image_at((0, 41, 71, 86))
-            #tree1 = pg.transform.scale_by(tree1, 2)
-            #WINDOW.blit(tree1, (700,400))
-        else:
+            sword.update(player)
+        elif pause:
             pause_rec = draw_rect_alpha(WINDOW, (0, 0, 0, 190), (0, 0, WINDOW_WIDTH, WINDOW_HEIGHT))
             if menu_optn == "main":
                 current_font = 1
