@@ -18,7 +18,7 @@ class spritesheet(object):
                 colorkey = image.get_at((0,0))
             image.set_colorkey(colorkey, pygame.RLEACCEL)
         return image
-    def image_nonalpha_at(self, rectangle, colorkey = None):
+    def nonalpha_image_at(self, rectangle, colorkey = None):
         "Loads image from x,y,x+offset,y+offset"
         rect = pygame.Rect(rectangle)
         image = pygame.Surface(rect.size).convert()
