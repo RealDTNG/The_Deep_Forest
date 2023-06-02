@@ -16,15 +16,10 @@ class Sword(pygame.sprite.Sprite):
             self.img = image_load.convert_alpha()
             self.img = pygame.transform.scale(self.img, (width, height))
             self.angle = 50
-            self.change_angle = 0
             self.w = width
             self.h = height
 
-<<<<<<< HEAD
-    def update(self,player,screen):#fix sword rotation logic
-=======
     def update(self,player):
->>>>>>> 344961a76c0697f77852902ed8117a1d5e21aac2
         mousePos = pygame.mouse.get_pos()
         if mousePos[0] > player.rect.x + player.rect.width/2: 
             self.x = player.rect.x + player.rect.width
@@ -37,17 +32,9 @@ class Sword(pygame.sprite.Sprite):
         rise = self.y - mousePos[1]
         if run != 0:
             self.angle = -math.degrees(math.atan(rise/run))+90
-            if mousePos[0] < player.rect.x + player.rect.width/2:
+            if (mousePos[0] < player.rect.x + player.rect.width/2 and run > 0) or run > 0:
                 self.angle += 180
-<<<<<<< HEAD
-                if run <= 0:
-                     self.angle -= self.angle
-            elif run > 0:
-                 self.angle -= self.angle
-        print(self.angle)
-=======
         #print(self.angle)
->>>>>>> 344961a76c0697f77852902ed8117a1d5e21aac2
         image_rect = self.img.get_rect(topleft = (self.origin[0] , self.origin[1]))
         offset_center_to_pivot = pygame.math.Vector2(self.origin) - image_rect.center
         rotated_offset = offset_center_to_pivot.rotate(-self.angle)
