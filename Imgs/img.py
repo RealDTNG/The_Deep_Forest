@@ -9,5 +9,5 @@ def imgs():
     tree_sheet = spritesheet('Imgs\Tree_SpriteSheet_Outlined.png')
     menu_backdrop = pg.transform.scale(pg.image.load('Imgs/menu_backdrop.png'),(1440,900))
     grass = pg.transform.scale(pg.image.load('Imgs/grass.jfif'),(1440,200))
-    logg = tree_sheet.image_at((314,97,12,31))
+    logg = tree_sheet.image_at((834,88,21,33))
     tree1 = tree_sheet.image_at((0, 41, 71, 86))
