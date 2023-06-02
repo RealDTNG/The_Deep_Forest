@@ -181,11 +181,12 @@ def load_game():
     sword = Sword(player,10,60,img.grass)
     
     tool_group.add(sword)
-    wall_group.add(Barrier(0,0,10,700,img.logg))
-    wall_group.add(Barrier(1430,0,10,700,img.logg))
-    logg_rotated = pg.transform.rotate(img.logg, 90)
-    wall_group.add(Barrier(0,700,1440,200,logg_rotated))
-    wall_group.add(Barrier(10,250,1020,50,logg_rotated))
+    wall_group.add(Barrier(1390,0,50,700,img.log))
+    log_left = pg.transform.rotate(img.log, 180)
+    wall_group.add(Barrier(0,0,50,700,log_left))
+    log_ground = pg.transform.rotate(img.log, -90)
+    wall_group.add(Barrier(50,700,1440,200,log_ground))
+    wall_group.add(Barrier(50,250,1020,50,log_ground))
     
 
 def return_to_main():
@@ -397,7 +398,7 @@ def display_play():
     global tree_sheet
     WINDOW.fill((255,255,255)) #White background
     key_press = pg.key.get_pressed()
-    if load_time <= 300:
+    if load_time <= 0:#CHANGE TO 300 FOR LOAD TIME
         load_time += 1
         count += 1
         pg.Surface.blit(WINDOW,img.menu_backdrop,(0,0))
