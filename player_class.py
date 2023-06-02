@@ -40,8 +40,8 @@ class Player(pygame.sprite.Sprite):
                 self.movex -= self.movex/abs(self.movex)
         
         for b in barriers:
-            if pygame.sprite.collide_mask(self,b):
-                self.rect.x -= self.movex
+            while pygame.sprite.collide_mask(self,b):
+                self.rect.x -= self.movex/abs(self.movex)
 
         self.movey += 1
 
@@ -70,12 +70,16 @@ class Player(pygame.sprite.Sprite):
             self.rect = self.image.get_rect(topleft=(x,y))
 
         for b in barriers:
-            if pygame.sprite.collide_mask(self,b):
-                if self.movey >0:
-                    self.rect.y = b.rect.y - self.rect.h
+            if self.movey > 0:
+                collidetype= 'up'
+            else:
+                collidetype = 'down'
+            while pygame.sprite.collide_mask(self,b):
+                if collidetype == 'up':
+                    self.rect.y -= 1
                     self.jump=self.jumpcount
                 else:
-                    self.rect.y = b.rect.y + b.rect.height
+                    self.rect.y += 1
                 self.movey = 0
 
     def hit(self,dmg):
