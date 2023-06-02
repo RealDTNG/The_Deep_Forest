@@ -9,7 +9,7 @@ def imgs():
     tree_sheet = spritesheet('Imgs\Tree_SpriteSheet.png')
     menu_backdrop = pg.transform.scale(pg.image.load('Imgs/menu_backdrop.png'),(1440,900))
     grass = tree_sheet.image_at((671,136,97,30))
-    log = tree_sheet.image_at((834,88,21,33))
+    log = tree_sheet.image_at((835,90,20,31))
     big_rock = tree_sheet.image_at((616,200,44,34))
     rock = tree_sheet.image_at((569,216,30,16))
     thin_grass = tree_sheet.image_at((569,144,96,17))
