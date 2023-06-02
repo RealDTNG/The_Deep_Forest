@@ -46,8 +46,7 @@ T1-T2 -- L1-4 - L1-5 _ L1-6 -- L2-4 - L2-5 _ L2-6
 """
 #v---------------------Imports------------------------v
 
-import pygame as pg, data_functions as data, sys, Imgs.img as img
- # pip install pygame
+import pygame as pg, data_functions as data, sys, Imgs.img as img # pip install pygame
 from button_class import Button
 from text_class import Text
 from wall_class import Barrier
