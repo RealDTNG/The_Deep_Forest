@@ -177,13 +177,14 @@ def load_game():
         enemy_group.empty()
         player = Player(100,300,70,100,img.big_rock,img.big_rock,5,True)
         player_group.add(player)
-        sword = Sword(player,10,60,img.rock)
+        sword = Sword(10,60,img.rock,img.big_rock,1)
         tool_group.add(sword)
         wall_group.add(Barrier(1390,0,50,700,img.log))
         log_left = pg.transform.rotate(img.log, 180)
         wall_group.add(Barrier(0,0,50,700,log_left))
         log_ground = pg.transform.rotate(img.log, -90)
         wall_group.add(Barrier(50,700,1440,200,log_ground))
+        enemy_group.add(Enemy(900,500,100,70,img.rock,img.big_rock,2,400,1))
     
 
 def return_to_main():
@@ -423,6 +424,7 @@ def display_play():
             wall_group.draw(WINDOW)
             player_group.draw(WINDOW)
             sword.draw(WINDOW)
+            enemy_group.draw(WINDOW)
             grass = pg.transform.scale_by(img.grass, 3)
             WINDOW.blit(grass,(-238,680))
             WINDOW.blit(grass,(50,680))
@@ -433,6 +435,10 @@ def display_play():
         if not pause:
             player.move(keys,keybinds,wall_group)
             sword.update(player)
+            for e in enemy_group:
+                e.move(wall_group,player)
+                if pg.sprite.collide_mask(e,sword):
+                    e.hit(sword.dmg)
         elif pause:
             pause_rec = draw_rect_alpha(WINDOW, (0, 0, 0, 190), (0, 0, WINDOW_WIDTH, WINDOW_HEIGHT))
             if menu_optn == "main":

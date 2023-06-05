@@ -10,16 +10,33 @@ class Sword(pygame.sprite.Sprite):
         self.surf = pygame.surface(width,height)
     '''
         
-    def __init__(self,player,width,height,image_load):
+    def __init__(self,width,height,image_load,image_stab,damage):
             super(Sword, self).__init__()
             self.surf = pygame.transform.smoothscale(image_load.convert(), (width, height))
             self.img = image_load.convert_alpha()
             self.img = pygame.transform.scale(self.img, (width, height))
+            self.imgstab = image_stab.convert_alpha()
+            self.imgstab = pygame.transform.scale(self.imgstab, (width, height*4))
             self.angle = 50
+            self.stab = False
+            self.stabtime = 0
+            self.stab_CD = 0
+            self.dmg = damage
             self.w = width
             self.h = height
 
     def update(self,player):
+        if self.stabtime > 0:
+            self.stabtime -= 1
+        else:
+            self.stab = False
+
+        if pygame.mouse.get_pressed(num_buttons=3)[0] and self.stab_CD < 0 :
+            self.stab = True
+            self.stabtime = 10
+            self.stab_CD = 60
+        self.stab_CD -= 1
+        
         mousePos = pygame.mouse.get_pos()
         if mousePos[0] > player.rect.x + player.rect.width/2: 
             self.x = player.rect.x + player.rect.width
@@ -35,11 +52,18 @@ class Sword(pygame.sprite.Sprite):
             if (mousePos[0] < player.rect.x + player.rect.width/2 and run > 0) or run > 0:
                 self.angle += 180
         #print(self.angle)
-        image_rect = self.img.get_rect(topleft = (self.origin[0] , self.origin[1]))
-        offset_center_to_pivot = pygame.math.Vector2(self.origin) - image_rect.center
-        rotated_offset = offset_center_to_pivot.rotate(-self.angle)
-        rotated_image_center = (self.origin[0] - rotated_offset.x, self.origin[1] - rotated_offset.y)
-        self.image = pygame.transform.rotate(self.img, self.angle)
+        if not self.stab:
+            image_rect = self.img.get_rect(topleft = (self.origin[0] , self.origin[1]))
+            offset_center_to_pivot = pygame.math.Vector2(self.origin) - image_rect.center
+            rotated_offset = offset_center_to_pivot.rotate(-self.angle)
+            rotated_image_center = (self.origin[0] - rotated_offset.x, self.origin[1] - rotated_offset.y)
+            self.image = pygame.transform.rotate(self.img, self.angle)
+        else:
+            image_rect = self.imgstab.get_rect(topleft = (self.origin[0] , self.origin[1]))
+            offset_center_to_pivot = pygame.math.Vector2(self.origin) - image_rect.center
+            rotated_offset = offset_center_to_pivot.rotate(-self.angle)
+            rotated_image_center = (self.origin[0] - rotated_offset.x, self.origin[1] - rotated_offset.y)
+            self.image = pygame.transform.rotate(self.imgstab, self.angle)
         self.rect = self.image.get_rect(center = rotated_image_center)
         
     
