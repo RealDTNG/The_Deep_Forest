@@ -65,7 +65,7 @@ class Player(pygame.sprite.Sprite):
             if not self.happend_once:
                 self.rect.y += self.h/2
                 self.happend_once = True
-            self.image = pygame.transform.scale(self.imgld, (self.w, self.h/2)).convert_alpha()
+            self.image = pygame.transform.scale(self.image, (self.w, self.h/2)).convert_alpha()
             self.mask  = pygame.mask.from_surface(self.image)
             x,y = self.rect.x,self.rect.y
             self.rect = self.image.get_rect(topleft=(x,y))
