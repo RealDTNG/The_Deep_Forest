@@ -78,7 +78,6 @@ pause = False
 pause_delay = 40
 loading_text = "Loading"
 location = "T1"
-tree_sheet = spritesheet('Imgs\Tree_SpriteSheet_Outlined.png')
 img.imgs()
 wall_group = pg.sprite.Group()
 player_group = pg.sprite.Group()
@@ -177,7 +176,7 @@ def load_game():
         enemy_group.empty()
         player = Player(100,300,90,160,img.player,img.big_rock,5,True)
         player_group.add(player)
-        sword = Sword(10,60,img.rock,img.big_rock,1)
+        sword = Sword(20,78,img.sword1,img.big_rock,1)
         tool_group.add(sword)
         wall_group.add(Barrier(1390,0,50,700,img.log))
         log_left = pg.transform.rotate(img.log, 180)
