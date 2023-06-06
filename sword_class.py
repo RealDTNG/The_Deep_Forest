@@ -34,15 +34,15 @@ class Sword(pygame.sprite.Sprite):
         if pygame.mouse.get_pressed(num_buttons=3)[0] and self.stab_CD < 0 :
             self.stab = True
             self.stabtime = 10
-            self.stab_CD = 60
+            self.stab_CD = 40
         self.stab_CD -= 1
         
         mousePos = pygame.mouse.get_pos()
         if mousePos[0] > player.rect.x + player.rect.width/2: 
-            self.x = player.rect.x + player.rect.width
+            self.x = player.rect.x + player.rect.width*(11/12)
         else:
-            self.x = player.rect.x
-        self.y = player.rect.y + player.rect.height/2
+            self.x = player.rect.x + player.rect.width*(1/12)
+        self.y = player.rect.y + player.rect.height*(8/15)
         self.origin=[self.x,self.y]
         
         run = self.x - mousePos[0]
