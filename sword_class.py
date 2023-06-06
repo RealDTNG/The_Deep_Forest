@@ -42,7 +42,7 @@ class Sword(pygame.sprite.Sprite):
             self.x = player.rect.x + player.rect.width*(11/12)
         else:
             self.x = player.rect.x + player.rect.width*(1/12)
-        self.y = player.rect.y + player.rect.height*(8/15)
+        self.y = player.rect.y + player.rect.height*(9/15)
         self.origin=[self.x,self.y]
         
         run = self.x - mousePos[0]
