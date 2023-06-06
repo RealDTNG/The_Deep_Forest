@@ -422,9 +422,9 @@ def display_play():
             play_pause()
         if location == "T1":
             wall_group.draw(WINDOW)
-            player_group.draw(WINDOW)
             sword.draw(WINDOW)
             enemy_group.draw(WINDOW)
+            player.draw(WINDOW)
             grass = pg.transform.scale_by(img.grass, 3)
             WINDOW.blit(grass,(-238,680))
             WINDOW.blit(grass,(50,680))
@@ -433,7 +433,7 @@ def display_play():
             WINDOW.blit(grass,(914,680))
             WINDOW.blit(grass,(1202,680))
         if not pause:
-            player.move(keys,keybinds,wall_group)
+            player.update(keys,keybinds,wall_group)
             sword.update(player)
             for e in enemy_group:
                 e.move(wall_group,player)
