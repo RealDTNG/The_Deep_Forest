@@ -1,10 +1,11 @@
 import pygame
-player = pygame.transform.scale(pygame.image.load('Imgs/Player.png'),(90,160))
-fliped_player = pygame.transform.flip(player, True, False)
+
 class Player(pygame.sprite.Sprite):
     def __init__(self, startX,startY,width,height,image_load,img_dmg,health,double_jump_unlock):
         super().__init__()
-        self.image = pygame.transform.scale(image_load, (width, height)).convert_alpha()
+        self.player = pygame.transform.scale(pygame.image.load('Imgs/Player.png'),(width,height)).convert_alpha()
+        self.fliped_player = pygame.transform.flip(self.player, True, False)
+        self.image = self.player
         self.mask  = pygame.mask.from_surface(self.image)
         self.rect = self.image.get_rect(topleft=(startX,startY))
         self.w = width
@@ -24,12 +25,17 @@ class Player(pygame.sprite.Sprite):
         self.jump_CD = 0
         
     def update(self,keys,keybinds,barriers):
-        self.image = pygame.transform.scale(self.imgld, (self.w, self.h)).convert_alpha()
         keyvalu = {True : 1, False: 0}
         key_input = pygame.key.get_pressed()
-        mousepos = pygame.mouse.get_pos()
-        
-        
+        mousepos = pygame.mouse.get_pos() 
+         
+        if self.rect.x < mousepos[0]:
+            self.image = self.player
+            self.mask  = pygame.mask.from_surface(self.image)  
+        elif self.rect.x > mousepos[0]:
+            self.image =  self.fliped_player
+            self.mask  = pygame.mask.from_surface(self.image)  
+            
         if self.movex >4:
             self.movex-=1
         elif self.movex < -4:
@@ -37,14 +43,6 @@ class Player(pygame.sprite.Sprite):
         if key_input[keys[keybinds['RIGHT']]] or key_input[keys[keybinds['LEFT']]]:
             self.movex += 1*(keyvalu[key_input[keys[keybinds['RIGHT']]]]-keyvalu[key_input[keys[keybinds['LEFT']]]])
             self.rect.x += self.movex
-            
-                
-            if self.rect.x < mousepos[0]:
-                self.image = pygame.transform.scale(player, (44, 32)).convert_alpha()
-                self.mask  = pygame.mask.from_surface(self.image)  
-            elif self.rect.x > mousepos[0]:
-                self.image =  pygame.transform.scale(fliped_player, (44, 32)).convert_alpha()
-                self.mask  = pygame.mask.from_surface(self.image)  
         else:
             if self.movex != 0:
                 self.movex -= self.movex/abs(self.movex)
@@ -74,7 +72,7 @@ class Player(pygame.sprite.Sprite):
         else:
             if self.happend_once:
                 self.happend_once = False
-            self.image = pygame.transform.scale(self.imgld, (self.w, self.h)).convert_alpha()
+            self.image = pygame.transform.scale(self.image, (self.w, self.h)).convert_alpha()
             self.mask  = pygame.mask.from_surface(self.image)
             x,y = self.rect.x,self.rect.y
             self.rect = self.image.get_rect(topleft=(x,y))
