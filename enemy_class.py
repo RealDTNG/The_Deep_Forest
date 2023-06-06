@@ -15,6 +15,7 @@ class Enemy(pygame.sprite.Sprite):
         self.movey = 0
         self.movex = 0
         self.speed = speed
+        self.hlt = False
         
     def move(self,barriers,player):
         self.image = pygame.transform.scale(self.imgld, (self.w, self.h)).convert_alpha()
@@ -41,8 +42,9 @@ class Enemy(pygame.sprite.Sprite):
                 self.rect.y -= reverse_dir
                 self.movey = 0
 
-    def hit(self,dmg):
-        self.hp -= dmg
-        self.image = pygame.transform.scale(self.imgdmg, (self.w, self.h)).convert_alpha()
-        if self.hp <= 0:
-            self.kill()
+    def hit(self,sword):
+        if not self.hlt:
+            self.hp -= sword.dmg
+            self.image = pygame.transform.scale(self.imgdmg, (self.w, self.h)).convert_alpha()
+            if self.hp <= 0:
+                self.kill()
