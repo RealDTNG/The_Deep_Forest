@@ -28,13 +28,7 @@ class Player(pygame.sprite.Sprite):
         keyvalu = {True : 1, False: 0}
         key_input = pygame.key.get_pressed()
         mousepos = pygame.mouse.get_pos() 
-         
-        if self.rect.x < mousepos[0]:
-            self.image = self.player
-            self.mask  = pygame.mask.from_surface(self.image)  
-        elif self.rect.x > mousepos[0]:
-            self.image =  self.fliped_player
-            self.mask  = pygame.mask.from_surface(self.image)  
+        
             
         if self.movex >4:
             self.movex-=1
@@ -49,7 +43,10 @@ class Player(pygame.sprite.Sprite):
         
         for b in barriers:
             while pygame.sprite.collide_mask(self,b):
-                self.rect.x -= self.movex/abs(self.movex)
+                if self.movex == 0:
+                    break
+                else:
+                    self.rect.x -= self.movex/abs(self.movex)
 
         self.movey += 1
 
@@ -65,15 +62,24 @@ class Player(pygame.sprite.Sprite):
             if not self.happend_once:
                 self.rect.y += self.h/2
                 self.happend_once = True
-            self.image = pygame.transform.scale(self.image, (self.w, self.h/2)).convert_alpha()
-            self.mask  = pygame.mask.from_surface(self.image)
+            if self.rect.x < mousepos[0]:
+                self.image = pygame.transform.scale(self.player, (self.w, self.h/2)).convert_alpha()
+                self.mask  = pygame.mask.from_surface(self.image)  
+            elif self.rect.x > mousepos[0]:
+                self.image = pygame.transform.scale(self.fliped_player, (self.w, self.h/2)).convert_alpha()
+                self.mask  = pygame.mask.from_surface(self.image)
             x,y = self.rect.x,self.rect.y
             self.rect = self.image.get_rect(topleft=(x,y))
         else:
             if self.happend_once:
+                self.rect.y -= self.h/2
                 self.happend_once = False
-            self.image = pygame.transform.scale(self.image, (self.w, self.h)).convert_alpha()
-            self.mask  = pygame.mask.from_surface(self.image)
+            if self.rect.x + self.rect.w/2 < mousepos[0]:
+                self.image = self.player
+                self.mask  = pygame.mask.from_surface(self.image)  
+            else:
+                self.image =  self.fliped_player
+                self.mask  = pygame.mask.from_surface(self.image)
             x,y = self.rect.x,self.rect.y
             self.rect = self.image.get_rect(topleft=(x,y))
 
