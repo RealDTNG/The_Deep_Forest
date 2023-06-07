@@ -184,6 +184,15 @@ def load_game():
         log_ground = pg.transform.rotate(img.log, -90)
         wall_group.add(Barrier(50,700,1440,200,log_ground))
         enemy_group.add(Enemy(900,500,100,70,img.slime,img.big_rock,2,400,1))
+    if location == "T2":
+        wall_group.empty()
+        player_group.empty()
+        tool_group.empty()
+        enemy_group.empty()
+        player = Player(100,300,90,160,img.player,img.player,5,True)
+        player_group.add(player)
+        sword = Sword(20,78,img.sword1,img.big_rock,1)
+        
     
 
 def return_to_main():
