@@ -474,7 +474,7 @@ def display_play():
             player.draw(WINDOW)
             
             grass_group.draw(WINDOW)
-            if player.rect.x >= 131ddd0:
+            if player.rect.x >= 1310:
                 location = "T2"
                 load_game()
         elif location == "T2":
