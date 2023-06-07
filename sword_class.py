@@ -10,13 +10,13 @@ class Sword(pygame.sprite.Sprite):
         self.surf = pygame.surface(width,height)
     '''
         
-    def __init__(self,width,height,image_load,image_stab,damage):
+    def __init__(self,width,height,image_load,slash_width,slash_height,image_stab,damage):
             super(Sword, self).__init__()
             self.surf = pygame.transform.smoothscale(image_load.convert(), (width, height))
             self.img = image_load.convert_alpha()
             self.img = pygame.transform.scale(self.img, (width, height))
             self.imgstab = image_stab.convert_alpha()
-            self.imgstab = pygame.transform.scale(self.imgstab, (width, height*4))
+            self.imgstab = pygame.transform.scale(self.imgstab, (slash_width, slash_height))
             self.angle = 50
             self.stab = False
             self.stabtime = 0

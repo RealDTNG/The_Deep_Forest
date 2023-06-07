@@ -176,7 +176,7 @@ def load_game():
         enemy_group.empty()
         player = Player(100,300,90,160,img.player,img.big_rock,5,True)
         player_group.add(player)
-        sword = Sword(20,78,img.sword1,img.big_rock,1)
+        sword = Sword(20,78,img.sword1,50,250,img.sword1_slash,1)
         tool_group.add(sword)
         wall_group.add(Barrier(1390,0,50,700,img.log))
         log_left = pg.transform.rotate(img.log, 180)
