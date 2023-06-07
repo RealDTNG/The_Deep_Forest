@@ -429,11 +429,23 @@ def display_play():
         if key_press[pg.K_ESCAPE] and pause_delay >= 40:
             play_pause()
         if location == "T1":
+            grass = pg.transform.scale_by(img.grass, 3)
+            tree1 = pg.transform.scale_by(img.tree1, 4)
+            tree4 = pg.transform.scale_by(img.tree4, 4)
+            
+            WINDOW.blit(tree1,(-238,374))
+            WINDOW.blit(tree1,(50,374))
+            WINDOW.blit(tree1,(338,374))
+            WINDOW.blit(tree1,(626,374))
+            WINDOW.blit(tree4,(914,192))
+            WINDOW.blit(tree1,(1202,374))
+            
             wall_group.draw(WINDOW)
             sword.draw(WINDOW)
             enemy_group.draw(WINDOW)
             player.draw(WINDOW)
-            grass = pg.transform.scale_by(img.grass, 3)
+            
+            
             WINDOW.blit(grass,(-238,680))
             WINDOW.blit(grass,(50,680))
             WINDOW.blit(grass,(338,680))
