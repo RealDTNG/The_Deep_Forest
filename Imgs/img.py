@@ -18,7 +18,7 @@ def imgs():
     grass = tree_sheet.image_at((672,136,96,30))
     thin_grass = tree_sheet.image_at((569,144,96,17))
     log = tree_sheet.image_at((835,90,20,31))
-    big_rock = tree_sheet.image_at((616,200,44,34))
+    big_rock = pg.transform.scale_by(tree_sheet.image_at((616,200,44,34)), 2)
     rock = tree_sheet.image_at((569,216,30,16))
     tree1 = tree_sheet.image_at((379, 42, 68, 87))
     tree2 = tree_sheet.image_at((472, 23, 83, 106))

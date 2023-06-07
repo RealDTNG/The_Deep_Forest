@@ -39,10 +39,10 @@ class Sword(pygame.sprite.Sprite):
         
         mousePos = pygame.mouse.get_pos()
         if mousePos[0] > player.rect.x + player.rect.width/2: 
-            self.x = player.rect.x + player.rect.width*(11/12)
+            self.x = player.rect.x + player.rect.width*(12/14)
         else:
             self.x = player.rect.x + player.rect.width*(1/12)
-        self.y = player.rect.y + player.rect.height*(9/15)
+        self.y = player.rect.y + player.rect.height*(8/15)
         self.origin=[self.x,self.y]
         self.pivot = [14,6]
         

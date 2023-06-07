@@ -83,6 +83,8 @@ wall_group = pg.sprite.Group()
 player_group = pg.sprite.Group()
 tool_group = pg.sprite.Group()
 enemy_group = pg.sprite.Group()
+grass_group = pg.sprite.Group()
+grass_loop = 680
 fonts = {1:'texts\menu_main.ttf',2:'texts\menu_sec.ttf',3:'texts\extra.ttf'}
 the_font = pg.font.Font(fonts[current_font],140)
 keys = {"~":pg.K_BACKQUOTE,"1":pg.K_1,"2":pg.K_2,"3":pg.K_3,"4":pg.K_4,"5":pg.K_5,"6":pg.K_6,"7":pg.K_7,"8":pg.K_8,"9":pg.K_9,
@@ -168,7 +170,7 @@ def key_change_sprint():
 
 
 def load_game():
-    global wall_group,player_group,tool_group,enemy_group,player,sword, location
+    global wall_group,player_group,tool_group,enemy_group,player,sword, location, grass_group, grass_loop
     if location == "T1":
         wall_group.empty()
         player_group.empty()
@@ -178,20 +180,44 @@ def load_game():
         player_group.add(player)
         sword = Sword(20,78,img.sword1,50,250,img.sword1_slash,1)
         tool_group.add(sword)
-        wall_group.add(Barrier(1390,0,50,700,img.log))
+        wall_group.add(Barrier(1400,0,50,700,img.log))
+        grass = pg.transform.scale_by(img.grass, 3)
         log_left = pg.transform.rotate(img.log, 180)
         wall_group.add(Barrier(0,0,50,700,log_left))
         log_ground = pg.transform.rotate(img.log, -90)
         wall_group.add(Barrier(50,700,1440,200,log_ground))
         enemy_group.add(Enemy(900,500,100,70,img.slime,img.big_rock,2,400,1))
+        
+        while grass_loop <= 760:
+                grass_sprite1,grass_sprite2,grass_sprite3,grass_sprite4,grass_sprite5,grass_sprite6 = pg.sprite.Sprite(),pg.sprite.Sprite(),pg.sprite.Sprite(),pg.sprite.Sprite(),pg.sprite.Sprite(),pg.sprite.Sprite()
+                grass_sprite1.image,grass_sprite2.image,grass_sprite3.image,grass_sprite4.image,grass_sprite5.image,grass_sprite6.image = grass,grass,grass,grass,grass,grass
+                grass_sprite1.rect = grass_sprite1.image.get_rect().move(-238,grass_loop)
+                grass_group.add(grass_sprite1)
+                grass_sprite2.rect = grass_sprite2.image.get_rect().move(50,grass_loop)
+                grass_group.add(grass_sprite2)
+                grass_sprite3.rect = grass_sprite3.image.get_rect().move(338,grass_loop)
+                grass_group.add(grass_sprite3)
+                grass_sprite4.rect = grass_sprite4.image.get_rect().move(626,grass_loop)
+                grass_group.add(grass_sprite4)
+                grass_sprite5.rect = grass_sprite5.image.get_rect().move(914,grass_loop)
+                grass_group.add(grass_sprite5)
+                grass_sprite6.rect = grass_sprite6.image.get_rect().move(1202,grass_loop)
+                grass_group.add(grass_sprite6)
+                grass_loop += 40
+        
     if location == "T2":
         wall_group.empty()
         player_group.empty()
         tool_group.empty()
         enemy_group.empty()
-        player = Player(100,300,90,160,img.player,img.player,5,True)
+        player = Player(40,300,90,160,img.player,img.player,5,True)
         player_group.add(player)
         sword = Sword(20,78,img.sword1,img.big_rock,1)
+        tool_group.add(sword)
+        log_ground = pg.transform.rotate(img.log, -90)
+        wall_group.add(Barrier(50,700,1440,200,log_ground))
+        wall_group.add(Barrier(250,612,44*2,34*2,img.big_rock))
+        
         
     
 
@@ -401,7 +427,7 @@ def display_menu():
 def display_play():
     global load_time, count, WINDOW, load_text, loading_text, pause, WINDOW_HEIGHT, WINDOW_WIDTH, pause_delay, game_state
     global menu_optn, save_datas, current_font, the_font, save_num, save_hp, save_time, choosing_key, htp_text, keybinds
-    global tree_sheet
+    global tree_sheet, grass_loop, location
     WINDOW.fill((255,255,255)) #White background
     key_press = pg.key.get_pressed()
     if load_time <= 0:#CHANGE TO 300 FOR LOAD TIME
@@ -429,29 +455,39 @@ def display_play():
         if key_press[pg.K_ESCAPE] and pause_delay >= 40:
             play_pause()
         if location == "T1":
-            grass = pg.transform.scale_by(img.grass, 3)
             tree1 = pg.transform.scale_by(img.tree1, 4)
+            tree3 = pg.transform.scale_by(img.tree3, 4)
             tree4 = pg.transform.scale_by(img.tree4, 4)
             
+            WINDOW.blit(tree4,(194,192))
             WINDOW.blit(tree1,(-238,374))
             WINDOW.blit(tree1,(50,374))
             WINDOW.blit(tree1,(338,374))
-            WINDOW.blit(tree1,(626,374))
+            WINDOW.blit(tree1,(650,374))
             WINDOW.blit(tree4,(914,192))
             WINDOW.blit(tree1,(1202,374))
+            WINDOW.blit(tree3,(482,290))
             
             wall_group.draw(WINDOW)
             sword.draw(WINDOW)
             enemy_group.draw(WINDOW)
             player.draw(WINDOW)
             
+            grass_group.draw(WINDOW)
+            if player.rect.x >= 131ddd0:
+                location = "T2"
+                load_game()
+        elif location == "T2":
+            if player.rect.x >= 20:
+                location = "T1"
+                load_game()
+            wall_group.draw(WINDOW)
+            sword.draw(WINDOW)
+            enemy_group.draw(WINDOW)
+            player.draw(WINDOW)
             
-            WINDOW.blit(grass,(-238,680))
-            WINDOW.blit(grass,(50,680))
-            WINDOW.blit(grass,(338,680))
-            WINDOW.blit(grass,(626,680))
-            WINDOW.blit(grass,(914,680))
-            WINDOW.blit(grass,(1202,680))
+            grass_group.draw(WINDOW)
+            
         if not pause:
             player.update(keys,keybinds,wall_group)
             sword.update(player)
