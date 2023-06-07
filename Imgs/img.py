@@ -6,12 +6,15 @@ from spritesheet import spritesheet
 
 def imgs():
     global tree_sheet, menu_backdrop, grass, log, tree1, big_rock, rock, thin_grass, slime, player, sword1, tree_and_branch, dead_tree
-    global tree2, tree3, tree4
+    global tree2, tree3, tree4, sword2, sword1_slash, sword2_slash
     tree_sheet = spritesheet('Imgs\Tree_SpriteSheet.png')
     toolsheet = spritesheet('Imgs\Tool_SpriteSheet.png')
     menu_backdrop = pg.transform.scale(pg.image.load('Imgs/menu_backdrop.png'),(1440,900))
     player = pg.transform.scale(pg.image.load('Imgs/Player.png'),(90,160))
-    sword1 = toolsheet.image_at((0,0,14,39))
+    sword1 = toolsheet.image_at((0,0,13,39))
+    sword2 = toolsheet.image_at((18,0,15,60))
+    sword1_slash = toolsheet.image_at((38,0,19,85))
+    sword2_slash = toolsheet.image_at((18,0,24,144))
     grass = tree_sheet.image_at((672,136,96,30))
     thin_grass = tree_sheet.image_at((569,144,96,17))
     log = tree_sheet.image_at((835,90,20,31))
