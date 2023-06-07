@@ -184,6 +184,15 @@ def load_game():
         log_ground = pg.transform.rotate(img.log, -90)
         wall_group.add(Barrier(50,700,1440,200,log_ground))
         enemy_group.add(Enemy(900,500,100,70,img.slime,img.big_rock,2,400,1))
+    if location == "T2":
+        wall_group.empty()
+        player_group.empty()
+        tool_group.empty()
+        enemy_group.empty()
+        player = Player(100,300,90,160,img.player,img.player,5,True)
+        player_group.add(player)
+        sword = Sword(20,78,img.sword1,img.big_rock,1)
+        
     
 
 def return_to_main():
@@ -421,9 +430,9 @@ def display_play():
             play_pause()
         if location == "T1":
             wall_group.draw(WINDOW)
-            player_group.draw(WINDOW)
             sword.draw(WINDOW)
             enemy_group.draw(WINDOW)
+            player.draw(WINDOW)
             grass = pg.transform.scale_by(img.grass, 3)
             WINDOW.blit(grass,(-238,680))
             WINDOW.blit(grass,(50,680))
@@ -432,7 +441,7 @@ def display_play():
             WINDOW.blit(grass,(914,680))
             WINDOW.blit(grass,(1202,680))
         if not pause:
-            player.move(keys,keybinds,wall_group)
+            player.update(keys,keybinds,wall_group)
             sword.update(player)
             for e in enemy_group:
                 e.move(wall_group,player)

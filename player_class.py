@@ -3,7 +3,9 @@ import pygame
 class Player(pygame.sprite.Sprite):
     def __init__(self, startX,startY,width,height,image_load,img_dmg,health,double_jump_unlock):
         super().__init__()
-        self.image = pygame.transform.scale(image_load, (width, height)).convert_alpha()
+        self.player = pygame.transform.scale(pygame.image.load('Imgs/Player.png'),(width,height)).convert_alpha()
+        self.fliped_player = pygame.transform.flip(self.player, True, False)
+        self.image = self.player
         self.mask  = pygame.mask.from_surface(self.image)
         self.rect = self.image.get_rect(topleft=(startX,startY))
         self.w = width
@@ -22,12 +24,18 @@ class Player(pygame.sprite.Sprite):
             self.jumpcount = 1
         self.jump_CD = 0
         
-    def move(self,keys,keybinds,barriers):
-        self.image = pygame.transform.scale(self.imgld, (self.w, self.h)).convert_alpha()
+    def update(self,keys,keybinds,barriers):
         keyvalu = {True : 1, False: 0}
         key_input = pygame.key.get_pressed()
-        
-        
+        mousepos = pygame.mouse.get_pos() 
+         
+        if self.rect.x < mousepos[0]:
+            self.image = self.player
+            self.mask  = pygame.mask.from_surface(self.image)  
+        elif self.rect.x > mousepos[0]:
+            self.image =  self.fliped_player
+            self.mask  = pygame.mask.from_surface(self.image)  
+            
         if self.movex >4:
             self.movex-=1
         elif self.movex < -4:
@@ -57,14 +65,14 @@ class Player(pygame.sprite.Sprite):
             if not self.happend_once:
                 self.rect.y += self.h/2
                 self.happend_once = True
-            self.image = pygame.transform.scale(self.imgld, (self.w, self.h/2)).convert_alpha()
+            self.image = pygame.transform.scale(self.image, (self.w, self.h/2)).convert_alpha()
             self.mask  = pygame.mask.from_surface(self.image)
             x,y = self.rect.x,self.rect.y
             self.rect = self.image.get_rect(topleft=(x,y))
         else:
             if self.happend_once:
                 self.happend_once = False
-            self.image = pygame.transform.scale(self.imgld, (self.w, self.h)).convert_alpha()
+            self.image = pygame.transform.scale(self.image, (self.w, self.h)).convert_alpha()
             self.mask  = pygame.mask.from_surface(self.image)
             x,y = self.rect.x,self.rect.y
             self.rect = self.image.get_rect(topleft=(x,y))
@@ -89,3 +97,9 @@ class Player(pygame.sprite.Sprite):
             return True
         else:
             return False
+        
+    def draw(self, screen):
+        try:
+            screen.blit(self.image, self.rect)
+        except:
+            pass
