@@ -35,6 +35,7 @@ class Sword(pygame.sprite.Sprite):
             self.stab = True
             self.stabtime = 10
             self.stab_CD = 40
+            self.stabangle = self.angle
         self.stab_CD -= 1
         
         mousePos = pygame.mouse.get_pos()
@@ -62,9 +63,9 @@ class Sword(pygame.sprite.Sprite):
         else:
             image_rect = self.imgstab.get_rect(topleft = (self.origin[0] , self.origin[1]))
             offset_center_to_pivot = pygame.math.Vector2(self.origin) - image_rect.center
-            rotated_offset = offset_center_to_pivot.rotate(-self.angle)
+            rotated_offset = offset_center_to_pivot.rotate(-self.stabangle)
             rotated_image_center = (self.origin[0] - rotated_offset.x, self.origin[1] - rotated_offset.y)
-            self.image = pygame.transform.rotate(self.imgstab, self.angle)
+            self.image = pygame.transform.rotate(self.imgstab, self.stabangle)
         self.rect = self.image.get_rect(center = rotated_image_center)
         
     
