@@ -1,7 +1,7 @@
-import pygame
+import pygame, random
 
 class Enemy(pygame.sprite.Sprite):
-    def __init__(self, startX,startY,width,height,image_load,img_dmg,health,agro_range,speed):
+    def __init__(self, startX,startY,width,height,image_load,img_dmg,health,agro_range,speed,damage):
         super().__init__()
         self.image = pygame.transform.scale(image_load, (width, height)).convert_alpha()
         self.mask  = pygame.mask.from_surface(self.image)
@@ -16,6 +16,7 @@ class Enemy(pygame.sprite.Sprite):
         self.movex = 0
         self.speed = speed
         self.hlt = False
+        self.dmg = damage
         
     def move(self,barriers,player):
         self.image = pygame.transform.scale(self.imgld, (self.w, self.h)).convert_alpha()
@@ -48,3 +49,10 @@ class Enemy(pygame.sprite.Sprite):
             self.image = pygame.transform.scale(self.imgdmg, (self.w, self.h)).convert_alpha()
             if self.hp <= 0:
                 self.kill()
+                heals = 0
+                for i in range(self.hp):
+                    rannum = random.randint(1,5)
+                    if rannum == 1:
+                        heals += 1
+                return True, heals
+        return False

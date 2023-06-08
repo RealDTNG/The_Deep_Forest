@@ -1,7 +1,7 @@
 import pygame
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, startX,startY,width,height,image_load,img_dmg,health,double_jump_unlock):
+    def __init__(self, startX,startY,width,height,image_load,img_dmg,health,maxhealth,double_jump_unlock,sprint_unlock,max_stamina = 0):
         super().__init__()
         self.player = pygame.transform.scale(pygame.image.load('Imgs/Player.png'),(width,height)).convert_alpha()
         self.fliped_player = pygame.transform.flip(self.player, True, False)
@@ -13,6 +13,7 @@ class Player(pygame.sprite.Sprite):
         self.imgld = image_load
         self.imgdmg = img_dmg
         self.hp = health
+        self.maxhp = maxhealth
         self.movey = 0
         self.movex = 0
         self.happend_once = False
@@ -23,6 +24,9 @@ class Player(pygame.sprite.Sprite):
             self.jump = 1
             self.jumpcount = 1
         self.jump_CD = 0
+
+        self.max_stamina = max_stamina
+        self.stamina = max_stamina
         
     def update(self,keys,keybinds,barriers):
         keyvalu = {True : 1, False: 0}
@@ -35,12 +39,18 @@ class Player(pygame.sprite.Sprite):
         elif self.movex < -4:
             self.movex+=1
         if key_input[keys[keybinds['RIGHT']]] or key_input[keys[keybinds['LEFT']]]:
-            self.movex += 1*(keyvalu[key_input[keys[keybinds['RIGHT']]]]-keyvalu[key_input[keys[keybinds['LEFT']]]])
-            self.rect.x += self.movex
+            self.movex += (keyvalu[key_input[keys[keybinds['RIGHT']]]]-keyvalu[key_input[keys[keybinds['LEFT']]]]) 
+            if key_input[keys[keybinds['SPRINT']]] and self.stamina > 4:
+                self.movex = 10*self.movex/abs(self.movex)
+                self.stamina -= 5
         else:
+            if self.stamina < self.max_stamina:
+                self.stamina += 1
             if self.movex != 0:
                 self.movex -= self.movex/abs(self.movex)
-        
+
+        self.rect.x += self.movex
+
         for b in barriers:
             while pygame.sprite.collide_mask(self,b):
                 if self.movex == 0:
@@ -96,9 +106,18 @@ class Player(pygame.sprite.Sprite):
                     self.rect.y += 1
                 self.movey = 0
 
-    def hit(self,dmg):
-        self.hp -= dmg
+    def draw_health_bar(self, surface, position, size, color_border, color_background, color_health):
+        pygame.draw.rect(surface, color_background, (*position, *size))
+        pygame.draw.rect(surface, color_border, (*position, *size), 1)
+        innerPos  = (position[0]+1, position[1]+1)
+        innerSize = (int((size[0]-2) * (self.hp/self.maxhp)), size[1]-2)
+        pygame.draw.rect(surface, color_health, (*innerPos, *innerSize))
+
+    def hit(self,enemy):
+        self.hp -= enemy.dmg
         self.image = pygame.transform.scale(self.imgdmg, (self.w, self.h)).convert_alpha()
+        self.movey = -10
+        self.movex = 20*((self.rect.x-enemy.rect.x)/abs(self.rect.x-enemy.rect.x))
         if self.hp <= 0:
             return True
         else:

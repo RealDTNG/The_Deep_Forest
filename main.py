@@ -176,7 +176,7 @@ def load_game():
         player_group.empty()
         tool_group.empty()
         enemy_group.empty()
-        player = Player(100,300,90,160,img.player,img.big_rock,5,True)
+        player = Player(100,300,90,160,img.player,img.big_rock,5,5,True,True,300)
         player_group.add(player)
         sword = Sword(20,78,img.sword1,50,250,img.sword1_slash,1)
         tool_group.add(sword)
@@ -186,7 +186,7 @@ def load_game():
         wall_group.add(Barrier(0,0,50,700,log_left))
         log_ground = pg.transform.rotate(img.log, -90)
         wall_group.add(Barrier(50,700,1440,200,log_ground))
-        enemy_group.add(Enemy(900,500,100,70,img.slime,img.big_rock,2,400,1))
+        enemy_group.add(Enemy(900,500,100,70,img.slime,img.big_rock,2,400,1,1))
         
         while grass_loop <= 760:
                 grass_sprite1,grass_sprite2,grass_sprite3,grass_sprite4,grass_sprite5,grass_sprite6 = pg.sprite.Sprite(),pg.sprite.Sprite(),pg.sprite.Sprite(),pg.sprite.Sprite(),pg.sprite.Sprite(),pg.sprite.Sprite()
@@ -474,6 +474,7 @@ def display_play():
             player.draw(WINDOW)
             
             grass_group.draw(WINDOW)
+            player.draw_health_bar(WINDOW,(player.rect.x,player.rect.y-40),(player.rect.width,20),(0,0,0),(200,0,0),(0,200,0))
             if player.rect.x >= 1310:
                 location = "T2"
                 load_game()
@@ -493,11 +494,17 @@ def display_play():
             sword.update(player)
             for e in enemy_group:
                 e.move(wall_group,player)
-                if pg.sprite.collide_mask(e,sword):
-                    e.hit(sword)
+                if pg.sprite.collide_mask(e,sword) and sword.stab:
+                    result_of_stab = e.hit(sword)
+                    if result_of_stab[0]:
+                        pass #spawn result_of_stab[1] amount of health
                     e.hlt = True
                 else:
                     e.hlt = False
+                if pg.sprite.collide_mask(e,player):
+                    if player.hit(e):
+                        game_state = "dead"
+
         elif pause:
             pause_rec = draw_rect_alpha(WINDOW, (0, 0, 0, 190), (0, 0, WINDOW_WIDTH, WINDOW_HEIGHT))
             if menu_optn == "main":
