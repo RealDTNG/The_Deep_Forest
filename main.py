@@ -108,7 +108,7 @@ choosing_key=[False]
 
 
 def start():
-    global game_state, menu_optn, save_datas, current_font, the_font, save_num, save_hp, save_time
+    global game_state, menu_optn, save_datas, current_font, the_font, save_num, save_hp, save_time, save1_data, save2_data, save3_data
     current_font = 2
     the_font = pg.font.Font(fonts[current_font],50)
     
@@ -118,11 +118,30 @@ def start():
     save_time = []
     save_hp = []
     save_datas = data.select_db(connection,"Player_Save_Info").fetchall()
+    '''              SAVE NUM         PLAY TIME           HP             MAX HP          DMG MULT         LOCATION        SLASH UNLOC     SPRINT UNLOC      DJUMP UNLOC      SHOOT UNLOC      '''
+    save1_data = [save_datas[0][1],save_datas[0][2],save_datas[0][3],save_datas[0][4],save_datas[0][5],save_datas[0][6],save_datas[0][7],save_datas[0][8],save_datas[0][9],save_datas[0][10]]
+    save2_data = [save_datas[1][1],save_datas[1][2],save_datas[1][3],save_datas[1][4],save_datas[1][5],save_datas[1][6],save_datas[1][7],save_datas[1][8],save_datas[1][9],save_datas[1][10]]
+    save3_data = [save_datas[2][1],save_datas[2][2],save_datas[2][3],save_datas[2][4],save_datas[2][5],save_datas[2][6],save_datas[2][7],save_datas[2][8],save_datas[2][9],save_datas[2][10]]
     for id in save_datas:
             save_num.append(the_font.render(f"Save {id[1]}", True, (130, 93, 14)))
             save_time.append(the_font.render(f"Play Time: [{id[2]}s]", True, (130, 93, 14)))
             save_hp.append(the_font.render(f"Current Health: [{id[3]}]", True, (130, 93, 14)))
+
+
+def save_location(save_num):
+    global location, save1_data,save2_data,save3_data
+    if save_num == 1:
+        data.update(connection,"Player_Save_Info","P_Loc",location,save1_data[5])
+    elif save_num == 2:
+        data.update(connection,"Player_Save_Info","P_Loc",location,save2_data[5])
+    elif save_num == 3:
+        data.update(connection,"Player_Save_Info","P_Loc",location,save3_data[5])
         
+
+def change_location(new_pos):
+    global location
+    location = new_pos
+
 
 def how_to_play():
     global menu_optn
@@ -351,7 +370,7 @@ sprint_key_btn = Text(500,675,keybinds['SPRINT'],50,fonts[current_font],key_chan
 
 
 def display_menu():
-    global WINDOW, game_state, menu_optn, current_save, count, load_time, loading_text, choosing_key, htp_text, wall_group, keybinds
+    global WINDOW, game_state, menu_optn, current_save, count, load_time, loading_text, choosing_key, htp_text, wall_group, keybinds, save3_data,save1_data,save2_data, location
     WINDOW.fill((255,255,255)) #White background
 
     pg.Surface.blit(WINDOW,img.menu_backdrop,(0,0))
@@ -394,6 +413,7 @@ def display_menu():
                         pg.time.delay(750)
                         game_state = "playing"
                         menu_optn = "main"
+                        location = save1_data[5]
                         load_game()
                     else:
                         rec1 = draw_rect_alpha(WINDOW, (161, 161, 161, 100), (temp_x-(rec1x/2), 375, rec1x, 205))
@@ -413,6 +433,7 @@ def display_menu():
                         pg.time.delay(750)
                         game_state = "playing"
                         menu_optn = "main"
+                        location = save2_data[5]
                         load_game()
                     else:
                         rec2 = draw_rect_alpha(WINDOW, (161, 161, 161, 100), (temp_x-(rec2x/2), 375, rec2x, 205))
@@ -433,6 +454,7 @@ def display_menu():
                         pg.time.delay(750)
                         game_state = "playing"
                         menu_optn = "main"
+                        location = save3_data[5]
                         load_game()
                     else:
                         rec3 = draw_rect_alpha(WINDOW, (161, 161, 161, 100), (temp_x-(rec3x/2), 375, rec3x, 205))
@@ -516,6 +538,10 @@ def display_play():
             player.draw(WINDOW)
             grass_group.draw(WINDOW)
             
+        elif location == "L1-4":#---------------------------------------------------------------------------------------------------
+        
+            pass
+        
         if not pause:
             player.update(keys,keybinds,wall_group)
             sword.update(player)
