@@ -128,3 +128,6 @@ class Player(pygame.sprite.Sprite):
             screen.blit(self.image, self.rect)
         except:
             pass
+    
+    def back(self):
+        self.rect.x -= self.movex

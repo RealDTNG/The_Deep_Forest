@@ -77,7 +77,6 @@ load_time = 0
 pause = False
 pause_delay = 40
 loading_text = "Loading"
-location = "T2"
 prev_location = "T1"
 img.imgs()
 wall_group = pg.sprite.Group()
@@ -86,6 +85,7 @@ tool_group = pg.sprite.Group()
 enemy_group = pg.sprite.Group()
 grass_group = pg.sprite.Group()
 grass_loop = 680
+slash_unlocking = False
 fonts = {1:'texts\menu_main.ttf',2:'texts\menu_sec.ttf',3:'texts\extra.ttf'}
 the_font = pg.font.Font(fonts[current_font],140)
 keys = {"~":pg.K_BACKQUOTE,"1":pg.K_1,"2":pg.K_2,"3":pg.K_3,"4":pg.K_4,"5":pg.K_5,"6":pg.K_6,"7":pg.K_7,"8":pg.K_8,"9":pg.K_9,
@@ -111,7 +111,6 @@ def start():
     global game_state, menu_optn, save_datas, current_font, the_font, save_num, save_hp, save_time, save1_data, save2_data, save3_data
     current_font = 2
     the_font = pg.font.Font(fonts[current_font],50)
-    
     menu_optn = "start"
     
     save_num = []
@@ -129,18 +128,13 @@ def start():
 
 
 def save_location(save_num):
-    global location, save1_data,save2_data,save3_data
+    global save1_data,save2_data,save3_data
     if save_num == 1:
-        data.update(connection,"Player_Save_Info","P_Loc",location,save1_data[5])
+        data.update(connection,"Player_Save_Info","P_Loc",active_save_info[5],save1_data[5])
     elif save_num == 2:
-        data.update(connection,"Player_Save_Info","P_Loc",location,save2_data[5])
+        data.update(connection,"Player_Save_Info","P_Loc",active_save_info[5],save2_data[5])
     elif save_num == 3:
-        data.update(connection,"Player_Save_Info","P_Loc",location,save3_data[5])
-        
-
-def change_location(new_pos):
-    global location
-    location = new_pos
+        data.update(connection,"Player_Save_Info","P_Loc",active_save_info[5],save3_data[5])
 
 
 def how_to_play():
@@ -187,11 +181,11 @@ def key_change_sprint():
     global choosing_key
     sprint_key_btn.update_text('press new binding')
     choosing_key=[True,'SPRINT',sprint_key_btn]
-
+    
 
 def load_game():
-    global wall_group,player_group,tool_group,enemy_group,player,sword, location, grass_group, grass_loop, prev_location
-    if location == "T1":
+    global wall_group,player_group,tool_group,enemy_group,player,sword, grass_group, grass_loop, prev_location, active_save_info
+    if active_save_info[5] == "T1":
         wall_group.empty()
         player_group.empty()
         tool_group.empty()
@@ -229,7 +223,7 @@ def load_game():
             grass_loop += 40
         grass_loop = 680
         
-    if location == "T2":
+    if active_save_info[5] == "T2":
         wall_group.empty()
         player_group.empty()
         tool_group.empty()
@@ -242,6 +236,7 @@ def load_game():
         log_ground = pg.transform.rotate(img.log, -90)
         wall_group.add(Barrier(50,700,1440,200,log_ground))
         wall_group.add(Barrier(250,620,44*3,34*2.5,img.big_rock))
+        wall_group.add(Barrier(920,650,30*3,16*3,img.rock))
         
         while grass_loop <= 760:
             grass_sprite1,grass_sprite2,grass_sprite3,grass_sprite4,grass_sprite5,grass_sprite6 = pg.sprite.Sprite(),pg.sprite.Sprite(),pg.sprite.Sprite(),pg.sprite.Sprite(),pg.sprite.Sprite(),pg.sprite.Sprite()
@@ -282,7 +277,23 @@ def play_pause():
     else:
         pause = True
         pause_delay = 0
-
+        
+        
+def slash_unlock():
+    global slash_unlocking,active_save_info
+    draw_rect_alpha(WINDOW,(191, 153, 29,130),((WINDOW_WIDTH/2-WINDOW_WIDTH/4),(WINDOW_HEIGHT/2-WINDOW_HEIGHT/4),(WINDOW_WIDTH/2),(WINDOW_HEIGHT/2)))
+    main_text = the_font.render("You Have Ulocked The Sword!",True,(255, 255, 255))
+    main_text_width = main_text.get_width()
+    WINDOW.blit(main_text,((WINDOW_WIDTH/2)-(main_text_width/2),(WINDOW_HEIGHT/2-WINDOW_HEIGHT/4)+30))
+    sub_text = the_font.render("Press Any Key To Continue",True,(255, 255, 255))
+    sub_text_width = sub_text.get_width()
+    WINDOW.blit(sub_text,((WINDOW_WIDTH/2)-(sub_text_width/2),(WINDOW_HEIGHT/2-WINDOW_HEIGHT/4)+380))
+    rotated_sword = pg.transform.scale_by(pg.transform.rotate(img.sword1,60),3)
+    WINDOW.blit(rotated_sword,((WINDOW_WIDTH/2)-(rotated_sword.get_width()/2),(WINDOW_HEIGHT/2-WINDOW_HEIGHT/4)+170))
+    for event in pg.event.get(pg.KEYDOWN):
+        slash_unlocking = False
+        active_save_info[6] = 1
+    
 
 def keybindings():
     global resume_text, keybinds, WINDOW, choosing_key
@@ -322,6 +333,17 @@ def close_program():
     pg.quit()
     sys.exit()
     
+
+def save_exit():
+    global active_save_info, save1_data,save2_data,save3_data, current_save
+    done = True
+    
+    if not done:
+        save_location(int(current_save))
+    else:
+        pg.quit()
+        sys.exit()
+    
     
 #^-------------------Button Functions-------------------^
 
@@ -334,6 +356,7 @@ resume_text = Text((WINDOW_WIDTH/2),350,"Resume",70,fonts[current_font],play_pau
 how_to_play_text = Text((WINDOW_WIDTH/2),450,"How To Play",70,fonts[current_font],how_to_play)
 settings_text = Text((WINDOW_WIDTH/2),550,"Settings",70,fonts[current_font],settings)
 exit_text = Text((WINDOW_WIDTH/2),650,"Exit To Desktop",70,fonts[current_font],close_program)
+save_exit_text = Text((WINDOW_WIDTH/2),650,"Save And Exit",70,fonts[current_font],close_program)
 return_text = Text(125,60,"Return",70,fonts[current_font],return_to_main)
 
 current_font = 1
@@ -370,7 +393,8 @@ sprint_key_btn = Text(500,675,keybinds['SPRINT'],50,fonts[current_font],key_chan
 
 
 def display_menu():
-    global WINDOW, game_state, menu_optn, current_save, count, load_time, loading_text, choosing_key, htp_text, wall_group, keybinds, save3_data,save1_data,save2_data, location
+    global WINDOW, game_state, menu_optn, current_save, count, load_time, loading_text, choosing_key, htp_text, wall_group, keybinds, save3_data,save1_data,save2_data
+    global active_save_info
     WINDOW.fill((255,255,255)) #White background
 
     pg.Surface.blit(WINDOW,img.menu_backdrop,(0,0))
@@ -413,7 +437,8 @@ def display_menu():
                         pg.time.delay(750)
                         game_state = "playing"
                         menu_optn = "main"
-                        location = save1_data[5]
+                        #location = save1_data[5]
+                        active_save_info = save1_data.copy()
                         load_game()
                     else:
                         rec1 = draw_rect_alpha(WINDOW, (161, 161, 161, 100), (temp_x-(rec1x/2), 375, rec1x, 205))
@@ -433,7 +458,8 @@ def display_menu():
                         pg.time.delay(750)
                         game_state = "playing"
                         menu_optn = "main"
-                        location = save2_data[5]
+                        #location = save2_data[5]
+                        active_save_info = save2_data.copy()
                         load_game()
                     else:
                         rec2 = draw_rect_alpha(WINDOW, (161, 161, 161, 100), (temp_x-(rec2x/2), 375, rec2x, 205))
@@ -454,7 +480,8 @@ def display_menu():
                         pg.time.delay(750)
                         game_state = "playing"
                         menu_optn = "main"
-                        location = save3_data[5]
+                        #location = save3_data[5]
+                        active_save_info = save3_data.copy()
                         load_game()
                     else:
                         rec3 = draw_rect_alpha(WINDOW, (161, 161, 161, 100), (temp_x-(rec3x/2), 375, rec3x, 205))
@@ -466,12 +493,12 @@ def display_menu():
             temp_saves_width = t.get_width()
             WINDOW.blit(t, (((-20+(20*i))+(WINDOW_WIDTH/4)+(WINDOW_WIDTH/4)*i)-(temp_saves_width/2),525))
         return_text.process(WINDOW,(117, 61, 8),(158, 84, 14),(64, 39, 8))
-            
-            
+
+
 def display_play():
     global load_time, count, WINDOW, load_text, loading_text, pause, WINDOW_HEIGHT, WINDOW_WIDTH, pause_delay, game_state
     global menu_optn, save_datas, current_font, the_font, save_num, save_hp, save_time, choosing_key, htp_text, keybinds
-    global tree_sheet, grass_loop, location, prev_location
+    global tree_sheet, grass_loop, prev_location, active_save_info, slash_unlocking
     WINDOW.fill((255,255,255)) #White background
     key_press = pg.key.get_pressed()
     if load_time <= 0:#CHANGE TO 300 FOR LOAD TIME
@@ -499,7 +526,7 @@ def display_play():
         if key_press[pg.K_ESCAPE] and pause_delay >= 40:
             play_pause()
             
-        if location == "T1":#-----------------------------------------------------------------------------------------------------
+        if active_save_info[5] == "T1":#-----------------------------------------------------------------------------------------------------
             
             WINDOW.blit(img.fogg,(0,0))
             WINDOW.blit(img.tree4,(194,192))
@@ -519,33 +546,49 @@ def display_play():
             grass_group.draw(WINDOW)
             player.draw_health_bar(WINDOW,(player.rect.x,player.rect.y-40),(player.rect.width,20),(0,0,0),(200,0,0),(0,200,0))
             if player.rect.x >= 1310:
-                location = "T2"
+                active_save_info[5] = "T2"
                 prev_location = "T1"
                 load_game()
                 
-        elif location == "T2":#---------------------------------------------------------------------------------------------------
+        elif active_save_info[5] == "T2":#---------------------------------------------------------------------------------------------------
             
             if player.rect.x <= 20:
-                location = "T1"
+                active_save_info[5] = "T1"
                 prev_location = "T2"
                 load_game()
                 
             WINDOW.blit(img.fogg,(0,0))
             WINDOW.blit(img.tree_and_branch,(420,255))
+            if active_save_info[6] == 0:
+                WINDOW.blit(img.sword1,(953,610))
+                if player.rect.x > 830:
+                    player.back()
+                if player.rect.x >= 800:
+                    sword_text = the_font.render(f"Press [{keybinds['ATTACK']}]",True,(83, 148, 252))
+                    sword_text_width = sword_text.get_width()
+                    WINDOW.blit(sword_text,(960-(sword_text_width/2),450))
+                    key_input = pg.key.get_pressed()
+                    if key_input[keys[keybinds['ATTACK']]]:
+                        #active_save_info[5] = 1
+                        slash_unlocking = True
+            else:
+                sword.draw(WINDOW)
             
             wall_group.draw(WINDOW)
-            sword.draw(WINDOW)
             enemy_group.draw(WINDOW)
             player.draw(WINDOW)
             grass_group.draw(WINDOW)
             
-        elif location == "L1-4":#---------------------------------------------------------------------------------------------------
+        elif active_save_info[5] == "L1-4":#---------------------------------------------------------------------------------------------------
         
             pass
         
         if not pause:
-            player.update(keys,keybinds,wall_group)
-            sword.update(player)
+            if not slash_unlocking:
+                player.update(keys,keybinds,wall_group)
+                sword.update(player)
+            else:
+                slash_unlock()
             for e in enemy_group:
                 e.move(wall_group,player)
                 if pg.sprite.collide_mask(e,sword) and sword.stab:
