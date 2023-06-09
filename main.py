@@ -231,7 +231,7 @@ def load_game():
         tool_group.empty()
         enemy_group.empty()
         grass_group.empty()
-        player = Player(50,300,90,160,img.player,img.big_rock,5,5,True,True)
+        player = Player(50,300,90,160,img.player,img.big_rock,5,5,True,True,300)
         player_group.add(player)
         sword = Sword(20,78,img.sword1,50,250,img.sword1_slash,1)
         tool_group.add(sword)
@@ -546,7 +546,6 @@ def display_play():
             player.draw(WINDOW)
             
             grass_group.draw(WINDOW)
-            player.draw_health_bar(WINDOW,(player.rect.x,player.rect.y-40),(player.rect.width,10),(player.rect.width,10),(0,0,0),(200,0,0),(0,200,0),(200,200,0))
             if player.rect.x >= 1310:
                 active_save_info[5] = "T2"
                 prev_location = "T1"
@@ -589,6 +588,7 @@ def display_play():
             if not slash_unlocking:
                 player.update(keys,keybinds,wall_group)
                 sword.update(player)
+                player.draw_health_bar(WINDOW,(player.rect.x,player.rect.y-40),(player.rect.width,10),(player.rect.width,10),(0,0,0),(200,0,0),(0,200,0),(200,200,0))
             else:
                 slash_unlock()
             for e in enemy_group:
