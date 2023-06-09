@@ -24,7 +24,7 @@ class Player(pygame.sprite.Sprite):
             self.jump = 1
             self.jumpcount = 1
         self.jump_CD = 0
-
+        self.sprint_unlock = sprint_unlock
         self.max_stamina = max_stamina
         self.stamina = max_stamina
         
@@ -33,16 +33,20 @@ class Player(pygame.sprite.Sprite):
         key_input = pygame.key.get_pressed()
         mousepos = pygame.mouse.get_pos() 
         
-            
-        if self.movex >4:
+        if self.movex > 5:
+            self.movex-=2
+        elif self.movex < -5:
+            self.movex+=2
+        elif self.movex > 4:
             self.movex-=1
         elif self.movex < -4:
             self.movex+=1
         if key_input[keys[keybinds['RIGHT']]] or key_input[keys[keybinds['LEFT']]]:
             self.movex += (keyvalu[key_input[keys[keybinds['RIGHT']]]]-keyvalu[key_input[keys[keybinds['LEFT']]]]) 
-            if key_input[keys[keybinds['SPRINT']]] and self.stamina > 4:
-                self.movex = 10*self.movex/abs(self.movex)
-                self.stamina -= 5
+            if key_input[keys[keybinds['SPRINT']]] and self.stamina > 4 and self.sprint_unlock:
+                if self.movex != 0:
+                    self.movex = 10*self.movex/abs(self.movex)
+                    self.stamina -= 5
         else:
             if self.stamina < self.max_stamina:
                 self.stamina += 1
@@ -106,18 +110,27 @@ class Player(pygame.sprite.Sprite):
                     self.rect.y += 1
                 self.movey = 0
 
-    def draw_health_bar(self, surface, position, size, color_border, color_background, color_health):
-        pygame.draw.rect(surface, color_background, (*position, *size))
-        pygame.draw.rect(surface, color_border, (*position, *size), 1)
-        innerPos  = (position[0]+1, position[1]+1)
-        innerSize = (int((size[0]-2) * (self.hp/self.maxhp)), size[1]-2)
-        pygame.draw.rect(surface, color_health, (*innerPos, *innerSize))
+    def draw_health_bar(self, surface, position, sizeHP, sizeStam, color_border, color_background, color_health, color_stamina):
+        pygame.draw.rect(surface, color_background, (*position, *sizeHP))
+        pygame.draw.rect(surface, color_border, (*position, *sizeHP), 2)
+        innerPosHP  = (position[0]+2, position[1]+2)
+        innerSizeHP = (int((sizeHP[0]-4) * (self.hp/self.maxhp)), sizeHP[1]-4)
+        pygame.draw.rect(surface, color_health, (*innerPosHP, *innerSizeHP))
+        if self.sprint_unlock:
+            pygame.draw.rect(surface, color_background, (*(position[0],position[1]+sizeHP[1]), *sizeStam))
+            pygame.draw.rect(surface, color_border, (*(position[0],position[1]+sizeHP[1]), *sizeStam), 2)
+            innerPosStam  = (position[0]+2, position[1]+sizeHP[1]+2)
+            innerSizeStam = (int((sizeStam[0]-4) * (self.stamina/self.max_stamina)), sizeStam[1]-4)
+            pygame.draw.rect(surface, color_stamina, (*innerPosStam, *innerSizeStam))
 
     def hit(self,enemy):
         self.hp -= enemy.dmg
         self.image = pygame.transform.scale(self.imgdmg, (self.w, self.h)).convert_alpha()
         self.movey = -10
-        self.movex = 20*((self.rect.x-enemy.rect.x)/abs(self.rect.x-enemy.rect.x))
+        try:
+            self.movex = 25*((self.rect.x+self.rect.w-enemy.rect.x-enemy.rect.width)/abs(self.rect.x+self.rect.w-enemy.rect.x-enemy.rect.width))
+        except:
+            self.movex = -25
         if self.hp <= 0:
             return True
         else:

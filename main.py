@@ -204,6 +204,8 @@ def load_game():
         log_ground = pg.transform.rotate(img.log, -90)
         wall_group.add(Barrier(50,700,1440,200,log_ground))
         enemy_group.add(Enemy(900,500,100,70,img.slime,img.big_rock,2,400,1,1))
+        enemy_group.add(Enemy(1000,500,140,80,img.wolf,img.big_rock,3,500,3,1))
+        enemy_group.add(Enemy(1000,200,100,80,img.bat,img.big_rock,2,700,2,1,True))
         
         while grass_loop <= 760:
             grass_sprite1,grass_sprite2,grass_sprite3,grass_sprite4,grass_sprite5,grass_sprite6 = pg.sprite.Sprite(),pg.sprite.Sprite(),pg.sprite.Sprite(),pg.sprite.Sprite(),pg.sprite.Sprite(),pg.sprite.Sprite()
@@ -544,7 +546,7 @@ def display_play():
             player.draw(WINDOW)
             
             grass_group.draw(WINDOW)
-            player.draw_health_bar(WINDOW,(player.rect.x,player.rect.y-40),(player.rect.width,20),(0,0,0),(200,0,0),(0,200,0))
+            player.draw_health_bar(WINDOW,(player.rect.x,player.rect.y-40),(player.rect.width,10),(player.rect.width,10),(0,0,0),(200,0,0),(0,200,0),(200,200,0))
             if player.rect.x >= 1310:
                 active_save_info[5] = "T2"
                 prev_location = "T1"
@@ -636,7 +638,7 @@ def display_play():
 
 while True:
     if game_state == "playing":
-        display_play()   
+        display_play()
     elif game_state == "menu":
         display_menu()
 
