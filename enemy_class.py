@@ -54,5 +54,5 @@ class Enemy(pygame.sprite.Sprite):
                     rannum = random.randint(1,5)
                     if rannum == 1:
                         heals += 1
-                return True, heals
-        return False
+                return [True, heals]
+        return [False]
