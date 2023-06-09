@@ -16,7 +16,7 @@ def imgs():
     
     player = pg.transform.scale(pg.image.load('Imgs/Player.png'),(90,160))
     
-    sword1 = toolsheet.image_at((0,0,13,39))
+    sword1 = pg.transform.scale_by(toolsheet.image_at((0,0,13,39)),2)
     
     sword2 = toolsheet.image_at((18,0,15,60))
     
@@ -32,7 +32,7 @@ def imgs():
     
     big_rock = pg.transform.scale_by(tree_sheet.image_at((616,201,50,33)), 2)
     
-    rock = tree_sheet.image_at((569,216,30,16))
+    rock = pg.transform.scale_by(tree_sheet.image_at((569,216,30,16)),2)
     
     tree1 = pg.transform.scale_by(tree_sheet.image_at((379, 42, 68, 87)),4)
     
