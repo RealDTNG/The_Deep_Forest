@@ -6,15 +6,21 @@ from spritesheet import spritesheet
 
 def imgs():
     global tree_sheet, menu_backdrop, grass, log, tree1, big_rock, rock, thin_grass, slime, player, sword1, tree_and_branch, dead_tree
-    global tree2, tree3, tree4, sword2, sword1_slash, sword2_slash, fogg, wolf, bat
+    global tree2, tree3, tree4, sword2, sword1_slash, sword2_slash, fogg, wolf, bat, player_crouching, player_jumping
     
     tree_sheet = spritesheet('Imgs\Tree_SpriteSheet.png')
     
     toolsheet = spritesheet('Imgs\Tool_SpriteSheet.png')
     
+    playersheet = spritesheet('Imgs\Player_SpriteSheet.png')
+    
     menu_backdrop = pg.transform.scale(pg.image.load('Imgs/menu_backdrop.png'),(1440,900))
     
-    player = pg.transform.scale(pg.image.load('Imgs/Player.png'),(90,160))
+    player = playersheet.image_at((0,0,45,77))
+    
+    player_crouching = playersheet.image_at((46,0,45,40))
+    
+    player_jumping = playersheet.image_at((46,84,45,62))
     
     sword1 = pg.transform.scale_by(toolsheet.image_at((0,0,13,39)),2)
     
@@ -50,7 +56,7 @@ def imgs():
 
     wolf = pg.transform.scale(pg.image.load('Imgs/wolf_enemy.png'),(140,80))
 
-    bat = pg.transform.scale(pg.image.load('Imgs/bat_enemy.png'),(100,80))
+    bat = pg.transform.flip(pg.transform.scale(pg.image.load('Imgs/bat_enemy.png'),(100,80)), True, False)
     
     fogg = pg.transform.scale_by(tree_sheet.image_at((0,0,230,130)),7)
     

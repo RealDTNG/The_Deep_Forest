@@ -3,7 +3,9 @@ import pygame, random
 class Enemy(pygame.sprite.Sprite):
     def __init__(self, startX,startY,width,height,image_load,img_dmg,health,agro_range,speed,damage,flying = False,shooter = False):
         super().__init__()
-        self.image = pygame.transform.scale(image_load, (width, height)).convert_alpha()
+        self.enemy = pygame.transform.scale(image_load, (width, height)).convert_alpha()
+        self.fliped_enemy = pygame.transform.flip(self.enemy, True, False)
+        self.image = self.enemy
         self.mask  = pygame.mask.from_surface(self.image)
         self.rect = self.image.get_rect(topleft=(startX,startY))
         self.agro_range = agro_range
@@ -21,8 +23,6 @@ class Enemy(pygame.sprite.Sprite):
         self.shooter = shooter
         
     def move(self,barriers,player):
-        self.image = pygame.transform.scale(self.imgld, (self.w, self.h)).convert_alpha()
-        
         if self.movex >self.speed:
             self.movex-=1
         elif self.movex < -self.speed:
@@ -32,7 +32,12 @@ class Enemy(pygame.sprite.Sprite):
                 pass
             else:
                 self.movex += (player.rect.x + player.rect.width/2 - self.rect.x - self.w/2)/abs(player.rect.x + player.rect.width/2 - self.rect.x - self.w/2)
-        
+
+        if self.movex > 0:
+            self.image = self.enemy
+        elif self.movex < 0:
+            self.image = self.fliped_enemy
+
         self.rect.x += self.movex
 
         for b in barriers:

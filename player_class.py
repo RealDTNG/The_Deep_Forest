@@ -1,10 +1,14 @@
 import pygame
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, startX,startY,width,height,image_load,img_dmg,health,maxhealth,double_jump_unlock,sprint_unlock,max_stamina = 0):
+    def __init__(self, startX,startY,width,height,image_load,img_dmg,img_crouch,img_jump,health,maxhealth,double_jump_unlock,sprint_unlock,max_stamina = 0):
         super().__init__()
-        self.player = pygame.transform.scale(pygame.image.load('Imgs/Player.png'),(width,height)).convert_alpha()
+        self.player = pygame.transform.scale(image_load,(width,height)).convert_alpha()
         self.fliped_player = pygame.transform.flip(self.player, True, False)
+        self.player_crouching = pygame.transform.scale(img_crouch,(width,height/2)).convert_alpha()
+        self.fliped_player_crouching = pygame.transform.flip(self.player_crouching, True, False)
+        self.player_jumping = pygame.transform.scale(img_jump,(width,height*(3/4))).convert_alpha()
+        self.fliped_player_jumping = pygame.transform.flip(self.player_jumping, True, False)
         self.image = self.player
         self.mask  = pygame.mask.from_surface(self.image)
         self.rect = self.image.get_rect(topleft=(startX,startY))
@@ -77,10 +81,10 @@ class Player(pygame.sprite.Sprite):
                 self.rect.y += self.h/2
                 self.happend_once = True
             if self.rect.x < mousepos[0]:
-                self.image = pygame.transform.scale(self.player, (self.w, self.h/2)).convert_alpha()
+                self.image = self.player_crouching
                 self.mask  = pygame.mask.from_surface(self.image)  
             elif self.rect.x > mousepos[0]:
-                self.image = pygame.transform.scale(self.fliped_player, (self.w, self.h/2)).convert_alpha()
+                self.image = self.fliped_player_crouching
                 self.mask  = pygame.mask.from_surface(self.image)
             x,y = self.rect.x,self.rect.y
             self.rect = self.image.get_rect(topleft=(x,y))
@@ -92,11 +96,13 @@ class Player(pygame.sprite.Sprite):
                 self.image = self.player
                 self.mask  = pygame.mask.from_surface(self.image)  
             else:
-                self.image =  self.fliped_player
+                self.image = self.fliped_player
                 self.mask  = pygame.mask.from_surface(self.image)
             x,y = self.rect.x,self.rect.y
             self.rect = self.image.get_rect(topleft=(x,y))
 
+        grounded = False
+        
         for b in barriers:
             if self.movey > 0:
                 collidetype= 'up'
@@ -106,9 +112,19 @@ class Player(pygame.sprite.Sprite):
                 if collidetype == 'up':
                     self.rect.y -= 1
                     self.jump=self.jumpcount
+                    grounded = True
                 else:
                     self.rect.y += 1
                 self.movey = 0
+        
+        if not grounded:
+            if self.rect.x < mousepos[0]:
+                self.image = self.player_jumping
+                self.mask  = pygame.mask.from_surface(self.image)  
+            elif self.rect.x > mousepos[0]:
+                self.image = self.fliped_player_jumping
+                self.mask  = pygame.mask.from_surface(self.image)
+            self.rect = self.image.get_rect(topleft=(x,y))
 
     def draw_health_bar(self, surface, position, sizeHP, sizeStam, color_border, color_background, color_health, color_stamina):
         pygame.draw.rect(surface, color_background, (*position, *sizeHP))

@@ -192,9 +192,9 @@ def load_game():
         enemy_group.empty()
         grass_group.empty()
         if prev_location == "T2":
-            player = Player(1300,300,90,160,img.player,img.big_rock,5,5,True,True,300)
+            player = Player(1300,300,90,160,img.player,img.big_rock,img.player_crouching,img.player_jumping,5,5,True,True,300)
         else:
-            player = Player(100,300,90,160,img.player,img.big_rock,5,5,True,True,300)
+            player = Player(100,300,90,160,img.player,img.big_rock,img.player_crouching,img.player_jumping,5,5,True,True,300)
         player_group.add(player)
         sword = Sword(20,78,img.sword1,50,250,img.sword1_slash,1)
         tool_group.add(sword)
@@ -231,7 +231,7 @@ def load_game():
         tool_group.empty()
         enemy_group.empty()
         grass_group.empty()
-        player = Player(50,300,90,160,img.player,img.big_rock,5,5,True,True,300)
+        player = Player(50,300,90,160,img.player,img.big_rock,img.player_crouching,img.player_jumping,5,5,True,True,300)
         player_group.add(player)
         sword = Sword(20,78,img.sword1,50,250,img.sword1_slash,1)
         tool_group.add(sword)
