@@ -100,6 +100,9 @@ class Player(pygame.sprite.Sprite):
                 self.rect.y -= self.h/2
                 self.happend_once = False
             if self.rect.x + self.rect.w/2 < mousepos[0]:
+                if self.direction == "left":
+                    self.image = self.player
+                    self.mask  = pygame.mask.from_surface(self.image) 
                 self.direction = "right"
                 if self.walk_count >= 20:
                     if self.walking == False:
@@ -113,6 +116,9 @@ class Player(pygame.sprite.Sprite):
                         self.walking = False
                         self.mask  = pygame.mask.from_surface(self.image)  
             else:
+                if self.direction == "right":
+                    self.image = self.fliped_player
+                    self.mask  = pygame.mask.from_surface(self.image)
                 self.direction = "left"
                 if self.walk_count >= 20:
                     if self.walking == False:
@@ -187,3 +193,7 @@ class Player(pygame.sprite.Sprite):
     
     def back(self):
         self.rect.x -= self.movex
+        
+    def return_stats(self):
+        return self.movex,self.movey,self.hp,self.stamina
+    
