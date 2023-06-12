@@ -46,7 +46,7 @@ T1-T2 -- L1-4 - L1-5 _ L1-6 -- L2-4 - L2-5 _ L2-6
 """
 #v---------------------Imports------------------------v
 
-import pygame as pg, data_functions as data, sys, Imgs.img as img # pip install pygame
+import pygame as pg, data_functions as data, sys, Imgs.img as img, random # pip install pygame
 from button_class import Button
 from text_class import Text
 from wall_class import Barrier
@@ -84,6 +84,7 @@ player_group = pg.sprite.Group()
 tool_group = pg.sprite.Group()
 enemy_group = pg.sprite.Group()
 grass_group = pg.sprite.Group()
+heal_group = pg.sprite.Group()
 grass_loop = 680
 slash_unlocking = False
 fonts = {1:'texts\menu_main.ttf',2:'texts\menu_sec.ttf',3:'texts\extra.ttf'}
@@ -211,6 +212,7 @@ def load_game():
         tool_group.empty()
         enemy_group.empty()
         grass_group.empty()
+        heal_group.empty()
         if prev_location == "T2":
             player = Player(1300,300,90,160,img.player,img.big_rock,img.player_crouching,img.player_jumping,img.player_walk,5,5,True,True,300)
         else:
@@ -235,6 +237,7 @@ def load_game():
         tool_group.empty()
         enemy_group.empty()
         grass_group.empty()
+        heal_group.empty()
         player = Player(50,300,90,160,img.player,img.big_rock,img.player_crouching,img.player_jumping,img.player_walk,5,5,True,True,300)
         player_group.add(player)
         sword = Sword(20,78,img.sword1,50,250,img.sword1_slash,1)
@@ -602,6 +605,7 @@ def display_play():
             WINDOW.blit(img.tree1,(1202,374))
             WINDOW.blit(img.tree3,(482,290))
             
+            heal_group.draw(WINDOW)
             wall_group.draw(WINDOW)
             sword.draw(WINDOW)
             enemy_group.draw(WINDOW)
@@ -630,6 +634,7 @@ def display_play():
             else:
                 sword.draw(WINDOW)
             
+            heal_group.draw(WINDOW)
             wall_group.draw(WINDOW)
             enemy_group.draw(WINDOW)
             player.draw(WINDOW)
@@ -730,13 +735,18 @@ def display_play():
                 if pg.sprite.collide_mask(e,sword) and sword.stab:
                     result_of_stab = e.hit(sword)
                     if result_of_stab[0]:
-                        pass #spawn result_of_stab[1] amount of health
+                        for i in range(result_of_stab[1]):
+                            heal_group.add(Barrier(e.rect.x + random.randint((-e.rect.width/2),(e.rect.width/2)),e.rect.y + random.randint((-e.rect.height/2),(e.rect.height/2)),30,30,img.heal))
                     e.hlt = True
                 else:
                     e.hlt = False
                 if pg.sprite.collide_mask(e,player):
                     if player.hit(e):
                         game_state = "dead"
+            for h in heal_group:
+                if pg.sprite.collide_mask(h,player) and player.hp < player.maxhp:
+                    player.hp += 1
+                    h.kill()
 
         elif pause:
             pause_rec = draw_rect_alpha(WINDOW, (0, 0, 0, 190), (0, 0, WINDOW_WIDTH, WINDOW_HEIGHT))
