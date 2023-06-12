@@ -13,6 +13,7 @@ class Enemy(pygame.sprite.Sprite):
         self.h = height
         self.imgld = image_load
         self.imgdmg = img_dmg
+        self.maxhp = health
         self.hp = health
         self.movey = 0
         self.movex = 0
@@ -64,7 +65,7 @@ class Enemy(pygame.sprite.Sprite):
             if self.hp <= 0:
                 self.kill()
                 heals = 0
-                for i in range(self.hp):
+                for i in range(self.maxhp):
                     rannum = random.randint(1,5)
                     if rannum == 1:
                         heals += 1

@@ -1,7 +1,7 @@
 import pygame
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, startX,startY,width,height,image_load,img_dmg,img_crouch,img_jump,health,maxhealth,double_jump_unlock,sprint_unlock,max_stamina = 0):
+    def __init__(self, startX,startY,width,height,image_load,img_dmg,img_crouch,img_jump,health,maxhealth,double_jump_unlock,sprint_unlock,max_stamina = 0,stamina = 100):
         super().__init__()
         self.player = pygame.transform.scale(image_load,(width,height)).convert_alpha()
         self.fliped_player = pygame.transform.flip(self.player, True, False)
@@ -30,7 +30,7 @@ class Player(pygame.sprite.Sprite):
         self.jump_CD = 0
         self.sprint_unlock = sprint_unlock
         self.max_stamina = max_stamina
-        self.stamina = max_stamina
+        self.stamina = stamina
         
     def update(self,keys,keybinds,barriers):
         keyvalu = {True : 1, False: 0}
