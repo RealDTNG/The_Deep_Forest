@@ -53,8 +53,9 @@ class Enemy(pygame.sprite.Sprite):
         
         self.rect.y += self.movey
 
-        if self.movey != 0:
-            for b in barriers:
+        
+        for b in barriers:
+            if self.movey != 0:
                 reverse_dir = self.movey/abs(self.movey)
                 while pygame.sprite.collide_mask(self,b):
                     self.rect.y -= reverse_dir

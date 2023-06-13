@@ -5,9 +5,9 @@ Start: 5/16/2023     End: N/A
 
 Dawson To Do List;
     - Start/Menu                >DONE
-    - Database                  >EHH
-    - Animations                >PENDING DYLAN...
-    - Ability Unlock            >
+    - Database                  >DONE
+    - Animations                >GOOD ENOUGH
+    - Ability Unlock            >DONE
     - Level Design              >WIP
     - Game Map                  >
     - Game Ending               >
@@ -16,7 +16,7 @@ Dawson To Do List;
 Dylan To Do List;   
     - Menu Settings             >DONE
     - Resolution                >DONE
-    - Sprites                   >WIP
+    - Sprites                   >GOOD ENOUGH
     - Sound                     >
     - Test Map                  >DONE
     - Game Map                  >
@@ -184,6 +184,26 @@ def key_change_sprint():
     sprint_key_btn.update_text('press new binding')
     choosing_key=[True,'SPRINT',sprint_key_btn]
     
+def make_grass():
+    global grass_group, grass_loop
+    while grass_loop <= 840:
+        grass_sprite1,grass_sprite2,grass_sprite3,grass_sprite4,grass_sprite5,grass_sprite6 = pg.sprite.Sprite(),pg.sprite.Sprite(),pg.sprite.Sprite(),pg.sprite.Sprite(),pg.sprite.Sprite(),pg.sprite.Sprite()
+        grass_sprite1.image,grass_sprite2.image,grass_sprite3.image,grass_sprite4.image,grass_sprite5.image,grass_sprite6.image = img.grass,img.grass,img.grass,img.grass,img.grass,img.grass
+        grass_sprite1.rect = grass_sprite1.image.get_rect().move(-238,grass_loop)
+        grass_group.add(grass_sprite1)
+        grass_sprite2.rect = grass_sprite2.image.get_rect().move(50,grass_loop)
+        grass_group.add(grass_sprite2)
+        grass_sprite3.rect = grass_sprite3.image.get_rect().move(338,grass_loop)
+        grass_group.add(grass_sprite3)
+        grass_sprite4.rect = grass_sprite4.image.get_rect().move(626,grass_loop)
+        grass_group.add(grass_sprite4)
+        grass_sprite5.rect = grass_sprite5.image.get_rect().move(914,grass_loop)
+        grass_group.add(grass_sprite5)
+        grass_sprite6.rect = grass_sprite6.image.get_rect().move(1202,grass_loop)
+        grass_group.add(grass_sprite6)
+        grass_loop += 40
+    grass_loop = 680
+        
 
 def load_game():
     global wall_group,player_group,tool_group,enemy_group,player,sword, grass_group, grass_loop, prev_location, active_save_info
@@ -206,30 +226,14 @@ def load_game():
         log_left = pg.transform.rotate(img.log, 180)
         wall_group.add(Barrier(0,0,50,700,log_left))
         log_ground = pg.transform.rotate(img.log, -90)
-        wall_group.add(Barrier(50,700,1440,200,log_ground))
+        wall_group.add(Barrier(0,700,1440,200,log_ground))
         enemy_group.add(Enemy(900,500,100,70,img.slime,img.big_rock,2,400,1,1))
         enemy_group.add(Enemy(1000,500,140,80,img.wolf,img.big_rock,3,500,3,1))
         enemy_group.add(Enemy(1000,200,100,80,img.bat,img.big_rock,2,700,2,1,True,True))
         
-        while grass_loop <= 760:
-            grass_sprite1,grass_sprite2,grass_sprite3,grass_sprite4,grass_sprite5,grass_sprite6 = pg.sprite.Sprite(),pg.sprite.Sprite(),pg.sprite.Sprite(),pg.sprite.Sprite(),pg.sprite.Sprite(),pg.sprite.Sprite()
-            grass_sprite1.image,grass_sprite2.image,grass_sprite3.image,grass_sprite4.image,grass_sprite5.image,grass_sprite6.image = img.grass,img.grass,img.grass,img.grass,img.grass,img.grass
-            grass_sprite1.rect = grass_sprite1.image.get_rect().move(-238,grass_loop)
-            grass_group.add(grass_sprite1)
-            grass_sprite2.rect = grass_sprite2.image.get_rect().move(50,grass_loop)
-            grass_group.add(grass_sprite2)
-            grass_sprite3.rect = grass_sprite3.image.get_rect().move(338,grass_loop)
-            grass_group.add(grass_sprite3)
-            grass_sprite4.rect = grass_sprite4.image.get_rect().move(626,grass_loop)
-            grass_group.add(grass_sprite4)
-            grass_sprite5.rect = grass_sprite5.image.get_rect().move(914,grass_loop)
-            grass_group.add(grass_sprite5)
-            grass_sprite6.rect = grass_sprite6.image.get_rect().move(1202,grass_loop)
-            grass_group.add(grass_sprite6)
-            grass_loop += 40
-        grass_loop = 680
+        make_grass()
         
-    if active_save_info[5] == "T2":
+    elif active_save_info[5] == "T2":
         wall_group.empty()
         player_group.empty()
         tool_group.empty()
@@ -242,29 +246,96 @@ def load_game():
         sword = Sword(20,78,img.sword1,50,250,img.sword1_slash,1)
         tool_group.add(sword)
         log_ground = pg.transform.rotate(img.log, -90)
-        wall_group.add(Barrier(50,700,1440,200,log_ground))
+        wall_group.add(Barrier(0,700,1440,200,log_ground))
         wall_group.add(Barrier(250,620,44*3,34*2.5,img.big_rock))
         wall_group.add(Barrier(920,650,30*3,16*3,img.rock))
         
-        while grass_loop <= 760:
-            grass_sprite1,grass_sprite2,grass_sprite3,grass_sprite4,grass_sprite5,grass_sprite6 = pg.sprite.Sprite(),pg.sprite.Sprite(),pg.sprite.Sprite(),pg.sprite.Sprite(),pg.sprite.Sprite(),pg.sprite.Sprite()
-            grass_sprite1.image,grass_sprite2.image,grass_sprite3.image,grass_sprite4.image,grass_sprite5.image,grass_sprite6.image = img.grass,img.grass,img.grass,img.grass,img.grass,img.grass
-            grass_sprite1.rect = grass_sprite1.image.get_rect().move(-238,grass_loop)
-            grass_group.add(grass_sprite1)
-            grass_sprite2.rect = grass_sprite2.image.get_rect().move(50,grass_loop)
-            grass_group.add(grass_sprite2)
-            grass_sprite3.rect = grass_sprite3.image.get_rect().move(338,grass_loop)
-            grass_group.add(grass_sprite3)
-            grass_sprite4.rect = grass_sprite4.image.get_rect().move(626,grass_loop)
-            grass_group.add(grass_sprite4)
-            grass_sprite5.rect = grass_sprite5.image.get_rect().move(914,grass_loop)
-            grass_group.add(grass_sprite5)
-            grass_sprite6.rect = grass_sprite6.image.get_rect().move(1202,grass_loop)
-            grass_group.add(grass_sprite6)
-            grass_loop += 40
-        grass_loop = 680
+        make_grass()
     
-
+    elif active_save_info[5] == "L1-4":
+        wall_group.empty()
+        player_group.empty()
+        tool_group.empty()
+        enemy_group.empty()
+        grass_group.empty()
+        if prev_location == "L1-5":
+            player = Player(1300,300,90,160,img.player,img.big_rock,img.player_crouching,img.player_jumping,img.player_walk,5,5,True,True,300)
+        else:
+            player = Player(50,300,90,160,img.player,img.big_rock,img.player_crouching,img.player_jumping,img.player_walk,5,5,True,True,300)
+        player_group.add(player)
+        sword = Sword(20,78,img.sword1,50,250,img.sword1_slash,1)
+        tool_group.add(sword)
+        log_ground = pg.transform.rotate(img.log, -90)
+        wall_group.add(Barrier(1360,0,90,300,img.log))
+        wall_group.add(Barrier(1360,500,90,200,img.log))
+        wall_group.add(Barrier(0,700,1440,200,log_ground))
+        enemy_group.add(Enemy(600,500,100,70,img.slime,img.big_rock,2,400,1,1))
+        make_grass()
+    
+    elif active_save_info[5] == "L1-5":
+        wall_group.empty()
+        player_group.empty()
+        tool_group.empty()
+        enemy_group.empty()
+        grass_group.empty()
+        if prev_location == "L1-6":
+            player = Player(1300,300,90,160,img.player,img.big_rock,img.player_crouching,img.player_jumping,img.player_walk,5,5,True,True,300)
+        else:
+            player = Player(50,300,90,160,img.player,img.big_rock,img.player_crouching,img.player_jumping,img.player_walk,5,5,True,True,300)
+        player_group.add(player)
+        sword = Sword(20,78,img.sword1,50,250,img.sword1_slash,1)
+        tool_group.add(sword)
+        wall_group.add(Barrier(0,0,500,300,img.log))
+        wall_group.add(Barrier(0,520,1000,50,img.log))
+        wall_group.add(Barrier(720,250,820,50,img.log))
+        wall_group.add(Barrier(500,0,600,20,img.log))
+        wall_group.add(Barrier(1360,0,80,250,img.log))
+        wall_group.add(Barrier(1300,520,140,380,img.log))
+        wall_group.add(Barrier(0,570,30,330,img.log))
+        wall_group.add(Barrier(250,850,1050,50,img.log))
+        enemy_group.add(Enemy(750,600,100,70,img.slime,img.big_rock,2,400,1,1))
+        enemy_group.add(Enemy(850,150,100,70,img.slime,img.big_rock,2,400,1,1))
+        
+    elif active_save_info[5] == "L1-6":
+        wall_group.empty()
+        player_group.empty()
+        tool_group.empty()
+        enemy_group.empty()
+        grass_group.empty()
+        player = Player(50,300,90,160,img.player,img.big_rock,img.player_crouching,img.player_jumping,img.player_walk,5,5,True,True,300)
+        player_group.add(player)
+        sword = Sword(20,78,img.sword1,50,250,img.sword1_slash,1)
+        tool_group.add(sword)
+        wall_group.add(Barrier(0,0,300,200,img.log))
+        wall_group.add(Barrier(300,0,1140,20,img.log))
+        wall_group.add(Barrier(0,520,750,380,img.log))
+        wall_group.add(Barrier(1200,520,750,380,img.log))
+        enemy_group.add(Enemy(600,420,100,70,img.slime,img.big_rock,2,400,1,1))
+    elif active_save_info[5] == "L1-9":
+        wall_group.empty()
+        player_group.empty()
+        tool_group.empty()
+        enemy_group.empty()
+        grass_group.empty()
+        if prev_location == "L1-6":
+            player = Player(900,50,90,160,img.player,img.big_rock,img.player_crouching,img.player_jumping,img.player_walk,5,5,True,True,300)
+        else:
+            player = Player(50,300,90,160,img.player,img.big_rock,img.player_crouching,img.player_jumping,img.player_walk,5,5,True,True,300)
+        player_group.add(player)
+        sword = Sword(20,78,img.sword1,50,250,img.sword1_slash,1)
+        tool_group.add(sword)
+        wall_group.add(Barrier(0,0,750,50,img.log))
+        wall_group.add(Barrier(1200,0,750,50,img.log))
+        wall_group.add(Barrier(0,850,1440,50,img.log))
+        wall_group.add(Barrier(0,650,70,200,img.log))
+        wall_group.add(Barrier(1390,50,50,800,img.log))
+        enemy_group.add(Enemy(600,700,100,70,img.slime,img.big_rock,2,400,1,1))
+        enemy_group.add(Enemy(500,700,100,70,img.slime,img.big_rock,2,400,1,1))
+        enemy_group.add(Enemy(400,700,100,70,img.slime,img.big_rock,2,400,1,1))
+        enemy_group.add(Enemy(300,700,100,70,img.slime,img.big_rock,2,400,1,1))
+        enemy_group.add(Enemy(1200,700,100,70,img.slime,img.big_rock,2,400,1,1))
+        enemy_group.add(Enemy(1280,700,100,70,img.slime,img.big_rock,2,400,1,1))
+        
 def return_to_main():
     global menu_optn
     menu_optn = "main"
@@ -341,6 +412,30 @@ def close_program():
     pg.quit()
     sys.exit()
     
+
+def change_location(bound, side, new_location, last_location):
+    global active_save_info, prev_location,player, tempx_vel, tempy_vel, temp_hp, temp_stamina
+    tempx_vel, tempy_vel, temp_hp, temp_stamina = player.return_stats()
+    if side == "R":
+        if player.rect.x >= bound and tempx_vel > 0:
+                active_save_info[5] = new_location
+                prev_location = last_location
+                load_game()
+    elif side == "L":
+        if player.rect.x <= bound and tempx_vel < 0:
+                active_save_info[5] = new_location
+                prev_location = last_location
+                load_game()
+    elif side == "B":
+        if player.rect.y >= bound and tempy_vel > 0:
+                active_save_info[5] = new_location
+                prev_location = last_location
+                load_game()
+    elif side == "T":
+        if player.rect.y <= bound and tempy_vel < 0:
+                active_save_info[5] = new_location
+                prev_location = last_location
+                load_game()
 
 def save_exit():
     global active_save_info, save1_data,save2_data,save3_data, current_save
@@ -490,6 +585,7 @@ def display_menu():
                         menu_optn = "main"
                         #location = save3_data[5]
                         active_save_info = save3_data.copy()
+                        active_save_info[5] = "L1-6"
                         load_game()
                     else:
                         rec3 = draw_rect_alpha(WINDOW, (161, 161, 161, 100), (temp_x-(rec3x/2), 375, rec3x, 205))
@@ -554,17 +650,11 @@ def display_play():
             player.draw(WINDOW)
             
             grass_group.draw(WINDOW)
-            if player.rect.x >= 1310:
-                active_save_info[5] = "T2"
-                prev_location = "T1"
-                load_game()
+            change_location(1310, "R","T2","T1")
                 
         elif active_save_info[5] == "T2":#---------------------------------------------------------------------------------------------------
             
-            if player.rect.x <= 20:
-                active_save_info[5] = "T1"
-                prev_location = "T2"
-                load_game()
+            change_location(20, "L","T1","T2")
                 
             WINDOW.blit(img.fogg,(0,0))
             WINDOW.blit(img.tree_and_branch,(420,255))
@@ -578,7 +668,6 @@ def display_play():
                     WINDOW.blit(sword_text,(960-(sword_text_width/2),450))
                     key_input = pg.key.get_pressed()
                     if key_input[keys[keybinds['ATTACK']]]:
-                        #active_save_info[5] = 1
                         slash_unlocking = True
             else:
                 sword.draw(WINDOW)
@@ -590,9 +679,90 @@ def display_play():
             player.draw(WINDOW)
             grass_group.draw(WINDOW)
             
+            change_location(1310, "R","L1-4","T2")
+            
         elif active_save_info[5] == "L1-4":#---------------------------------------------------------------------------------------------------
+            
+            change_location(1310, "R","L1-5","L1-4")
+            
+            wall_group.draw(WINDOW)
+            sword.draw(WINDOW)
+            enemy_group.draw(WINDOW)
+            player.draw(WINDOW)
+            grass_group.draw(WINDOW)
         
-            pass
+        elif active_save_info[5] == "L1-5":#---------------------------------------------------------------------------------------------------
+            
+            change_location(20, "L","L1-4","L1-5")
+            change_location(1310, "R","L1-6","L1-5")
+            wall_group.draw(WINDOW)
+            sword.draw(WINDOW)
+            enemy_group.draw(WINDOW)
+            player.draw(WINDOW)
+            grass_group.draw(WINDOW)
+        
+        elif active_save_info[5] == "L1-6":#---------------------------------------------------------------------------------------------------
+            
+            change_location(20, "L","L1-5","L1-6")
+            change_location(800, "B","L1-9","L1-6")
+            wall_group.draw(WINDOW)
+            sword.draw(WINDOW)
+            enemy_group.draw(WINDOW)
+            player.draw(WINDOW)
+            grass_group.draw(WINDOW)
+            
+            
+            
+            
+            
+        elif active_save_info[5] == "L1-1":#---------------------------------------------------------------------------------------------------
+            
+            wall_group.draw(WINDOW)
+            sword.draw(WINDOW)
+            enemy_group.draw(WINDOW)
+            player.draw(WINDOW)
+            grass_group.draw(WINDOW)
+            
+        elif active_save_info[5] == "L1-2":#---------------------------------------------------------------------------------------------------
+            
+            wall_group.draw(WINDOW)
+            sword.draw(WINDOW)
+            enemy_group.draw(WINDOW)
+            player.draw(WINDOW)
+            grass_group.draw(WINDOW)
+        
+        elif active_save_info[5] == "L1-3":#---------------------------------------------------------------------------------------------------
+            
+            wall_group.draw(WINDOW)
+            sword.draw(WINDOW)
+            enemy_group.draw(WINDOW)
+            player.draw(WINDOW)
+            grass_group.draw(WINDOW)
+            
+        elif active_save_info[5] == "L1-7":#---------------------------------------------------------------------------------------------------
+            
+            wall_group.draw(WINDOW)
+            sword.draw(WINDOW)
+            enemy_group.draw(WINDOW)
+            player.draw(WINDOW)
+            grass_group.draw(WINDOW)
+            
+        elif active_save_info[5] == "L1-8":#---------------------------------------------------------------------------------------------------
+            
+            wall_group.draw(WINDOW)
+            sword.draw(WINDOW)
+            enemy_group.draw(WINDOW)
+            player.draw(WINDOW)
+            grass_group.draw(WINDOW)
+            
+        elif active_save_info[5] == "L1-9":#---------------------------------------------------------------------------------------------------
+            
+            
+            wall_group.draw(WINDOW)
+            sword.draw(WINDOW)
+            enemy_group.draw(WINDOW)
+            player.draw(WINDOW)
+            grass_group.draw(WINDOW)
         
         if not pause:
             if not slash_unlocking:
