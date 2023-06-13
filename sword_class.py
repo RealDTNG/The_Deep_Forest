@@ -47,11 +47,11 @@ class Sword(pygame.sprite.Sprite):
         self.origin=[self.x,self.y]
         self.pivot = [14,6]
         
-        run = self.x - mousePos[0]
+        self.run = self.x - mousePos[0]
         rise = self.y - mousePos[1]
-        if run != 0:
-            self.angle = -math.degrees(math.atan(rise/run))+90
-            if (mousePos[0] < player.rect.x + player.rect.width/2 and run > 0) or run > 0:
+        if self.run != 0:
+            self.angle = -math.degrees(math.atan(rise/self.run))+90
+            if (mousePos[0] < player.rect.x + player.rect.width/2 and self.run > 0) or self.run > 0:
                 self.angle += 180
         #print(self.angle)
         if not self.stab:

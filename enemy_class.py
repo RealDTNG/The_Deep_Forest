@@ -22,6 +22,9 @@ class Enemy(pygame.sprite.Sprite):
         self.dmg = damage
         self.flying = flying
         self.shooter = shooter
+        if shooter:
+            self.shoot = False
+            self.delay = 240
         
     def move(self,barriers,player):
         if self.movex >self.speed:
@@ -56,11 +59,23 @@ class Enemy(pygame.sprite.Sprite):
                 while pygame.sprite.collide_mask(self,b):
                     self.rect.y -= reverse_dir
                     self.movey = 0
+        
+        
+        if self.shooter:
+            if self.shoot == True:
+                self.shoot = False
+            self.delay -= 1
+            if self.delay == 0:
+                self.shoot = True
+                self.delay = 240
+            
+
 
     def hit(self,sword):
         if not self.hlt:
             self.hp -= sword.dmg
-            self.movex = 15*(self.rect.x + self.rect.width/2 - sword.rect.x)/abs(self.rect.x + self.rect.width/2 - sword.rect.x)
+            if sword.run != 0:
+                self.movex = -15*(sword.run)/abs(sword.run)
             self.image = pygame.transform.scale(self.imgdmg, (self.w, self.h)).convert_alpha()
             if self.hp <= 0:
                 self.kill()

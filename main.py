@@ -46,7 +46,7 @@ T1-T2 -- L1-4 - L1-5 _ L1-6 -- L2-4 - L2-5 _ L2-6
 """
 #v---------------------Imports------------------------v
 
-import pygame as pg, data_functions as data, sys, Imgs.img as img, random # pip install pygame
+import pygame as pg, data_functions as data, sys, Imgs.img as img, random, math # pip install pygame
 from button_class import Button
 from text_class import Text
 from wall_class import Barrier
@@ -85,6 +85,7 @@ tool_group = pg.sprite.Group()
 enemy_group = pg.sprite.Group()
 grass_group = pg.sprite.Group()
 heal_group = pg.sprite.Group()
+bullet_group = pg.sprite.Group()
 grass_loop = 680
 slash_unlocking = False
 fonts = {1:'texts\menu_main.ttf',2:'texts\menu_sec.ttf',3:'texts\extra.ttf'}
@@ -193,6 +194,7 @@ def load_game():
         enemy_group.empty()
         grass_group.empty()
         heal_group.empty()
+        bullet_group.empty()
         if prev_location == "T2":
             player = Player(1300,300,90,160,img.player,img.big_rock,img.player_crouching,img.player_jumping,img.player_walk,5,5,True,True,300)
         else:
@@ -207,7 +209,7 @@ def load_game():
         wall_group.add(Barrier(50,700,1440,200,log_ground))
         enemy_group.add(Enemy(900,500,100,70,img.slime,img.big_rock,2,400,1,1))
         enemy_group.add(Enemy(1000,500,140,80,img.wolf,img.big_rock,3,500,3,1))
-        enemy_group.add(Enemy(1000,200,100,80,img.bat,img.big_rock,2,700,2,1,True))
+        enemy_group.add(Enemy(1000,200,100,80,img.bat,img.big_rock,2,700,2,1,True,True))
         
         while grass_loop <= 760:
             grass_sprite1,grass_sprite2,grass_sprite3,grass_sprite4,grass_sprite5,grass_sprite6 = pg.sprite.Sprite(),pg.sprite.Sprite(),pg.sprite.Sprite(),pg.sprite.Sprite(),pg.sprite.Sprite(),pg.sprite.Sprite()
@@ -234,6 +236,7 @@ def load_game():
         enemy_group.empty()
         grass_group.empty()
         heal_group.empty()
+        bullet_group.empty()
         player = Player(50,300,90,160,img.player,img.big_rock,img.player_crouching,img.player_jumping,img.player_walk,5,5,True,True,300)
         player_group.add(player)
         sword = Sword(20,78,img.sword1,50,250,img.sword1_slash,1)
@@ -547,6 +550,7 @@ def display_play():
             wall_group.draw(WINDOW)
             sword.draw(WINDOW)
             enemy_group.draw(WINDOW)
+            bullet_group.draw(WINDOW)
             player.draw(WINDOW)
             
             grass_group.draw(WINDOW)
@@ -582,6 +586,7 @@ def display_play():
             heal_group.draw(WINDOW)
             wall_group.draw(WINDOW)
             enemy_group.draw(WINDOW)
+            bullet_group.draw(WINDOW)
             player.draw(WINDOW)
             grass_group.draw(WINDOW)
             
@@ -609,10 +614,34 @@ def display_play():
                 if pg.sprite.collide_mask(e,player):
                     if player.hit(e):
                         game_state = "dead"
+                
+                if e.shooter and e.shoot:
+                    run = player.rect.centerx - (e.rect.centerx)
+                    rise = player.rect.centery - (e.rect.centery)
+                    if run != 0:
+                        theta = abs(math.atan(rise/run))
+                    else:
+                        theta = 180
+                    if run != 0:
+                        vx = (run/abs(run))*math.cos(theta)*3
+                    else:
+                        vx = 0
+                    if rise != 0 and run != 0:
+                        vy = (rise/abs(rise))*math.sin(theta)*3
+                    else:
+                        vy = 0
+                    bullet_group.add(Bullet(e.rect.centerx,e.rect.centery,30,30,img.heal,[vx,vy],0,2))
+            
             for h in heal_group:
                 if pg.sprite.collide_mask(h,player) and player.hp < player.maxhp:
                     player.hp += 1
                     h.kill()
+
+            for b in bullet_group:
+                b.move()
+                if b.hit_check([player]) == player:
+                    if player.hit(b):
+                        game_state = "dead"
 
         elif pause:
             pause_rec = draw_rect_alpha(WINDOW, (0, 0, 0, 190), (0, 0, WINDOW_WIDTH, WINDOW_HEIGHT))

@@ -17,6 +17,7 @@ class Bullet(pygame.sprite.Sprite):
 
     def hit_check(self,targets):
         for t in targets:
-            if self.collideobjects(t):
+            if pygame.sprite.collide_mask(t,self):
+                self.kill()
                 return t
-        self.kill()
+                

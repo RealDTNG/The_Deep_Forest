@@ -1,7 +1,7 @@
 import pygame
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, startX,startY,width,height,image_load,img_dmg,img_crouch,img_jump,img_walk,health,maxhealth,double_jump_unlock,sprint_unlock,max_stamina = 0,stamina = 100):
+    def __init__(self, startX,startY,width,height,image_load,img_dmg,img_crouch,img_jump,img_walk,health,maxhealth,double_jump_unlock,sprint_unlock,max_stamina = 0,stamina = 300):
         super().__init__()
         self.player = pygame.transform.scale(image_load,(width,height)).convert_alpha()
         self.fliped_player = pygame.transform.flip(self.player, True, False)
