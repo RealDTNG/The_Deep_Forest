@@ -308,6 +308,30 @@ def load_game():
         wall_group.add(Barrier(0,520,750,380,img.log))
         wall_group.add(Barrier(1200,520,750,380,img.log))
         enemy_group.add(Enemy(600,420,100,70,img.slime,img.big_rock,2,400,1,1))
+    elif active_save_info[5] == "L1-9":
+        wall_group.empty()
+        player_group.empty()
+        tool_group.empty()
+        enemy_group.empty()
+        grass_group.empty()
+        if prev_location == "L1-6":
+            player = Player(900,50,90,160,img.player,img.big_rock,img.player_crouching,img.player_jumping,img.player_walk,5,5,True,True,300)
+        else:
+            player = Player(50,300,90,160,img.player,img.big_rock,img.player_crouching,img.player_jumping,img.player_walk,5,5,True,True,300)
+        player_group.add(player)
+        sword = Sword(20,78,img.sword1,50,250,img.sword1_slash,1)
+        tool_group.add(sword)
+        wall_group.add(Barrier(0,0,750,50,img.log))
+        wall_group.add(Barrier(1200,0,750,50,img.log))
+        wall_group.add(Barrier(0,850,1440,50,img.log))
+        wall_group.add(Barrier(0,650,70,200,img.log))
+        wall_group.add(Barrier(1390,50,50,800,img.log))
+        enemy_group.add(Enemy(600,700,100,70,img.slime,img.big_rock,2,400,1,1))
+        enemy_group.add(Enemy(500,700,100,70,img.slime,img.big_rock,2,400,1,1))
+        enemy_group.add(Enemy(400,700,100,70,img.slime,img.big_rock,2,400,1,1))
+        enemy_group.add(Enemy(300,700,100,70,img.slime,img.big_rock,2,400,1,1))
+        enemy_group.add(Enemy(1200,700,100,70,img.slime,img.big_rock,2,400,1,1))
+        enemy_group.add(Enemy(1280,700,100,70,img.slime,img.big_rock,2,400,1,1))
         
 def return_to_main():
     global menu_optn
@@ -558,7 +582,7 @@ def display_menu():
                         menu_optn = "main"
                         #location = save3_data[5]
                         active_save_info = save3_data.copy()
-                        active_save_info[5] = "L1-5"
+                        active_save_info[5] = "L1-6"
                         load_game()
                     else:
                         rec3 = draw_rect_alpha(WINDOW, (161, 161, 161, 100), (temp_x-(rec3x/2), 375, rec3x, 205))
@@ -675,7 +699,7 @@ def display_play():
         elif active_save_info[5] == "L1-6":#---------------------------------------------------------------------------------------------------
             
             change_location(20, "L","L1-5","L1-6")
-            change_location(800, "B","L1-9","L1-9")
+            change_location(800, "B","L1-9","L1-6")
             wall_group.draw(WINDOW)
             sword.draw(WINDOW)
             enemy_group.draw(WINDOW)
