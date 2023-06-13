@@ -20,9 +20,9 @@ def imgs():
     
     player_walk = playersheet.image_at((0,84,45,76))
     
-    player_crouching = playersheet.image_at((46,0,45,40))
+    player_crouching = playersheet.image_at((52,0,45,77))
     
-    player_jumping = playersheet.image_at((46,84,45,62))
+    player_jumping = playersheet.image_at((56,84,45,77))
     
     sword1 = pg.transform.scale_by(toolsheet.image_at((0,0,13,39)),2)
     

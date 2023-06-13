@@ -5,9 +5,9 @@ class Player(pygame.sprite.Sprite):
         super().__init__()
         self.player = pygame.transform.scale(image_load,(width,height)).convert_alpha()
         self.fliped_player = pygame.transform.flip(self.player, True, False)
-        self.player_crouching = pygame.transform.scale(img_crouch,(width,height/2)).convert_alpha()
+        self.player_crouching = pygame.transform.scale(img_crouch,(width,height)).convert_alpha()
         self.fliped_player_crouching = pygame.transform.flip(self.player_crouching, True, False)
-        self.player_jumping = pygame.transform.scale(img_jump,(width,height*(3/4))).convert_alpha()
+        self.player_jumping = pygame.transform.scale(img_jump,(width,height)).convert_alpha()
         self.fliped_player_jumping = pygame.transform.flip(self.player_jumping, True, False)
         self.walk = pygame.transform.scale(img_walk,(width,height)).convert_alpha()
         self.fliped_walk = pygame.transform.flip(self.walk, True, False)
@@ -65,13 +65,32 @@ class Player(pygame.sprite.Sprite):
                 self.movex -= self.movex/abs(self.movex)
 
         self.rect.x += self.movex
+        
+        self.grounded = False
+        
+        for b in barriers:
+            while pygame.sprite.collide_mask(self,b):
+                if self.movey < 0:
+                    self.rect.y += 3
+                else:
+                    if self.grounded == False:
+                        if self.direction == "right":
+                            self.image = self.player
+                            self.mask  = pygame.mask.from_surface(self.image) 
+                        elif self.direction == "left":
+                            self.image = self.fliped_player
+                            self.mask  = pygame.mask.from_surface(self.image)
+                    self.rect.y -= 1
+                    self.movey = 0
+                    self.jump=self.jumpcount
+                    self.grounded = True
 
         for b in barriers:
             while pygame.sprite.collide_mask(self,b):
                 if self.movex == 0:
                     break
                 else:
-                    self.rect.x -= self.movex/abs(self.movex)
+                    self.rect.x -= self.movex
 
         self.movey += 1
 
@@ -133,22 +152,6 @@ class Player(pygame.sprite.Sprite):
                         self.mask  = pygame.mask.from_surface(self.image)
             x,y = self.rect.x,self.rect.y
             self.rect = self.image.get_rect(topleft=(x,y))
-
-        self.grounded = False
-        
-        for b in barriers:
-            if self.movey > 0:
-                collidetype= 'up'
-            else:
-                collidetype = 'down'
-            while pygame.sprite.collide_mask(self,b):
-                if collidetype == 'up':
-                    self.rect.y -= 1
-                    self.jump=self.jumpcount
-                    self.grounded = True
-                else:
-                    self.rect.y += 1
-                self.movey = 0
         
         if not self.grounded:
             if self.rect.x < mousepos[0]:

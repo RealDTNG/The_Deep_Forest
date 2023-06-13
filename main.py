@@ -399,6 +399,16 @@ def change_location(bound, side, new_location, last_location):
                 active_save_info[5] = new_location
                 prev_location = last_location
                 load_game()
+    elif side == "B":
+        if player.rect.y >= bound and tempy_vel > 0:
+                active_save_info[5] = new_location
+                prev_location = last_location
+                load_game()
+    elif side == "T":
+        if player.rect.y <= bound and tempy_vel < 0:
+                active_save_info[5] = new_location
+                prev_location = last_location
+                load_game()
 
 def save_exit():
     global active_save_info, save1_data,save2_data,save3_data, current_save
@@ -548,7 +558,7 @@ def display_menu():
                         menu_optn = "main"
                         #location = save3_data[5]
                         active_save_info = save3_data.copy()
-                        active_save_info[5] = "L1-6"
+                        active_save_info[5] = "L1-5"
                         load_game()
                     else:
                         rec3 = draw_rect_alpha(WINDOW, (161, 161, 161, 100), (temp_x-(rec3x/2), 375, rec3x, 205))
@@ -665,6 +675,7 @@ def display_play():
         elif active_save_info[5] == "L1-6":#---------------------------------------------------------------------------------------------------
             
             change_location(20, "L","L1-5","L1-6")
+            change_location(800, "B","L1-9","L1-9")
             wall_group.draw(WINDOW)
             sword.draw(WINDOW)
             enemy_group.draw(WINDOW)
@@ -716,6 +727,7 @@ def display_play():
             grass_group.draw(WINDOW)
             
         elif active_save_info[5] == "L1-9":#---------------------------------------------------------------------------------------------------
+            
             
             wall_group.draw(WINDOW)
             sword.draw(WINDOW)
