@@ -72,7 +72,7 @@ class Player(pygame.sprite.Sprite):
                 else:
                     self.rect.x -= self.movex/abs(self.movex)
 
-        self.movey += 1#gravity
+        self.movey += 1 #gravity
 
         self.jump_CD -= 1
         if key_input[keys[keybinds['JUMP']]] and self.jump >0 and self.jump_CD <=0:
@@ -85,10 +85,14 @@ class Player(pygame.sprite.Sprite):
         self.grounded = False
 
         for b in barriers:#y collision
+                    if self.movey<0:
+                        collide_type = 'ceiling'
+                    else:
+                        collide_type = 'floor'
                     while pygame.sprite.collide_mask(self,b):
-                        if self.movey < 0:
+                        if collide_type == 'ceiling':
                             self.rect.y += 1
-                            self.movey= 0
+                            self.movey = 0
                         else:
                             if self.grounded == False:#player standing image
                                 if self.rect.x + self.rect.w/2 < mousepos[0]:
