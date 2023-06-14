@@ -57,7 +57,6 @@ class Player(pygame.sprite.Sprite):
                 if self.movex != 0:
                     self.movex = 10*self.movex/abs(self.movex)
                     self.stamina -= 5
-            
         else:
             if self.stamina < self.max_stamina:
                 self.stamina += 1
@@ -66,92 +65,82 @@ class Player(pygame.sprite.Sprite):
 
         self.rect.x += self.movex
         
-        self.grounded = False
-        
-        for b in barriers:
-            while pygame.sprite.collide_mask(self,b):
-                if self.movey < 0:
-                    self.rect.y += 3
-                else:
-                    if self.grounded == False:
-                        if self.direction == "right":
-                            self.image = self.player
-                            self.mask  = pygame.mask.from_surface(self.image) 
-                        elif self.direction == "left":
-                            self.image = self.fliped_player
-                            self.mask  = pygame.mask.from_surface(self.image)
-                    self.rect.y -= 1
-                    self.movey = 0
-                    self.jump=self.jumpcount
-                    self.grounded = True
-
-        for b in barriers:
+        for b in barriers:#x collision
             while pygame.sprite.collide_mask(self,b):
                 if self.movex == 0:
                     break
                 else:
-                    self.rect.x -= self.movex
+                    self.rect.x -= self.movex/abs(self.movex)
 
-        self.movey += 1
+        self.movey += 1#gravity
 
         self.jump_CD -= 1
         if key_input[keys[keybinds['JUMP']]] and self.jump >0 and self.jump_CD <=0:
             self.movey = -22
             self.jump -= 1
             self.jump_CD = 20
-        
+
         self.rect.y += self.movey
         
+        self.grounded = False
+
+        for b in barriers:#y collision
+                    while pygame.sprite.collide_mask(self,b):
+                        if self.movey < 0:
+                            self.rect.y += 1
+                            self.movey= 0
+                        else:
+                            if self.grounded == False:#player standing image
+                                if self.rect.x + self.rect.w/2 < mousepos[0]:
+                                    if self.direction == "left":
+                                        self.image = self.player
+                                        self.mask  = pygame.mask.from_surface(self.image) 
+                                    self.direction = "right"
+                                    if self.walk_count >= 20:
+                                        if self.walking == False:
+                                            self.image = self.walk
+                                            self.walking = True
+                                        else:
+                                            self.image = self.player
+                                            self.walking = False
+                                        self.mask  = pygame.mask.from_surface(self.image)
+                                        self.walk_count = 0
+                                else:
+                                    if self.direction == "right":
+                                        self.image = self.fliped_player
+                                        self.mask  = pygame.mask.from_surface(self.image)
+                                    self.direction = "left"
+                                    if self.walk_count >= 20:
+                                        if self.walking == False:
+                                            self.walking = True
+                                            self.image = self.fliped_walk
+                                        else:
+                                            self.walking = False
+                                            self.image = self.fliped_player
+                                        self.mask  = pygame.mask.from_surface(self.image)
+                                        self.walk_count = 0
+                            self.rect.y -= 1
+                            self.movey = 0
+                            self.jump=self.jumpcount
+                            self.grounded = True
+        
+        
+
+        print(self.rect.x,self.rect.y)
+
         if key_input[keys[keybinds['CROUCH']]]:
             if not self.happend_once:
-                self.rect.y += self.h/2
                 self.happend_once = True
-            if self.rect.x < mousepos[0]:
+            if self.rect.x < mousepos[0]:#correct from standing to crouch
                 self.image = self.player_crouching
                 self.mask  = pygame.mask.from_surface(self.image)  
             elif self.rect.x > mousepos[0]:
                 self.image = self.fliped_player_crouching
                 self.mask  = pygame.mask.from_surface(self.image)
-            x,y = self.rect.x,self.rect.y
-            self.rect = self.image.get_rect(topleft=(x,y))
         else:
             if self.happend_once:
-                self.rect.y -= self.h/2
                 self.happend_once = False
-            if self.rect.x + self.rect.w/2 < mousepos[0]:
-                if self.direction == "left":
-                    self.image = self.player
-                    self.mask  = pygame.mask.from_surface(self.image) 
-                self.direction = "right"
-                if self.walk_count >= 20:
-                    if self.walking == False:
-                        self.walk_count = 0
-                        self.image = self.walk
-                        self.walking = True
-                        self.mask  = pygame.mask.from_surface(self.image)
-                    else:
-                        self.walk_count = 0
-                        self.image = self.player
-                        self.walking = False
-                        self.mask  = pygame.mask.from_surface(self.image)  
-            else:
-                if self.direction == "right":
-                    self.image = self.fliped_player
-                    self.mask  = pygame.mask.from_surface(self.image)
-                self.direction = "left"
-                if self.walk_count >= 20:
-                    if self.walking == False:
-                        self.walk_count = 0
-                        self.walking = True
-                        self.image = self.fliped_walk
-                        self.mask  = pygame.mask.from_surface(self.image)
-                    else:
-                        self.walk_count = 0
-                        self.walking = False
-                        self.image = self.fliped_player
-                        self.mask  = pygame.mask.from_surface(self.image)
-            x,y = self.rect.x,self.rect.y
-            self.rect = self.image.get_rect(topleft=(x,y))
+            
         
         if not self.grounded:
             if self.rect.x < mousepos[0]:
@@ -160,7 +149,6 @@ class Player(pygame.sprite.Sprite):
             elif self.rect.x > mousepos[0]:
                 self.image = self.fliped_player_jumping
                 self.mask  = pygame.mask.from_surface(self.image)
-            self.rect = self.image.get_rect(topleft=(x,y))
 
     def draw_health_bar(self, surface, position, sizeHP, sizeStam, color_border, color_background, color_health, color_stamina):
         pygame.draw.rect(surface, color_background, (*position, *sizeHP))
