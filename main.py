@@ -597,6 +597,11 @@ def display_menu():
             temp_saves_width = t.get_width()
             WINDOW.blit(t, (((-20+(20*i))+(WINDOW_WIDTH/4)+(WINDOW_WIDTH/4)*i)-(temp_saves_width/2),525))
         return_text.process(WINDOW,(117, 61, 8),(158, 84, 14),(64, 39, 8))
+    
+    WINDOW.blit(pg.transform.scale(img.player,(90,160)).convert_alpha(),(50, 200))
+    WINDOW.blit(pg.transform.scale(img.player_walk,(90,160)).convert_alpha(),(120, 200))
+    WINDOW.blit(pg.transform.scale(img.player_jumping,(90,160)).convert_alpha(),(200, 200))
+    WINDOW.blit(pg.transform.scale(img.player_crouching,(90,160)).convert_alpha(),(250, 200))
 
 
 def display_play():
