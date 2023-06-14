@@ -6,7 +6,8 @@ from spritesheet import spritesheet
 
 def imgs():
     global tree_sheet, menu_backdrop, grass, log, tree1, big_rock, rock, thin_grass, slime, player, sword1, tree_and_branch, dead_tree
-    global tree2, tree3, tree4, sword2, sword1_slash, sword2_slash, fogg, wolf, bat, player_crouching, player_jumping, heal,player_walk
+    global tree2, tree3, tree4, sword2, sword1_slash, sword2_slash, fogg, wolf, bat, player_crouching, player_jumping, heal,player_walk, destructable
+    global flat_log
     
     tree_sheet = spritesheet('Imgs\Tree_SpriteSheet.png')
     
@@ -16,9 +17,11 @@ def imgs():
     
     menu_backdrop = pg.transform.scale(pg.image.load('Imgs/menu_backdrop.png'),(1440,900))
     
+    destructable = pg.transform.scale_by(tree_sheet.image_at((305,157,25,8)),3)
+    
     player = playersheet.image_at((0,0,45,77))
     
-    player_walk = playersheet.image_at((0,84,45,76))
+    player_walk = playersheet.image_at((-1,84,45,77))
     
     player_crouching = playersheet.image_at((52,0,45,77))
     
@@ -37,6 +40,8 @@ def imgs():
     thin_grass = tree_sheet.image_at((569,144,96,17))
     
     log = tree_sheet.image_at((835,90,20,31))
+    
+    flat_log = pg.transform.rotate(log,-90)
     
     big_rock = pg.transform.scale_by(tree_sheet.image_at((616,201,50,33)), 2)
     
