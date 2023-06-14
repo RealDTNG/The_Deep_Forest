@@ -21,7 +21,7 @@ def imgs():
     
     player = playersheet.image_at((0,0,45,77))
     
-    player_walk = playersheet.image_at((-1,84,45,77))
+    player_walk = playersheet.image_at((0,84,45,76))
     
     player_crouching = playersheet.image_at((52,0,45,77))
     
