@@ -463,6 +463,7 @@ def close_program():
 
 def change_location(bound, side, new_location, last_location):
     global active_save_info, prev_location,player, tempx_vel, tempy_vel, temp_hp, temp_stamina
+    
     tempx_vel, tempy_vel, temp_hp, temp_stamina = player.return_stats()
     active_save_info[2] = temp_hp
     if side == "R":
