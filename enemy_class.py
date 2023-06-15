@@ -1,7 +1,7 @@
 import pygame, random
 
 class Enemy(pygame.sprite.Sprite):
-    def __init__(self, startX,startY,width,height,image_load,img_dmg,health,agro_range,speed,damage,flying = False,shooter = False):
+    def __init__(self, startX,startY,width,height,image_load,img_dmg,health,agro_range,speed,damage,flying = False,shooter = False,bullet_speed = 3):
         super().__init__()
         self.enemy = pygame.transform.scale(image_load, (width, height)).convert_alpha()
         self.fliped_enemy = pygame.transform.flip(self.enemy, True, False)
@@ -23,6 +23,7 @@ class Enemy(pygame.sprite.Sprite):
         self.flying = flying
         self.shooter = shooter
         if shooter:
+            self.bullet_speed = bullet_speed
             self.shoot = False
             self.delay = 240
         

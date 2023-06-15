@@ -247,7 +247,7 @@ def load_game():
         if prev_location == "L1-5":
             player.rect.x = 1300
         else:
-            player.rect.x,player.rect.y = 50,300
+            player.rect.x = 50
         log_ground = pg.transform.rotate(img.log, -90)
         wall_group.add(Barrier(-10,0,10,900,img.log))
         wall_group.add(Barrier(1360,0,90,300,img.log))
@@ -263,13 +263,13 @@ def load_game():
         bullet_group.empty()
         heal_group.empty()
         if prev_location == "L1-6":
-            player.rect.x,player.rect.y = 1300,300
+            player.rect.x = 1300
         elif prev_location == "L1-8":
-            player.rect.x,player.rect.y = 150,700
+            player.rect.y = 700
         elif prev_location == "L1-2":
-            player.rect.x,player.rect.y = 1200,20
+            player.rect.y = 20
         else:
-            player.rect.x,player.rect.y = 50,300
+            player.rect.x = 50
         wall_group.add(Barrier(0,0,500,300,img.flat_log))
         wall_group.add(Barrier(0,520,1000,50,img.flat_log))
         wall_group.add(Barrier(720,250,820,50,img.flat_log))
@@ -289,7 +289,7 @@ def load_game():
         grass_group.empty()
         bullet_group.empty()
         heal_group.empty()
-        player.rect.x,player.rect.y = 50,300
+        player.rect.x = 50
         wall_group.add(Barrier(0,0,300,200,img.log))
         wall_group.add(Barrier(300,0,1140,20,img.flat_log))
         wall_group.add(Barrier(0,520,750,380,img.log))
@@ -304,9 +304,9 @@ def load_game():
         bullet_group.empty()
         heal_group.empty()
         if prev_location == "L1-6":
-            player.rect.x,player.rect.y = 900,50
+            player.rect.y = 50
         else:
-            player.rect.x,player.rect.y = 50,300
+            player.rect.x = 50
         wall_group.add(Barrier(0,0,750,50,img.flat_log))
         wall_group.add(Barrier(1200,0,750,50,img.flat_log))
         wall_group.add(Barrier(0,850,1440,50,img.flat_log))
@@ -326,11 +326,11 @@ def load_game():
         bullet_group.empty()
         heal_group.empty()
         if prev_location == "L1-9":
-            player.rect.x,player.rect.y = 1300,300
+            player.rect.x = 1300
         elif prev_location == "L1-5":
-            player.rect.x,player.rect.y = 50,100
+            player.rect.y = 100
         else:
-            player.rect.x,player.rect.y = 50,650
+            player.rect.x = 50
         wall_group.add(Barrier(0,850,1040,50,img.flat_log))
         wall_group.add(Barrier(1040,850,350,50,img.destructable))
         wall_group.add(Barrier(1390,600,50,300,img.log))
@@ -352,7 +352,7 @@ def load_game():
         grass_group.empty()
         bullet_group.empty()
         heal_group.empty()
-        player.rect.x,player.rect.y = 1300,650
+        player.rect.x = 1300
         wall_group.add(Barrier(0,850,1440,50,img.flat_log))
         wall_group.add(Barrier(0,0,50,850,img.log))
         wall_group.add(Barrier(50,300,380,50,img.flat_log))
@@ -372,11 +372,11 @@ def load_game():
         heal_group.empty()
 
         if prev_location == "L1-5":
-            player.rect.x,player.rect.y = 1000,650
+            player.rect.y = 650
         elif prev_location == "L1-1":
-            player.rect.x,player.rect.y = 50,650
+            player.rect.x = 50
         else:
-            player.rect.x,player.rect.y = 800,650
+            player.rect.x = 800
 
         #if not active_save_info[7] == 1:
         enemy_group.add(Enemy(0,650,50,200,img.you_diedd,img.big_rock,1,0,0,0)) #destrutable wall
@@ -398,8 +398,9 @@ def load_game():
         bullet_group.empty()
         heal_group.empty()
         player.rect.x = 20
-        wall_group.add(Barrier(0,850,1440,50,img.flat_log))
-        enemy_group.add(Enemy(600,500,200,300,img.hehe,img.hehe,10,400,1,2,False,True))
+        wall_group.add(Barrier(150,325,300,50,img.flat_log))
+        wall_group.add(Barrier(0,700,1440,50,img.flat_log))
+        enemy_group.add(Enemy(600,400,200,300,img.hehe,img.hehe,10,1440,2,2,False,True,5))
 
         make_grass()
         
@@ -852,11 +853,7 @@ def display_play():
             player.draw(WINDOW)
             grass_group.draw(WINDOW)
             
-            
-            
-            
-            
-            
+
         elif active_save_info[5] == "L1-1":#---------------------------------------------------------------------------------------------------
             
             WINDOW.blit(img.fogg,(0,0)) #tree background
@@ -899,6 +896,7 @@ def display_play():
             enemy_group.draw(WINDOW)
             bullet_group.draw(WINDOW)
             player.draw(WINDOW)
+            grass_group.draw(WINDOW)
 
         if not pause:
             if not slash_unlocking:
@@ -929,11 +927,11 @@ def display_play():
                     else:
                         theta = 180
                     if run != 0:
-                        vx = (run/abs(run))*math.cos(theta)*3
+                        vx = (run/abs(run))*math.cos(theta)*e.bullet_speed
                     else:
                         vx = 0
                     if rise != 0 and run != 0:
-                        vy = (rise/abs(rise))*math.sin(theta)*3
+                        vy = (rise/abs(rise))*math.sin(theta)*e.bullet_speed
                     else:
                         vy = 3
                     bullet_group.add(Bullet(e.rect.centerx,e.rect.centery,30,30,img.projectile,[vx,vy],0,2))
