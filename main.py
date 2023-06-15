@@ -227,9 +227,6 @@ def load_game():
         wall_group.add(Barrier(0,0,50,700,log_left))
         log_ground = pg.transform.rotate(img.log, -90)
         wall_group.add(Barrier(0,700,1440,200,log_ground))
-        enemy_group.add(Enemy(900,500,100,70,img.slime,img.big_rock,2,400,1,1))
-        enemy_group.add(Enemy(1000,500,140,80,img.wolf,img.big_rock,3,500,3,1))
-        enemy_group.add(Enemy(1000,200,100,80,img.bat,img.big_rock,2,700,2,1,True,True))
         
         make_grass()
         
@@ -258,6 +255,8 @@ def load_game():
         tool_group.empty()
         enemy_group.empty()
         grass_group.empty()
+        bullet_group.empty()
+        heal_group.empty()
         if prev_location == "L1-5":
             player = Player(1300,300,90,160,img.player,img.big_rock,img.player_crouching,img.player_jumping,img.player_walk,active_save_info[2],5,True,True,300)
         else:
@@ -266,6 +265,7 @@ def load_game():
         sword = Sword(20,78,img.sword1,50,250,img.sword1_slash,1)
         tool_group.add(sword)
         log_ground = pg.transform.rotate(img.log, -90)
+        wall_group.add(Barrier(-10,0,10,900,img.log))
         wall_group.add(Barrier(1360,0,90,300,img.log))
         wall_group.add(Barrier(1360,500,90,200,img.log))
         wall_group.add(Barrier(0,700,1440,200,log_ground))
@@ -278,6 +278,8 @@ def load_game():
         tool_group.empty()
         enemy_group.empty()
         grass_group.empty()
+        bullet_group.empty()
+        heal_group.empty()
         if prev_location == "L1-6":
             player = Player(1300,300,90,160,img.player,img.big_rock,img.player_crouching,img.player_jumping,img.player_walk,active_save_info[2],5,True,True,300)
         elif prev_location == "L1-8":
@@ -308,6 +310,8 @@ def load_game():
         tool_group.empty()
         enemy_group.empty()
         grass_group.empty()
+        bullet_group.empty()
+        heal_group.empty()
         player = Player(50,300,90,160,img.player,img.big_rock,img.player_crouching,img.player_jumping,img.player_walk,active_save_info[2],5,True,True,300)
         player_group.add(player)
         sword = Sword(20,78,img.sword1,50,250,img.sword1_slash,1)
@@ -316,6 +320,7 @@ def load_game():
         wall_group.add(Barrier(300,0,1140,20,img.flat_log))
         wall_group.add(Barrier(0,520,750,380,img.log))
         wall_group.add(Barrier(1200,520,750,380,img.log))
+        enemy_group.add(Enemy(1000,200,100,80,img.bat,img.big_rock,2,700,2,1,True,True))
         enemy_group.add(Enemy(600,420,100,70,img.slime,img.big_rock,2,400,1,1))
         
     elif active_save_info[5] == "L1-9":
@@ -324,6 +329,8 @@ def load_game():
         tool_group.empty()
         enemy_group.empty()
         grass_group.empty()
+        bullet_group.empty()
+        heal_group.empty()
         if prev_location == "L1-6":
             player = Player(900,50,90,160,img.player,img.big_rock,img.player_crouching,img.player_jumping,img.player_walk,active_save_info[2],5,True,True,300)
         else:
@@ -336,7 +343,7 @@ def load_game():
         wall_group.add(Barrier(0,850,1440,50,img.flat_log))
         wall_group.add(Barrier(0,650,70,200,img.log))
         wall_group.add(Barrier(1390,50,50,800,img.log))
-        enemy_group.add(Enemy(600,700,100,70,img.slime,img.big_rock,2,400,1,1))
+        enemy_group.add(Enemy(550,690,140,80,img.wolf,img.big_rock,3,500,3,2))
         enemy_group.add(Enemy(500,700,100,70,img.slime,img.big_rock,2,400,1,1))
         enemy_group.add(Enemy(400,700,100,70,img.slime,img.big_rock,2,400,1,1))
         enemy_group.add(Enemy(300,700,100,70,img.slime,img.big_rock,2,400,1,1))
@@ -349,6 +356,8 @@ def load_game():
         tool_group.empty()
         enemy_group.empty()
         grass_group.empty()
+        bullet_group.empty()
+        heal_group.empty()
         if prev_location == "L1-9":
             player = Player(1300,300,90,160,img.player,img.big_rock,img.player_crouching,img.player_jumping,img.player_walk,active_save_info[2],5,True,True,300)
         elif prev_location == "L1-5":
@@ -378,11 +387,17 @@ def load_game():
         tool_group.empty()
         enemy_group.empty()
         grass_group.empty()
+        bullet_group.empty()
+        heal_group.empty()
         player = Player(1300,650,90,160,img.player,img.big_rock,img.player_crouching,img.player_jumping,img.player_walk,active_save_info[2],5,True,True,300)
         player_group.add(player)
         sword = Sword(20,78,img.sword1,50,250,img.sword1_slash,1)
         tool_group.add(sword)
         
+def respawn():
+    global game_state
+    game_state = "playing"
+    load_game()
 
 def return_to_main():
     global menu_optn
@@ -511,6 +526,7 @@ settings_text = Text((WINDOW_WIDTH/2),550,"Settings",70,fonts[current_font],sett
 exit_text = Text((WINDOW_WIDTH/2),650,"Exit To Desktop",70,fonts[current_font],close_program)
 save_exit_text = Text((WINDOW_WIDTH/2),650,"Save And Exit",70,fonts[current_font],close_program)
 return_text = Text(125,60,"Return",70,fonts[current_font],return_to_main)
+respawn_text = Text(WINDOW_WIDTH/2,500,"Respawn",70,fonts[current_font],respawn)
 
 current_font = 1
 the_font = pg.font.Font(fonts[current_font],140)
@@ -528,7 +544,7 @@ htp_text.append(the_font.render(f"Move the mouse to aim your weapon.", True, (11
 htp_text.append(the_font.render(f"Use LEFT CLICK to attack with your weapon.", True, (117, 61, 8)))
 htp_text.append(the_font.render(f"Press {keybinds['SPRINT']} to sprint.", True, (117, 61, 8)))
 
-kb_text =[]
+kb_text = []
 
 kb_text.append(the_font.render("Left:", True, (117, 61, 8)))
 kb_text.append(the_font.render("Right:", True, (117, 61, 8)))
@@ -699,7 +715,6 @@ def display_play():
             
             heal_group.draw(WINDOW)
             wall_group.draw(WINDOW)
-            sword.draw(WINDOW)
             enemy_group.draw(WINDOW)
             bullet_group.draw(WINDOW)
             player.draw(WINDOW)
@@ -740,9 +755,12 @@ def display_play():
             
             change_location(1310, "R","L1-5","L1-4")
             
+            WINDOW.blit(img.fogg,(0,0))
+            heal_group.draw(WINDOW)
             wall_group.draw(WINDOW)
             sword.draw(WINDOW)
             enemy_group.draw(WINDOW)
+            bullet_group.draw(WINDOW)
             player.draw(WINDOW)
             grass_group.draw(WINDOW)
         
@@ -751,9 +769,13 @@ def display_play():
             change_location(20, "L","L1-4","L1-5")
             change_location(1310, "R","L1-6","L1-5")
             change_location(800, "B","L1-8","L1-5")
+            
+            WINDOW.blit(img.woodd,(0,0))
+            heal_group.draw(WINDOW)
             wall_group.draw(WINDOW)
             sword.draw(WINDOW)
             enemy_group.draw(WINDOW)
+            bullet_group.draw(WINDOW)
             player.draw(WINDOW)
             grass_group.draw(WINDOW)
         
@@ -761,18 +783,26 @@ def display_play():
             
             change_location(20, "L","L1-5","L1-6")
             change_location(800, "B","L1-9","L1-6")
+            
+            WINDOW.blit(img.woodd,(0,0))
+            heal_group.draw(WINDOW)
             wall_group.draw(WINDOW)
             sword.draw(WINDOW)
             enemy_group.draw(WINDOW)
+            bullet_group.draw(WINDOW)
             player.draw(WINDOW)
             grass_group.draw(WINDOW)
             
         elif active_save_info[5] == "L1-7":#---------------------------------------------------------------------------------------------------
             
             change_location(1320, "R","L1-8","L1-7")
+            
+            WINDOW.blit(img.woodd,(0,0))
+            heal_group.draw(WINDOW)
             wall_group.draw(WINDOW)
             sword.draw(WINDOW)
             enemy_group.draw(WINDOW)
+            bullet_group.draw(WINDOW)
             player.draw(WINDOW)
             grass_group.draw(WINDOW)
             
@@ -781,9 +811,13 @@ def display_play():
             change_location(20, "L","L1-7","L1-8")
             change_location(1320, "R","L1-9","L1-8")
             change_location(20, "T","L1-5","L1-8")
+            
+            WINDOW.blit(img.woodd,(0,0))
+            heal_group.draw(WINDOW)
             wall_group.draw(WINDOW)
             sword.draw(WINDOW)
             enemy_group.draw(WINDOW)
+            bullet_group.draw(WINDOW)
             player.draw(WINDOW)
             grass_group.draw(WINDOW)
             
@@ -791,9 +825,13 @@ def display_play():
             
             change_location(20, "L","L1-8","L1-9")
             change_location(20, "T","L1-6","L1-9")
+            
+            WINDOW.blit(img.woodd,(0,0))
+            heal_group.draw(WINDOW)
             wall_group.draw(WINDOW)
             sword.draw(WINDOW)
             enemy_group.draw(WINDOW)
+            bullet_group.draw(WINDOW)
             player.draw(WINDOW)
             grass_group.draw(WINDOW)
             
@@ -804,25 +842,34 @@ def display_play():
             
         elif active_save_info[5] == "L1-1":#---------------------------------------------------------------------------------------------------
             
+            WINDOW.blit(img.fogg,(0,0))
+            heal_group.draw(WINDOW)
             wall_group.draw(WINDOW)
             sword.draw(WINDOW)
             enemy_group.draw(WINDOW)
+            bullet_group.draw(WINDOW)
             player.draw(WINDOW)
             grass_group.draw(WINDOW)
             
         elif active_save_info[5] == "L1-2":#---------------------------------------------------------------------------------------------------
             
+            WINDOW.blit(img.fogg,(0,0))
+            heal_group.draw(WINDOW)
             wall_group.draw(WINDOW)
             sword.draw(WINDOW)
             enemy_group.draw(WINDOW)
+            bullet_group.draw(WINDOW)
             player.draw(WINDOW)
             grass_group.draw(WINDOW)
         
         elif active_save_info[5] == "L1-3":#---------------------------------------------------------------------------------------------------
             
+            WINDOW.blit(img.fogg,(0,0))
+            heal_group.draw(WINDOW)
             wall_group.draw(WINDOW)
             sword.draw(WINDOW)
             enemy_group.draw(WINDOW)
+            bullet_group.draw(WINDOW)
             player.draw(WINDOW)
             grass_group.draw(WINDOW)
         
@@ -861,8 +908,8 @@ def display_play():
                     if rise != 0 and run != 0:
                         vy = (rise/abs(rise))*math.sin(theta)*3
                     else:
-                        vy = 0
-                    bullet_group.add(Bullet(e.rect.centerx,e.rect.centery,30,30,img.heal,[vx,vy],0,2))
+                        vy = 3
+                    bullet_group.add(Bullet(e.rect.centerx,e.rect.centery,30,30,img.projectile,[vx,vy],0,2))
             
             for h in heal_group:
                 if pg.sprite.collide_mask(h,player) and player.hp < player.maxhp:
@@ -874,7 +921,6 @@ def display_play():
                 if b.hit_check([player]) == player:
                     if player.hit(b):
                         game_state = "dead"
-
         elif pause:
             pause_rec = draw_rect_alpha(WINDOW, (0, 0, 0, 190), (0, 0, WINDOW_WIDTH, WINDOW_HEIGHT))
             if menu_optn == "main":
@@ -905,11 +951,29 @@ def display_play():
             
             elif menu_optn == "settings":
                 keybindings()
+                
+def display_dead():
+    WINDOW.blit(img.you_diedd,(0,0))
+    current_font = 1
+    the_font = pg.font.Font(fonts[current_font],140)
+    game_over_title = the_font.render("You_Died", True, (255, 180, 18))
+    temp_width3 = game_over_title.get_width()
+    temp_height3 = game_over_title.get_height()
+    WINDOW.blit(game_over_title, ((WINDOW_WIDTH/2)-(temp_width3/2),300-(temp_height3/2)))
+    current_font = 2
+    the_font = pg.font.Font(fonts[current_font],70)
+    current_save_loaded = the_font.render(f"Save {current_save}", True, (255, 180, 18))
+    temp_save_w = current_save_loaded.get_width()
+    WINDOW.blit(current_save_loaded, ((125 - temp_save_w/2), 20))
+    exit_text.process(WINDOW,(255, 180, 18),(158, 84, 14),(64, 39, 8))
+    respawn_text.process(WINDOW,(255, 180, 18),(158, 84, 14),(64, 39, 8))
 
 
 while True:
     if game_state == "playing":
         display_play()
+    elif game_state == "dead":
+        display_dead() 
     elif game_state == "menu":
         display_menu()
 
