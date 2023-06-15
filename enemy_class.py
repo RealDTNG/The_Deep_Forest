@@ -70,7 +70,12 @@ class Enemy(pygame.sprite.Sprite):
                 self.shoot = True
                 self.delay = 240
             
-
+    def draw_health_bar(self, surface, position, size, color_border, color_background, color_health):
+        pygame.draw.rect(surface, color_background, (*position, *size))
+        pygame.draw.rect(surface, color_border, (*position, *size), 2)
+        innerPosHP  = (position[0]+2, position[1]+2)
+        innerSizeHP = (int((size[0]-4) * (self.hp/self.maxhp)), size[1]-4)
+        pygame.draw.rect(surface, color_health, (*innerPosHP, *innerSizeHP))
 
     def hit(self,sword):
         if not self.hlt:

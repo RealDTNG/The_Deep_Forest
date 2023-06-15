@@ -80,7 +80,6 @@ loading_text = "Loading"
 prev_location = "T1"
 img.imgs()
 wall_group = pg.sprite.Group()
-player_group = pg.sprite.Group()
 tool_group = pg.sprite.Group()
 enemy_group = pg.sprite.Group()
 grass_group = pg.sprite.Group()
@@ -206,23 +205,17 @@ def make_grass():
         
 
 def load_game():
-    global wall_group,player_group,tool_group,enemy_group,player,sword, grass_group, grass_loop, prev_location, active_save_info
+    global wall_group,tool_group,enemy_group,player,sword, grass_group, grass_loop, prev_location, active_save_info
     if active_save_info[5] == "T1":
         wall_group.empty()
-        player_group.empty()
-        tool_group.empty()
         enemy_group.empty()
         grass_group.empty()
         heal_group.empty()
         bullet_group.empty()
         if prev_location == "T2":
-            player = Player(1300,300,90,160,img.player,img.big_rock,img.player_crouching,img.player_jumping,img.player_walk,active_save_info[2],5,True,True,300)
+            player.rect.x = 1300
         else:
-            player = Player(100,300,90,160,img.player,img.big_rock,img.player_crouching,img.player_jumping,img.player_walk,active_save_info[2],5,True,True,300)
-        player_group.add(player)
-        sword = Sword(20,78,img.sword1,50,250,img.sword1_slash,1)
-        tool_group.add(sword)
-        wall_group.add(Barrier(1400,0,50,700,img.log))
+            player.rect.x,player.rect.y = 100,300
         log_left = pg.transform.rotate(img.log, 180)
         wall_group.add(Barrier(0,0,50,700,log_left))
         log_ground = pg.transform.rotate(img.log, -90)
@@ -232,16 +225,12 @@ def load_game():
         
     elif active_save_info[5] == "T2":
         wall_group.empty()
-        player_group.empty()
-        tool_group.empty()
         enemy_group.empty()
         grass_group.empty()
         heal_group.empty()
         bullet_group.empty()
-        player = Player(50,300,90,160,img.player,img.big_rock,img.player_crouching,img.player_jumping,img.player_walk,active_save_info[2],5,True,True,300)
-        player_group.add(player)
-        sword = Sword(20,78,img.sword1,50,250,img.sword1_slash,1)
-        tool_group.add(sword)
+        player.rect.x = 50
+
         log_ground = pg.transform.rotate(img.log, -90)
         wall_group.add(Barrier(0,700,1440,200,log_ground))
         wall_group.add(Barrier(250,620,44*3,34*2.5,img.big_rock))
@@ -251,19 +240,14 @@ def load_game():
     
     elif active_save_info[5] == "L1-4":
         wall_group.empty()
-        player_group.empty()
-        tool_group.empty()
         enemy_group.empty()
         grass_group.empty()
         bullet_group.empty()
         heal_group.empty()
         if prev_location == "L1-5":
-            player = Player(1300,300,90,160,img.player,img.big_rock,img.player_crouching,img.player_jumping,img.player_walk,active_save_info[2],5,True,True,300)
+            player.rect.x = 1300
         else:
-            player = Player(50,300,90,160,img.player,img.big_rock,img.player_crouching,img.player_jumping,img.player_walk,active_save_info[2],5,True,True,300)
-        player_group.add(player)
-        sword = Sword(20,78,img.sword1,50,250,img.sword1_slash,1)
-        tool_group.add(sword)
+            player.rect.x,player.rect.y = 50,300
         log_ground = pg.transform.rotate(img.log, -90)
         wall_group.add(Barrier(-10,0,10,900,img.log))
         wall_group.add(Barrier(1360,0,90,300,img.log))
@@ -274,24 +258,16 @@ def load_game():
     
     elif active_save_info[5] == "L1-5":
         wall_group.empty()
-        player_group.empty()
-        tool_group.empty()
         enemy_group.empty()
         grass_group.empty()
         bullet_group.empty()
         heal_group.empty()
         if prev_location == "L1-6":
-            player = Player(1300,300,90,160,img.player,img.big_rock,img.player_crouching,img.player_jumping,img.player_walk,active_save_info[2],5,True,True,300)
+            player.rect.x,player.rect.y = 1300,300
         elif prev_location == "L1-8":
-            player = Player(150,700,90,160,img.player,img.big_rock,img.player_crouching,img.player_jumping,img.player_walk,active_save_info[2],5,True,True,300)
-            player.movex = 3
-            player.movey = 4
+            player.rect.x,player.rect.y = 150,700
         else:
-            player = Player(50,300,90,160,img.player,img.big_rock,img.player_crouching,img.player_jumping,img.player_walk,active_save_info[2],5,True,True,300)
-        
-        player_group.add(player)
-        sword = Sword(20,78,img.sword1,50,250,img.sword1_slash,1)
-        tool_group.add(sword)
+            player.rect.x,player.rect.y = 50,300
         wall_group.add(Barrier(0,0,500,300,img.flat_log))
         wall_group.add(Barrier(0,520,1000,50,img.flat_log))
         wall_group.add(Barrier(720,250,820,50,img.flat_log))
@@ -306,16 +282,12 @@ def load_game():
         
     elif active_save_info[5] == "L1-6":
         wall_group.empty()
-        player_group.empty()
         tool_group.empty()
         enemy_group.empty()
         grass_group.empty()
         bullet_group.empty()
         heal_group.empty()
-        player = Player(50,300,90,160,img.player,img.big_rock,img.player_crouching,img.player_jumping,img.player_walk,active_save_info[2],5,True,True,300)
-        player_group.add(player)
-        sword = Sword(20,78,img.sword1,50,250,img.sword1_slash,1)
-        tool_group.add(sword)
+        player.rect.x,player.rect.y = 50,300
         wall_group.add(Barrier(0,0,300,200,img.log))
         wall_group.add(Barrier(300,0,1140,20,img.flat_log))
         wall_group.add(Barrier(0,520,750,380,img.log))
@@ -325,19 +297,14 @@ def load_game():
         
     elif active_save_info[5] == "L1-9":
         wall_group.empty()
-        player_group.empty()
-        tool_group.empty()
         enemy_group.empty()
         grass_group.empty()
         bullet_group.empty()
         heal_group.empty()
         if prev_location == "L1-6":
-            player = Player(900,50,90,160,img.player,img.big_rock,img.player_crouching,img.player_jumping,img.player_walk,active_save_info[2],5,True,True,300)
+            player.rect.x,player.rect.y = 900,50
         else:
-            player = Player(50,300,90,160,img.player,img.big_rock,img.player_crouching,img.player_jumping,img.player_walk,active_save_info[2],5,True,True,300)
-        player_group.add(player)
-        sword = Sword(20,78,img.sword1,50,250,img.sword1_slash,1)
-        tool_group.add(sword)
+            player.rect.x,player.rect.y = 50,300
         wall_group.add(Barrier(0,0,750,50,img.flat_log))
         wall_group.add(Barrier(1200,0,750,50,img.flat_log))
         wall_group.add(Barrier(0,850,1440,50,img.flat_log))
@@ -352,23 +319,16 @@ def load_game():
         
     elif active_save_info[5] == "L1-8":
         wall_group.empty()
-        player_group.empty()
-        tool_group.empty()
         enemy_group.empty()
         grass_group.empty()
         bullet_group.empty()
         heal_group.empty()
         if prev_location == "L1-9":
-            player = Player(1300,300,90,160,img.player,img.big_rock,img.player_crouching,img.player_jumping,img.player_walk,active_save_info[2],5,True,True,300)
+            player.rect.x,player.rect.y = 1300,300
         elif prev_location == "L1-5":
-            player = Player(50,100,90,160,img.player,img.big_rock,img.player_crouching,img.player_jumping,img.player_walk,active_save_info[2],5,True,True,300)
+            player.rect.x,player.rect.y = 50,100
         else:
-            player = Player(50,650,90,160,img.player,img.big_rock,img.player_crouching,img.player_jumping,img.player_walk,active_save_info[2],5,True,True,300)
-        
-        player_group.add(player)
-        sword = Sword(20,78,img.sword1,50,250,img.sword1_slash,1)
-        tool_group.add(sword)
-
+            player.rect.x,player.rect.y = 50,650
         wall_group.add(Barrier(0,850,1040,50,img.flat_log))
         wall_group.add(Barrier(1040,850,350,50,img.destructable))
         wall_group.add(Barrier(1390,600,50,300,img.log))
@@ -383,16 +343,23 @@ def load_game():
         
     elif active_save_info[5] == "L1-7":
         wall_group.empty()
-        player_group.empty()
-        tool_group.empty()
         enemy_group.empty()
         grass_group.empty()
         bullet_group.empty()
         heal_group.empty()
-        player = Player(1300,650,90,160,img.player,img.big_rock,img.player_crouching,img.player_jumping,img.player_walk,active_save_info[2],5,True,True,300)
-        player_group.add(player)
-        sword = Sword(20,78,img.sword1,50,250,img.sword1_slash,1)
-        tool_group.add(sword)
+        player.rect.x,player.rect.y = 1300,650
+    
+    elif active_save_info[5] == "L2-4":
+        wall_group.empty()
+        enemy_group.empty()
+        grass_group.empty()
+        bullet_group.empty()
+        heal_group.empty()
+        player.rect.x = 20
+        wall_group.add(Barrier(0,850,1440,50,img.flat_log))
+        enemy_group.add(Enemy(600,500,200,300,img.hehe,img.hehe,10,400,1,2,False,True))
+
+        make_grass()
         
 def respawn():
     global game_state
@@ -562,7 +529,7 @@ sprint_key_btn = Text(500,675,keybinds['SPRINT'],50,fonts[current_font],key_chan
 
 def display_menu():
     global WINDOW, game_state, menu_optn, current_save, count, load_time, loading_text, choosing_key, htp_text, wall_group, keybinds, save3_data,save1_data,save2_data
-    global active_save_info
+    global active_save_info,player,sword
     WINDOW.fill((255,255,255)) #White background
 
     pg.Surface.blit(WINDOW,img.menu_backdrop,(0,0))
@@ -607,6 +574,8 @@ def display_menu():
                         menu_optn = "main"
                         #location = save1_data[5]
                         active_save_info = save1_data.copy()
+                        player = Player(0,0,90,160,img.player,img.big_rock,img.player_crouching,img.player_jumping,img.player_walk,active_save_info[2],5,True,True,300)
+                        sword = Sword(20,78,img.sword1,50,250,img.sword1_slash,1)
                         load_game()
                     else:
                         rec1 = draw_rect_alpha(WINDOW, (161, 161, 161, 100), (temp_x-(rec1x/2), 375, rec1x, 205))
@@ -628,6 +597,8 @@ def display_menu():
                         menu_optn = "main"
                         #location = save2_data[5]
                         active_save_info = save2_data.copy()
+                        player = Player(0,0,90,160,img.player,img.big_rock,img.player_crouching,img.player_jumping,img.player_walk,active_save_info[2],5,True,True,300)
+                        sword = Sword(20,78,img.sword1,50,250,img.sword1_slash,1)
                         load_game()
                     else:
                         rec2 = draw_rect_alpha(WINDOW, (161, 161, 161, 100), (temp_x-(rec2x/2), 375, rec2x, 205))
@@ -651,6 +622,8 @@ def display_menu():
                         #location = save3_data[5]
                         active_save_info = save3_data.copy()
                         active_save_info[5] = "L1-7"
+                        player = Player(0,0,90,160,img.player,img.big_rock,img.player_crouching,img.player_jumping,img.player_walk,active_save_info[2],5,True,True,300)
+                        sword = Sword(20,78,img.sword1,50,250,img.sword1_slash,1)
                         load_game()
                     else:
                         rec3 = draw_rect_alpha(WINDOW, (161, 161, 161, 100), (temp_x-(rec3x/2), 375, rec3x, 205))
@@ -782,6 +755,7 @@ def display_play():
             
             change_location(20, "L","L1-5","L1-6")
             change_location(800, "B","L1-9","L1-6")
+            change_location(1420, "R","L2-4","L1-6")
             
             WINDOW.blit(img.woodd,(0,0))
             heal_group.draw(WINDOW)
@@ -824,7 +798,7 @@ def display_play():
             
             change_location(20, "L","L1-8","L1-9")
             change_location(20, "T","L1-6","L1-9")
-            
+
             WINDOW.blit(img.woodd,(0,0))
             heal_group.draw(WINDOW)
             wall_group.draw(WINDOW)
@@ -872,6 +846,15 @@ def display_play():
             player.draw(WINDOW)
             grass_group.draw(WINDOW)
         
+        elif active_save_info[5] == "L2-4":#---------------------------------------------------------------------------------------------------
+        
+            WINDOW.blit(img.fogg,(0,0))
+            wall_group.draw(WINDOW)
+            sword.draw(WINDOW)
+            enemy_group.draw(WINDOW)
+            bullet_group.draw(WINDOW)
+            player.draw(WINDOW)
+
         if not pause:
             if not slash_unlocking:
                 player.update(keys,keybinds,wall_group)
