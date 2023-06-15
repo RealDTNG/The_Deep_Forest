@@ -266,6 +266,8 @@ def load_game():
             player.rect.x,player.rect.y = 1300,300
         elif prev_location == "L1-8":
             player.rect.x,player.rect.y = 150,700
+        elif prev_location == "L1-2":
+            player.rect.x,player.rect.y = 1200,20
         else:
             player.rect.x,player.rect.y = 50,300
         wall_group.add(Barrier(0,0,500,300,img.flat_log))
@@ -332,7 +334,7 @@ def load_game():
         wall_group.add(Barrier(0,850,1040,50,img.flat_log))
         wall_group.add(Barrier(1040,850,350,50,img.destructable))
         wall_group.add(Barrier(1390,600,50,300,img.log))
-        wall_group.add(Barrier(0,0,50,650,img.log))
+        wall_group.add(Barrier(0,0,70,650,img.log))
         wall_group.add(Barrier(300,600,1090,50,img.flat_log))
         wall_group.add(Barrier(50,350,600,50,img.flat_log))
         wall_group.add(Barrier(850,350,200,30,img.flat_log))
@@ -340,6 +342,9 @@ def load_game():
         wall_group.add(Barrier(1150,570,30,30,img.flat_log))
         wall_group.add(Barrier(300,0,1140,50,img.flat_log))
         wall_group.add(Barrier(1390,50,50,300,img.log))
+        enemy_group.add(Enemy(700,700,100,70,img.slime,img.big_rock,2,400,1,1))
+        enemy_group.add(Enemy(900,700,140,80,img.wolf,img.big_rock,3,500,3,2))
+        enemy_group.add(Enemy(900,400,100,70,img.slime,img.big_rock,2,400,1,1))
         
     elif active_save_info[5] == "L1-7":
         wall_group.empty()
@@ -348,7 +353,44 @@ def load_game():
         bullet_group.empty()
         heal_group.empty()
         player.rect.x,player.rect.y = 1300,650
-    
+        wall_group.add(Barrier(0,850,1440,50,img.flat_log))
+        wall_group.add(Barrier(0,0,50,850,img.log))
+        wall_group.add(Barrier(50,300,380,50,img.flat_log))
+        wall_group.add(Barrier(630,300,50,550,img.log))
+        wall_group.add(Barrier(50,560,380,50,img.flat_log))
+        wall_group.add(Barrier(0,0,1440,50,img.flat_log))
+        wall_group.add(Barrier(830,590,560,50,img.flat_log))
+        wall_group.add(Barrier(1390,0,50,640,img.log))
+        wall_group.add(Barrier(680,300,510,50,img.flat_log))
+        wall_group.add(Barrier(1190,540,200,50,img.flat_log))
+
+    elif active_save_info[5] == "L1-2":
+        wall_group.empty()
+        enemy_group.empty()
+        grass_group.empty()
+        bullet_group.empty()
+        heal_group.empty()
+
+        if prev_location == "L1-5":
+            player.rect.x,player.rect.y = 1000,650
+        elif prev_location == "L1-1":
+            player.rect.x,player.rect.y = 50,650
+        else:
+            player.rect.x,player.rect.y = 800,650
+
+        #if not active_save_info[7] == 1:
+        enemy_group.add(Enemy(0,650,50,200,img.you_diedd,img.big_rock,1,0,0,0)) #destrutable wall
+        
+        wall_group.add(Barrier(0,850,900,50,img.flat_log))
+        wall_group.add(Barrier(1140,850,340,50,img.flat_log))
+        wall_group.add(Barrier(0,0,50,650,img.log))
+        wall_group.add(Barrier(300,600,1150,50,img.flat_log))
+        wall_group.add(Barrier(50,350,500,50,img.flat_log))
+        wall_group.add(Barrier(350,0,1090,50,img.flat_log))
+        wall_group.add(Barrier(750,350,300,250,img.log))
+        destructable = pg.transform.rotate(img.destructable,90)
+        wall_group.add(Barrier(500,50,50,300,destructable))
+
     elif active_save_info[5] == "L2-4":
         wall_group.empty()
         enemy_group.empty()
@@ -391,7 +433,7 @@ def play_pause():
 def slash_unlock():
     global slash_unlocking,active_save_info
     draw_rect_alpha(WINDOW,(191, 153, 29,130),((WINDOW_WIDTH/2-WINDOW_WIDTH/4),(WINDOW_HEIGHT/2-WINDOW_HEIGHT/4),(WINDOW_WIDTH/2),(WINDOW_HEIGHT/2)))
-    main_text = the_font.render("You Have Ulocked The Sword!",True,(255, 255, 255))
+    main_text = the_font.render("You Have Unlocked The Sword!",True,(255, 255, 255))
     main_text_width = main_text.get_width()
     WINDOW.blit(main_text,((WINDOW_WIDTH/2)-(main_text_width/2),(WINDOW_HEIGHT/2-WINDOW_HEIGHT/4)+30))
     sub_text = the_font.render("Press Any Key To Continue",True,(255, 255, 255))
@@ -445,6 +487,7 @@ def close_program():
 
 def change_location(bound, side, new_location, last_location):
     global active_save_info, prev_location,player, tempx_vel, tempy_vel, temp_hp, temp_stamina
+    
     tempx_vel, tempy_vel, temp_hp, temp_stamina = player.return_stats()
     active_save_info[2] = temp_hp
     if side == "R":
@@ -621,7 +664,7 @@ def display_menu():
                         menu_optn = "main"
                         #location = save3_data[5]
                         active_save_info = save3_data.copy()
-                        active_save_info[5] = "L1-7"
+                        active_save_info[5] = "L1-2"
                         player = Player(0,0,90,160,img.player,img.big_rock,img.player_crouching,img.player_jumping,img.player_walk,active_save_info[2],5,True,True,300)
                         sword = Sword(20,78,img.sword1,50,250,img.sword1_slash,1)
                         load_game()
@@ -741,6 +784,7 @@ def display_play():
             change_location(20, "L","L1-4","L1-5")
             change_location(1310, "R","L1-6","L1-5")
             change_location(800, "B","L1-8","L1-5")
+            change_location(20, "T","L1-2","L1-5")
             
             WINDOW.blit(img.woodd,(0,0))
             heal_group.draw(WINDOW)
@@ -815,7 +859,7 @@ def display_play():
             
         elif active_save_info[5] == "L1-1":#---------------------------------------------------------------------------------------------------
             
-            WINDOW.blit(img.fogg,(0,0))
+            WINDOW.blit(img.fogg,(0,0)) #tree background
             heal_group.draw(WINDOW)
             wall_group.draw(WINDOW)
             sword.draw(WINDOW)
@@ -827,6 +871,7 @@ def display_play():
         elif active_save_info[5] == "L1-2":#---------------------------------------------------------------------------------------------------
             
             WINDOW.blit(img.fogg,(0,0))
+            change_location(850, "B","L1-5","L1-2")
             heal_group.draw(WINDOW)
             wall_group.draw(WINDOW)
             sword.draw(WINDOW)
@@ -904,7 +949,7 @@ def display_play():
                     if player.hit(b):
                         game_state = "dead"
         elif pause:
-            pause_rec = draw_rect_alpha(WINDOW, (0, 0, 0, 190), (0, 0, WINDOW_WIDTH, WINDOW_HEIGHT))
+            draw_rect_alpha(WINDOW, (0, 0, 0, 190), (0, 0, WINDOW_WIDTH, WINDOW_HEIGHT))
             if menu_optn == "main":
                 current_font = 1
                 the_font = pg.font.Font(fonts[current_font],140)

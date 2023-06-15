@@ -17,6 +17,8 @@ class Sword(pygame.sprite.Sprite):
             self.img = pygame.transform.scale(self.img, (width, height))
             self.imgstab = image_stab.convert_alpha()
             self.imgstab = pygame.transform.scale(self.imgstab, (slash_width, slash_height))
+            self.fliped_img = pygame.transform.flip(self.img, True, False)
+            self.fliped_stab = pygame.transform.flip(self.imgstab, True, False)
             self.angle = 50
             self.stab = False
             self.stabtime = 0
@@ -40,19 +42,19 @@ class Sword(pygame.sprite.Sprite):
         
         mousePos = pygame.mouse.get_pos()
         if mousePos[0] > player.rect.x + player.rect.width/2: 
-            self.x = player.rect.x + player.rect.width*(12/14)
+            self.x = player.rect.x + player.rect.width*(11/12)
         else:
             self.x = player.rect.x + player.rect.width*(1/12)
         self.y = player.rect.y + player.rect.height*(8/15)
         self.origin=[self.x,self.y]
-        self.pivot = [14,6]
+        self.pivot = [10,10]
         
         self.run = self.x - mousePos[0]
         rise = self.y - mousePos[1]
         if self.run != 0:
             self.angle = -math.degrees(math.atan(rise/self.run))+90
             if (mousePos[0] < player.rect.x + player.rect.width/2 and self.run > 0) or self.run > 0:
-                self.angle += 180
+                self.angle += -180
         #print(self.angle)
         if not self.stab:
             image_rect = self.img.get_rect(topleft = (self.origin[0] - self.pivot[0] , self.origin[1] - self.pivot[1]))
@@ -65,7 +67,11 @@ class Sword(pygame.sprite.Sprite):
             offset_center_to_pivot = pygame.math.Vector2(self.origin) - image_rect.center
             rotated_offset = offset_center_to_pivot.rotate(-self.stabangle)
             rotated_image_center = (self.origin[0] - rotated_offset.x, self.origin[1] - rotated_offset.y)
-            self.image = pygame.transform.rotate(self.imgstab, self.stabangle)
+            if self.angle <= -90  and self.angle >= -270:
+                self.rect.y += -250
+                self.image = pygame.transform.rotate(self.fliped_stab, self.stabangle)
+            else:
+                self.image = pygame.transform.rotate(self.imgstab, self.stabangle)
         self.rect = self.image.get_rect(center = rotated_image_center)
         
     

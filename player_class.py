@@ -57,6 +57,7 @@ class Player(pygame.sprite.Sprite):
                 if self.movex != 0:
                     self.movex = 10*self.movex/abs(self.movex)
                     self.stamina -= 5
+                    self.walk_count += 1
         else:
             if self.stamina < self.max_stamina:
                 self.stamina += 1
@@ -100,7 +101,7 @@ class Player(pygame.sprite.Sprite):
                                         self.image = self.player
                                         self.mask  = pygame.mask.from_surface(self.image) 
                                     self.direction = "right"
-                                    if self.walk_count >= 20:
+                                    if self.walk_count >= 15:
                                         if self.walking == False:
                                             self.image = self.walk
                                             self.walking = True
@@ -114,7 +115,7 @@ class Player(pygame.sprite.Sprite):
                                         self.image = self.fliped_player
                                         self.mask  = pygame.mask.from_surface(self.image)
                                     self.direction = "left"
-                                    if self.walk_count >= 20:
+                                    if self.walk_count >= 15:
                                         if self.walking == False:
                                             self.walking = True
                                             self.image = self.fliped_walk
