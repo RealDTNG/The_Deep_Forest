@@ -374,10 +374,12 @@ def load_game():
 
         if prev_location == "L1-5":
             player.rect.y = 650
+            player.rect.x = 900
         elif prev_location == "L1-1":
             player.rect.x = 50
         else:
             player.rect.x = 800
+            player.rect.y = 650
 
         #if not active_save_info[7] == 1:
         enemy_group.add(Enemy(0,650,50,200,img.you_diedd,img.big_rock,1,0,0,0)) #destrutable wall
@@ -389,9 +391,35 @@ def load_game():
         wall_group.add(Barrier(50,350,500,50,img.flat_log))
         wall_group.add(Barrier(350,0,1090,50,img.flat_log))
         wall_group.add(Barrier(750,350,300,250,img.log))
+        wall_group.add(Barrier(1200,50,50,250,img.log))
+        wall_group.add(Barrier(1390,350,50,250,img.log))
+        wall_group.add(Barrier(1390,650,50,200,img.log))
         destructable = pg.transform.rotate(img.destructable,90)
         wall_group.add(Barrier(500,50,50,300,destructable))
 
+    elif active_save_info[5] == "L1-1":
+        wall_group.empty()
+        enemy_group.empty()
+        grass_group.empty()
+        bullet_group.empty()
+        heal_group.empty()
+
+        player.rect.x = 1310
+        player.rect.y = 650
+
+        
+        wall_group.add(Barrier(400,850,1040,50,img.flat_log))
+        wall_group.add(Barrier(0,0,1440,50,img.flat_log))
+        wall_group.add(Barrier(800,350,70,500,img.log))
+        wall_group.add(Barrier(870,600,70,250,img.log))
+        wall_group.add(Barrier(330,600,70,300,img.log))
+        wall_group.add(Barrier(280,400,50,300,img.log))
+        wall_group.add(Barrier(0,50,50,350,img.log))
+        wall_group.add(Barrier(50,350,280,50,img.flat_log))
+        wall_group.add(Barrier(750,400,50,30,img.flat_log))
+        wall_group.add(Barrier(1390,50,50,600,img.log))
+        
+        
     elif active_save_info[5] == "L2-4":
         wall_group.empty()
         enemy_group.empty()
@@ -404,7 +432,8 @@ def load_game():
         enemy_group.add(Enemy(600,400,200,300,img.hehe,img.hehe,10,1440,2,2,False,True,5))
 
         make_grass()
-        
+
+
 def respawn():
     global game_state
     game_state = "playing"
@@ -668,7 +697,7 @@ def display_menu():
                         menu_optn = "main"
                         #location = save3_data[5]
                         active_save_info = save3_data.copy()
-                        active_save_info[5] = "L1-2"
+                        active_save_info[5] = "L1-1"
                         player = Player(0,0,90,160,img.player,img.big_rock,img.player_crouching,img.player_jumping,img.player_walk,active_save_info[2],5,True,True,300)
                         sword = Sword(20,78,img.sword1,50,250,img.sword1_slash,1)
                         load_game()
@@ -858,6 +887,7 @@ def display_play():
             
         elif active_save_info[5] == "L1-1":#---------------------------------------------------------------------------------------------------
             
+            change_location(1310,"R","L1-2","L1-1")
             WINDOW.blit(img.fogg,(0,0)) #tree background
             heal_group.draw(WINDOW)
             wall_group.draw(WINDOW)
@@ -871,6 +901,8 @@ def display_play():
             
             WINDOW.blit(img.fogg,(0,0))
             change_location(850, "B","L1-5","L1-2")
+            change_location(50, "L","L1-1","L1-2")
+            change_location(1310, "R","L1-3","L1-2")
             heal_group.draw(WINDOW)
             wall_group.draw(WINDOW)
             sword.draw(WINDOW)

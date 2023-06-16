@@ -25,6 +25,7 @@ class Player(pygame.sprite.Sprite):
         self.movey = 0
         self.movex = 0
         self.direction = "left"
+        self.landed = True
         self.happend_once = False
         if double_jump_unlock:
             self.jump = 2
@@ -80,6 +81,7 @@ class Player(pygame.sprite.Sprite):
             self.movey = -22
             self.jump -= 1
             self.jump_CD = 20
+            self.landed = False
 
         self.rect.y += self.movey
         
@@ -128,6 +130,7 @@ class Player(pygame.sprite.Sprite):
                             self.movey = 0
                             self.jump=self.jumpcount
                             self.grounded = True
+                            self.landed = True
         
         
 
