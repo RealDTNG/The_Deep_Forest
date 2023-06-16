@@ -223,7 +223,7 @@ def load_game():
         wall_group.add(Barrier(0,700,1440,200,log_ground))
         
         make_grass()
-        
+
     elif active_save_info[5] == "T2":
         wall_group.empty()
         enemy_group.empty()
@@ -238,7 +238,7 @@ def load_game():
         wall_group.add(Barrier(920,650,30*3,16*3,img.rock))
         
         make_grass()
-    
+
     elif active_save_info[5] == "L1-4":
         wall_group.empty()
         enemy_group.empty()
@@ -256,7 +256,7 @@ def load_game():
         wall_group.add(Barrier(0,700,1440,200,log_ground))
         enemy_group.add(Enemy(600,500,100,70,img.slime,img.big_rock,2,400,1,1))
         make_grass()
-    
+
     elif active_save_info[5] == "L1-5":
         wall_group.empty()
         enemy_group.empty()
@@ -282,7 +282,7 @@ def load_game():
         wall_group.add(Barrier(1150,675,150,30,img.flat_log))
         enemy_group.add(Enemy(750,600,100,70,img.slime,img.big_rock,2,400,1,1))
         enemy_group.add(Enemy(850,150,100,70,img.slime,img.big_rock,2,400,1,1))
-        
+
     elif active_save_info[5] == "L1-6":
         wall_group.empty()
         tool_group.empty()
@@ -297,7 +297,7 @@ def load_game():
         wall_group.add(Barrier(1200,520,750,380,img.log))
         enemy_group.add(Enemy(1000,200,100,80,img.bat,img.big_rock,2,700,2,1,True,True))
         enemy_group.add(Enemy(600,420,100,70,img.slime,img.big_rock,2,400,1,1))
-        
+
     elif active_save_info[5] == "L1-9":
         wall_group.empty()
         enemy_group.empty()
@@ -319,7 +319,7 @@ def load_game():
         enemy_group.add(Enemy(300,700,100,70,img.slime,img.big_rock,2,400,1,1))
         enemy_group.add(Enemy(1200,700,100,70,img.slime,img.big_rock,2,400,1,1))
         enemy_group.add(Enemy(1280,700,100,70,img.slime,img.big_rock,2,400,1,1))
-        
+
     elif active_save_info[5] == "L1-8":
         wall_group.empty()
         enemy_group.empty()
@@ -346,7 +346,7 @@ def load_game():
         enemy_group.add(Enemy(700,700,100,70,img.slime,img.big_rock,2,400,1,1))
         enemy_group.add(Enemy(900,700,140,80,img.wolf,img.big_rock,3,500,3,2))
         enemy_group.add(Enemy(900,400,100,70,img.slime,img.big_rock,2,400,1,1))
-        
+
     elif active_save_info[5] == "L1-7":
         wall_group.empty()
         enemy_group.empty()
@@ -377,6 +377,9 @@ def load_game():
             player.rect.x = 900
         elif prev_location == "L1-1":
             player.rect.x = 50
+        if prev_location == "L1-3":
+            player.rect.x = 1310
+            player.rect.y = 100
         else:
             player.rect.x = 800
             player.rect.y = 650
@@ -396,6 +399,9 @@ def load_game():
         wall_group.add(Barrier(1390,650,50,200,img.log))
         destructable = pg.transform.rotate(img.destructable,90)
         wall_group.add(Barrier(500,50,50,300,destructable))
+        
+        enemy_group.add(Enemy(600,500,100,70,img.slime,img.big_rock,2,400,1,1))
+        enemy_group.add(Enemy(500,700,140,80,img.wolf,img.big_rock,3,500,3,2))
 
     elif active_save_info[5] == "L1-1":
         wall_group.empty()
@@ -418,8 +424,34 @@ def load_game():
         wall_group.add(Barrier(50,350,280,50,img.flat_log))
         wall_group.add(Barrier(750,400,50,30,img.flat_log))
         wall_group.add(Barrier(1390,50,50,600,img.log))
+
+    elif active_save_info[5] == "L1-3":
+        wall_group.empty()
+        enemy_group.empty()
+        grass_group.empty()
+        bullet_group.empty()
+        heal_group.empty()
+
+        player.rect.x = 50
+        player.rect.y = 190
         
+        wall_group.add(Barrier(0,0,1440,50,img.flat_log))
+        wall_group.add(Barrier(0,850,1440,50,img.flat_log))
+        wall_group.add(Barrier(0,350,800,50,img.flat_log))
+        wall_group.add(Barrier(800,350,50,300,img.log))
+        wall_group.add(Barrier(0,400,50,450,img.log))
+        wall_group.add(Barrier(300,600,300,250,img.log))
+        wall_group.add(Barrier(1000,50,50,300,img.log))
+        wall_group.add(Barrier(1050,300,200,50,img.flat_log))
+        wall_group.add(Barrier(850,600,70,50,img.flat_log))
+        wall_group.add(Barrier(1050,600,340,50,img.flat_log))
+        wall_group.add(Barrier(1390,50,50,800,img.log))
         
+        enemy_group.add(Enemy(500,280,100,70,img.slime,img.big_rock,2,400,1,1))
+        enemy_group.add(Enemy(400,530,100,70,img.slime,img.big_rock,2,400,1,1))
+        enemy_group.add(Enemy(700,700,140,80,img.wolf,img.big_rock,3,500,3,2))
+        enemy_group.add(Enemy(1100,700,140,80,img.wolf,img.big_rock,3,500,3,2))
+
     elif active_save_info[5] == "L2-4":
         wall_group.empty()
         enemy_group.empty()
@@ -697,7 +729,7 @@ def display_menu():
                         menu_optn = "main"
                         #location = save3_data[5]
                         active_save_info = save3_data.copy()
-                        active_save_info[5] = "L1-1"
+                        active_save_info[5] = "L1-3"
                         player = Player(0,0,90,160,img.player,img.big_rock,img.player_crouching,img.player_jumping,img.player_walk,active_save_info[2],5,True,True,300)
                         sword = Sword(20,78,img.sword1,50,250,img.sword1_slash,1)
                         load_game()
@@ -913,6 +945,7 @@ def display_play():
         
         elif active_save_info[5] == "L1-3":#---------------------------------------------------------------------------------------------------
             
+            change_location(50, "L","L1-2","L1-3")
             WINDOW.blit(img.fogg,(0,0))
             heal_group.draw(WINDOW)
             wall_group.draw(WINDOW)
