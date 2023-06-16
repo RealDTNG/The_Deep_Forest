@@ -87,6 +87,7 @@ heal_group = pg.sprite.Group()
 bullet_group = pg.sprite.Group()
 grass_loop = 680
 slash_unlocking = False
+sprint_unlocking = False
 fonts = {1:'texts\menu_main.ttf',2:'texts\menu_sec.ttf',3:'texts\extra.ttf'}
 the_font = pg.font.Font(fonts[current_font],140)
 keys = {"~":pg.K_BACKQUOTE,"1":pg.K_1,"2":pg.K_2,"3":pg.K_3,"4":pg.K_4,"5":pg.K_5,"6":pg.K_6,"7":pg.K_7,"8":pg.K_8,"9":pg.K_9,
@@ -484,6 +485,22 @@ def slash_unlock():
         slash_unlocking = False
         active_save_info[6] = 1
 
+def sprint_unlock():
+    global sprint_unlocking, active_save_info, player
+    draw_rect_alpha(WINDOW,(191, 153, 29,130),((WINDOW_WIDTH/2-WINDOW_WIDTH/4),(WINDOW_HEIGHT/2-WINDOW_HEIGHT/4),(WINDOW_WIDTH/2),(WINDOW_HEIGHT/2)))
+    main_text = the_font.render("You Have Unlocked Extra Mobility!",True,(255, 255, 255))
+    main_text_width = main_text.get_width()
+    WINDOW.blit(main_text,((WINDOW_WIDTH/2)-(main_text_width/2),(WINDOW_HEIGHT/2-WINDOW_HEIGHT/4)+30))
+    sub_text = the_font.render("Press Any Key To Continue",True,(255, 255, 255))
+    sub_text_width = sub_text.get_width()
+    WINDOW.blit(sub_text,((WINDOW_WIDTH/2)-(sub_text_width/2),(WINDOW_HEIGHT/2-WINDOW_HEIGHT/4)+380))
+    WINDOW.blit(img.power,((WINDOW_WIDTH/2)-(img.power.get_width()/2),(WINDOW_HEIGHT/2-WINDOW_HEIGHT/4)+170))
+    for event in pg.event.get(pg.KEYDOWN):
+        sprint_unlocking = False
+        player.sprint_unlock = True
+        player.jumpcount = 2
+        active_save_info[7] = 1
+
 
 def keybindings():
     global resume_text, keybinds, WINDOW, choosing_key
@@ -657,7 +674,11 @@ def display_menu():
                         menu_optn = "main"
                         #location = save1_data[5]
                         active_save_info = save1_data.copy()
-                        player = Player(0,0,90,160,img.player,img.big_rock,img.player_crouching,img.player_jumping,img.player_walk,active_save_info[2],5,True,True,300)
+                        if active_save_info[7] == 1:
+                            sprint_unlocking = True
+                        else:
+                            sprint_unlocking = False
+                        player = Player(0,0,90,160,img.player,img.big_rock,img.player_crouching,img.player_jumping,img.player_walk,active_save_info[2],5,sprint_unlocking,sprint_unlocking,300)
                         sword = Sword(20,78,img.sword1,50,250,img.sword1_slash,1)
                         load_game()
                     else:
@@ -680,7 +701,11 @@ def display_menu():
                         menu_optn = "main"
                         #location = save2_data[5]
                         active_save_info = save2_data.copy()
-                        player = Player(0,0,90,160,img.player,img.big_rock,img.player_crouching,img.player_jumping,img.player_walk,active_save_info[2],5,True,True,300)
+                        if active_save_info[7] == 1:
+                            sprint_unlocking = True
+                        else:
+                            sprint_unlocking = False
+                        player = Player(0,0,90,160,img.player,img.big_rock,img.player_crouching,img.player_jumping,img.player_walk,active_save_info[2],5,sprint_unlocking,sprint_unlocking,300)                        
                         sword = Sword(20,78,img.sword1,50,250,img.sword1_slash,1)
                         load_game()
                     else:
@@ -705,7 +730,11 @@ def display_menu():
                         #location = save3_data[5]
                         active_save_info = save3_data.copy()
                         active_save_info[5] = "L1-1"
-                        player = Player(0,0,90,160,img.player,img.big_rock,img.player_crouching,img.player_jumping,img.player_walk,active_save_info[2],5,True,True,300)
+                        if active_save_info[7] == 1:
+                            sprint_unlocking = True
+                        else:
+                            sprint_unlocking = False
+                        player = Player(0,0,90,160,img.player,img.big_rock,img.player_crouching,img.player_jumping,img.player_walk,active_save_info[2],5,sprint_unlocking,sprint_unlocking,300)                        
                         sword = Sword(20,78,img.sword1,50,250,img.sword1_slash,1)
                         load_game()
                     else:
@@ -718,17 +747,12 @@ def display_menu():
             temp_saves_width = t.get_width()
             WINDOW.blit(t, (((-20+(20*i))+(WINDOW_WIDTH/4)+(WINDOW_WIDTH/4)*i)-(temp_saves_width/2),525))
         return_text.process(WINDOW,(117, 61, 8),(158, 84, 14),(64, 39, 8))
-    
-    WINDOW.blit(pg.transform.scale(img.player,(90,160)).convert_alpha(),(50, 200))
-    WINDOW.blit(pg.transform.scale(img.player_walk,(90,160)).convert_alpha(),(120, 200))
-    WINDOW.blit(pg.transform.scale(img.player_jumping,(90,160)).convert_alpha(),(200, 200))
-    WINDOW.blit(pg.transform.scale(img.player_crouching,(90,160)).convert_alpha(),(250, 200))
 
 
 def display_play():
     global load_time, count, WINDOW, load_text, loading_text, pause, WINDOW_HEIGHT, WINDOW_WIDTH, pause_delay, game_state
     global menu_optn, save_datas, current_font, the_font, save_num, save_hp, save_time, choosing_key, htp_text, keybinds
-    global tree_sheet, grass_loop, prev_location, active_save_info, slash_unlocking,back_to_menu_text
+    global tree_sheet, grass_loop, prev_location, active_save_info, slash_unlocking,back_to_menu_text,sprint_unlocking
     WINDOW.fill((255,255,255)) #White background
     key_press = pg.key.get_pressed()
     if load_time <= 0:#CHANGE TO 300 FOR LOAD TIME
@@ -903,6 +927,15 @@ def display_play():
             bullet_group.draw(WINDOW)
             player.draw(WINDOW)
             grass_group.draw(WINDOW)
+            if active_save_info[7] == 0:
+                WINDOW.blit(img.power,(150,225))
+                if player.rect.x <= 300:
+                    power_text = the_font.render(f"Press [{keybinds['ATTACK']}]",True,(83, 148, 252))
+                    power_text_width = power_text.get_width()
+                    WINDOW.blit(power_text,(300-(power_text_width/2),250))
+                    key_input = pg.key.get_pressed()
+                    if key_input[keys[keybinds['ATTACK']]]:
+                        sprint_unlocking = True
             
         elif active_save_info[5] == "L1-2":#---------------------------------------------------------------------------------------------------
             
@@ -942,12 +975,14 @@ def display_play():
                 game_state = "win"
 
         if not pause:
-            if not slash_unlocking:
+            if not slash_unlocking and not sprint_unlocking:
                 player.update(keys,keybinds,wall_group)
                 sword.update(player)
                 player.draw_health_bar(WINDOW,(player.rect.x,player.rect.y-40),(player.rect.width,10),(player.rect.width,10),(0,0,0),(200,0,0),(0,200,0),(200,200,0))
-            else:
+            elif slash_unlocking:
                 slash_unlock()
+            else:
+                sprint_unlock()
             for e in enemy_group:
                 e.move(wall_group,player)
                 if pg.sprite.collide_mask(e,sword) and sword.stab:
