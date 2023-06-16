@@ -222,8 +222,9 @@ def load_game():
         bullet_group.empty()
         if prev_location == "T2":
             player.rect.x = 1300
+            player.rect.y = 500
         else:
-            player.rect.x,player.rect.y = 100,300
+            player.rect.x,player.rect.y = 100,500
         log_left = pg.transform.rotate(img.log, 180)
         wall_group.add(Barrier(0,0,50,700,log_left))
         log_ground = pg.transform.rotate(img.log, -90)
@@ -238,6 +239,7 @@ def load_game():
         heal_group.empty()
         bullet_group.empty()
         player.rect.x = 50
+        player.rect.y = 500
 
         log_ground = pg.transform.rotate(img.log, -90)
         wall_group.add(Barrier(0,700,1440,200,log_ground))
@@ -254,8 +256,10 @@ def load_game():
         heal_group.empty()
         if prev_location == "L1-5":
             player.rect.x = 1300
+            player.rect.y = 300
         else:
             player.rect.x = 50
+            player.rect.y = 500
         log_ground = pg.transform.rotate(img.log, -90)
         wall_group.add(Barrier(-10,0,10,900,img.log))
         wall_group.add(Barrier(1360,0,90,300,img.log))
@@ -279,6 +283,7 @@ def load_game():
             player.rect.x = 1150
         else:
             player.rect.x = 50
+            player.rect.y = 300
         wall_group.add(Barrier(0,0,500,300,img.flat_log))
         wall_group.add(Barrier(0,520,1000,50,img.flat_log))
         wall_group.add(Barrier(720,250,820,50,img.flat_log))
@@ -299,6 +304,7 @@ def load_game():
         bullet_group.empty()
         heal_group.empty()
         player.rect.x = 50
+        player.rect.y = 300
         wall_group.add(Barrier(0,0,300,200,img.log))
         wall_group.add(Barrier(300,0,1140,20,img.flat_log))
         wall_group.add(Barrier(0,520,750,380,img.log))
@@ -314,7 +320,9 @@ def load_game():
         heal_group.empty()
         if prev_location == "L1-6":
             player.rect.y = 50
+            player.rect.x = 1000
         else:
+            player.rect.y = 500
             player.rect.x = 50
         wall_group.add(Barrier(0,0,750,50,img.flat_log))
         wall_group.add(Barrier(1200,0,750,50,img.flat_log))
@@ -339,6 +347,7 @@ def load_game():
         elif prev_location == "L1-5":
             player.rect.y = 100
         else:
+            player.rect.y = 700
             player.rect.x = 50
         wall_group.add(Barrier(0,850,1040,50,img.flat_log))
         wall_group.add(Barrier(1040,850,350,50,img.destructable))
@@ -362,6 +371,7 @@ def load_game():
         bullet_group.empty()
         heal_group.empty()
         player.rect.x = 1300
+        player.rect.y = 700
         wall_group.add(Barrier(0,850,1440,50,img.flat_log))
         wall_group.add(Barrier(0,0,50,850,img.log))
         wall_group.add(Barrier(50,300,380,50,img.flat_log))
