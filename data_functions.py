@@ -27,7 +27,7 @@ def create_table(conn,table, columns):
     conn.execute(sql)
 
 
-def update_keys(conn,table,collum,new_value,current_value):
+def update(conn,table,collum,new_value,current_value):
     cur=conn.cursor()
     com = f"UPDATE {table} SET {collum} = '{new_value}' WHERE {collum} = '{current_value}'"
     try:
