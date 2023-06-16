@@ -182,7 +182,8 @@ def key_change_sprint():
     global choosing_key
     sprint_key_btn.update_text('press new binding')
     choosing_key=[True,'SPRINT',sprint_key_btn]
-    
+
+
 def make_grass():
     global grass_group, grass_loop
     while grass_loop <= 840:
@@ -202,7 +203,7 @@ def make_grass():
         grass_group.add(grass_sprite6)
         grass_loop += 40
     grass_loop = 680
-        
+
 
 def load_game():
     global wall_group,tool_group,enemy_group,player,sword, grass_group, grass_loop, prev_location, active_save_info
@@ -373,10 +374,12 @@ def load_game():
 
         if prev_location == "L1-5":
             player.rect.y = 650
+            player.rect.x = 900
         elif prev_location == "L1-1":
             player.rect.x = 50
         else:
             player.rect.x = 800
+            player.rect.y = 650
 
         #if not active_save_info[7] == 1:
         enemy_group.add(Enemy(0,650,50,200,img.you_diedd,img.big_rock,1,0,0,0)) #destrutable wall
@@ -388,9 +391,35 @@ def load_game():
         wall_group.add(Barrier(50,350,500,50,img.flat_log))
         wall_group.add(Barrier(350,0,1090,50,img.flat_log))
         wall_group.add(Barrier(750,350,300,250,img.log))
+        wall_group.add(Barrier(1200,50,50,250,img.log))
+        wall_group.add(Barrier(1390,350,50,250,img.log))
+        wall_group.add(Barrier(1390,650,50,200,img.log))
         destructable = pg.transform.rotate(img.destructable,90)
         wall_group.add(Barrier(500,50,50,300,destructable))
 
+    elif active_save_info[5] == "L1-1":
+        wall_group.empty()
+        enemy_group.empty()
+        grass_group.empty()
+        bullet_group.empty()
+        heal_group.empty()
+
+        player.rect.x = 1310
+        player.rect.y = 650
+
+        
+        wall_group.add(Barrier(400,850,1040,50,img.flat_log))
+        wall_group.add(Barrier(0,0,1440,50,img.flat_log))
+        wall_group.add(Barrier(800,350,70,500,img.log))
+        wall_group.add(Barrier(870,600,70,250,img.log))
+        wall_group.add(Barrier(330,600,70,300,img.log))
+        wall_group.add(Barrier(280,400,50,300,img.log))
+        wall_group.add(Barrier(0,50,50,350,img.log))
+        wall_group.add(Barrier(50,350,280,50,img.flat_log))
+        wall_group.add(Barrier(750,400,50,30,img.flat_log))
+        wall_group.add(Barrier(1390,50,50,600,img.log))
+        
+        
     elif active_save_info[5] == "L2-4":
         wall_group.empty()
         enemy_group.empty()
@@ -406,11 +435,13 @@ def load_game():
         enemy_group.add(Enemy(600,400,200,300,img.hehe,img.hehe,10,1440,2,2,False,True,5))
 
         make_grass()
-        
+
+
 def respawn():
     global game_state
     game_state = "playing"
     load_game()
+
 
 def return_to_main():
     global menu_optn
@@ -425,7 +456,7 @@ def draw_rect_alpha(surface, color, rect):
     shape_surf = pg.Surface(pg.Rect(rect).size, pg.SRCALPHA)
     pg.draw.rect(shape_surf, color, shape_surf.get_rect())
     surface.blit(shape_surf, rect)
-    
+
 
 def play_pause():
     global pause_delay, pause, menu_optn
@@ -436,8 +467,8 @@ def play_pause():
     else:
         pause = True
         pause_delay = 0
-        
-        
+
+
 def slash_unlock():
     global slash_unlocking,active_save_info
     draw_rect_alpha(WINDOW,(191, 153, 29,130),((WINDOW_WIDTH/2-WINDOW_WIDTH/4),(WINDOW_HEIGHT/2-WINDOW_HEIGHT/4),(WINDOW_WIDTH/2),(WINDOW_HEIGHT/2)))
@@ -452,7 +483,7 @@ def slash_unlock():
     for event in pg.event.get(pg.KEYDOWN):
         slash_unlocking = False
         active_save_info[6] = 1
-    
+
 
 def keybindings():
     global resume_text, keybinds, WINDOW, choosing_key
@@ -491,7 +522,7 @@ def keybindings():
 def close_program():
     pg.quit()
     sys.exit()
-    
+
 
 def change_location(bound, side, new_location, last_location):
     global active_save_info, prev_location,player, tempx_vel, tempy_vel, temp_hp, temp_stamina
@@ -518,6 +549,7 @@ def change_location(bound, side, new_location, last_location):
                 active_save_info[5] = new_location
                 prev_location = last_location
                 load_game()
+
 
 def save_exit():
     global active_save_info, save1_data,save2_data,save3_data, current_save, game_state
@@ -672,7 +704,7 @@ def display_menu():
                         menu_optn = "main"
                         #location = save3_data[5]
                         active_save_info = save3_data.copy()
-                        active_save_info[5] = "L1-2"
+                        active_save_info[5] = "L1-1"
                         player = Player(0,0,90,160,img.player,img.big_rock,img.player_crouching,img.player_jumping,img.player_walk,active_save_info[2],5,True,True,300)
                         sword = Sword(20,78,img.sword1,50,250,img.sword1_slash,1)
                         load_game()
@@ -860,9 +892,9 @@ def display_play():
             player.draw(WINDOW)
             grass_group.draw(WINDOW)
             
-
         elif active_save_info[5] == "L1-1":#---------------------------------------------------------------------------------------------------
             
+            change_location(1310,"R","L1-2","L1-1")
             WINDOW.blit(img.fogg,(0,0)) #tree background
             heal_group.draw(WINDOW)
             wall_group.draw(WINDOW)
@@ -876,6 +908,8 @@ def display_play():
             
             WINDOW.blit(img.fogg,(0,0))
             change_location(850, "B","L1-5","L1-2")
+            change_location(50, "L","L1-1","L1-2")
+            change_location(1310, "R","L1-3","L1-2")
             heal_group.draw(WINDOW)
             wall_group.draw(WINDOW)
             sword.draw(WINDOW)
