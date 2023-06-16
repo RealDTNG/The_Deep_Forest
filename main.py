@@ -129,13 +129,19 @@ def start():
 
 
 def save_location(save_num):
-    global save1_data,save2_data,save3_data
+    global save1_data,save2_data,save3_data, active_save_info
     if save_num == 1:
         data.update(connection,"Player_Save_Info","P_Loc",active_save_info[5],save1_data[5])
+        data.update(connection,"Player_Save_Info","Slash_Unlock",active_save_info[6],save1_data[6])
+        data.update(connection,"Player_Save_Info","Sprint_Unlock",active_save_info[7],save1_data[7])
     elif save_num == 2:
         data.update(connection,"Player_Save_Info","P_Loc",active_save_info[5],save2_data[5])
+        data.update(connection,"Player_Save_Info","Slash_Unlock",active_save_info[6],save2_data[6])
+        data.update(connection,"Player_Save_Info","Sprint_Unlock",active_save_info[7],save2_data[7])
     elif save_num == 3:
         data.update(connection,"Player_Save_Info","P_Loc",active_save_info[5],save3_data[5])
+        data.update(connection,"Player_Save_Info","Slash_Unlock",active_save_info[6],save3_data[6])
+        data.update(connection,"Player_Save_Info","Sprint_Unlock",active_save_info[7],save3_data[7])
 
 
 def how_to_play():
@@ -479,10 +485,12 @@ def return_to_main():
     global menu_optn
     menu_optn = "main"
 
+
 def return_to_menu():
     global game_state
     game_state = "menu"
     return_to_main()
+
 
 def draw_rect_alpha(surface, color, rect):
     shape_surf = pg.Surface(pg.Rect(rect).size, pg.SRCALPHA)
@@ -584,13 +592,10 @@ def change_location(bound, side, new_location, last_location):
 
 
 def save_exit():
-    global active_save_info, save1_data,save2_data,save3_data, current_save, game_state
-    done = True
-    
-    if not done:
-        save_location(int(current_save))
-    else:
-        game_state = "menu"
+    global active_save_info, save1_data,save2_data,save3_data, current_save, game_state, save_number
+
+    save_location(save_number)
+    game_state = "menu"
     
     
 #^-------------------Button Functions-------------------^
@@ -604,7 +609,7 @@ resume_text = Text((WINDOW_WIDTH/2),350,"Resume",70,fonts[current_font],play_pau
 how_to_play_text = Text((WINDOW_WIDTH/2),450,"How To Play",70,fonts[current_font],how_to_play)
 settings_text = Text((WINDOW_WIDTH/2),550,"Settings",70,fonts[current_font],settings)
 exit_text = Text((WINDOW_WIDTH/2),650,"Exit To Desktop",70,fonts[current_font],close_program)
-save_exit_text = Text((WINDOW_WIDTH/2),650,"Save And Exit",70,fonts[current_font],close_program)
+save_exit_text = Text((WINDOW_WIDTH/2),650,"Save And Exit",70,fonts[current_font],save_exit)
 return_text = Text(125,60,"Return",70,fonts[current_font],return_to_main)
 respawn_text = Text(WINDOW_WIDTH/2,500,"Respawn",70,fonts[current_font],respawn)
 back_to_menu_text = Text(WINDOW_WIDTH/2,650,"Back To Menu",70,fonts[current_font],return_to_menu)
@@ -644,7 +649,7 @@ sprint_key_btn = Text(500,675,keybinds['SPRINT'],50,fonts[current_font],key_chan
 
 def display_menu():
     global WINDOW, game_state, menu_optn, current_save, count, load_time, loading_text, choosing_key, htp_text, wall_group, keybinds, save3_data,save1_data,save2_data
-    global active_save_info,player,sword
+    global active_save_info,player,sword, save_number
     WINDOW.fill((255,255,255)) #White background
 
     pg.Surface.blit(WINDOW,img.menu_backdrop,(0,0))
@@ -684,6 +689,7 @@ def display_menu():
                     if pg.mouse.get_pressed(num_buttons=3)[0]:
                         rec1 = draw_rect_alpha(WINDOW, (161, 161, 161, 160), (temp_x-(rec1x/2), 375, rec1x, 205))
                         current_save = "1"
+                        save_number = 1
                         pg.time.delay(750)
                         game_state = "playing"
                         menu_optn = "main"
@@ -707,6 +713,7 @@ def display_menu():
                     if pg.mouse.get_pressed(num_buttons=3)[0]:
                         rec2 = draw_rect_alpha(WINDOW, (161, 161, 161, 160), (temp_x-(rec2x/2), 375, rec2x, 205))
                         current_save = "2"
+                        save_number = 2
                         pg.time.delay(750)
                         game_state = "playing"
                         menu_optn = "main"
@@ -731,12 +738,12 @@ def display_menu():
                     if pg.mouse.get_pressed(num_buttons=3)[0]:
                         rec3 = draw_rect_alpha(WINDOW, (161, 161, 161, 160), (temp_x-(rec3x/2), 375, rec3x, 205))
                         current_save = "3"
+                        save_number = 3
                         pg.time.delay(750)
                         game_state = "playing"
                         menu_optn = "main"
                         #location = save3_data[5]
                         active_save_info = save3_data.copy()
-                        active_save_info[5] = "L1-3"
                         player = Player(0,0,90,160,img.player,img.big_rock,img.player_crouching,img.player_jumping,img.player_walk,active_save_info[2],5,True,True,300)
                         sword = Sword(20,78,img.sword1,50,250,img.sword1_slash,1)
                         load_game()
@@ -1039,7 +1046,7 @@ def display_play():
                 resume_text.process(WINDOW,(117, 61, 8),(158, 84, 14),(64, 39, 8))
                 how_to_play_text.process(WINDOW,(117, 61, 8),(158, 84, 14),(64, 39, 8))
                 settings_text.process(WINDOW,(117, 61, 8),(158, 84, 14),(64, 39, 8))
-                back_to_menu_text.process(WINDOW,(117, 61, 8),(158, 84, 14),(64, 39, 8))
+                save_exit_text.process(WINDOW,(117, 61, 8),(158, 84, 14),(64, 39, 8))
             elif menu_optn == "htp":
                 temp_width2 = htp_title_text.get_width()
                 temp_height2 = htp_title_text.get_height()
