@@ -458,9 +458,12 @@ def load_game():
         grass_group.empty()
         bullet_group.empty()
         heal_group.empty()
-        player.rect.x = 20
-        wall_group.add(Barrier(150,325,300,50,img.flat_log))
+        player.rect.x,player.rect.y = 20,20
+        wall_group.add(Barrier(250,325,300,50,img.flat_log))
+        wall_group.add(Barrier(850,375,300,50,img.flat_log))
         wall_group.add(Barrier(0,700,1440,50,img.flat_log))
+        wall_group.add(Barrier(0,-500,20,1400,pg.transform.rotate(img.log,-180)))
+        wall_group.add(Barrier(1420,-500,20,1400,img.log))
         enemy_group.add(Enemy(600,400,200,300,img.hehe,img.hehe,10,1440,2,2,False,True,5))
 
         make_grass()
@@ -476,6 +479,10 @@ def return_to_main():
     global menu_optn
     menu_optn = "main"
 
+def return_to_menu():
+    global game_state
+    game_state = "menu"
+    return_to_main()
 
 def draw_rect_alpha(surface, color, rect):
     shape_surf = pg.Surface(pg.Rect(rect).size, pg.SRCALPHA)
@@ -577,16 +584,15 @@ def change_location(bound, side, new_location, last_location):
 
 
 def save_exit():
-    global active_save_info, save1_data,save2_data,save3_data, current_save
+    global active_save_info, save1_data,save2_data,save3_data, current_save, game_state
     done = True
     
     if not done:
         save_location(int(current_save))
     else:
-        pg.quit()
-        sys.exit()
-
-
+        game_state = "menu"
+    
+    
 #^-------------------Button Functions-------------------^
 
 game_text = the_font.render("The Deep Forest", True, (133, 69, 9))
@@ -601,6 +607,7 @@ exit_text = Text((WINDOW_WIDTH/2),650,"Exit To Desktop",70,fonts[current_font],c
 save_exit_text = Text((WINDOW_WIDTH/2),650,"Save And Exit",70,fonts[current_font],close_program)
 return_text = Text(125,60,"Return",70,fonts[current_font],return_to_main)
 respawn_text = Text(WINDOW_WIDTH/2,500,"Respawn",70,fonts[current_font],respawn)
+back_to_menu_text = Text(WINDOW_WIDTH/2,650,"Back To Menu",70,fonts[current_font],return_to_menu)
 
 current_font = 1
 the_font = pg.font.Font(fonts[current_font],140)
@@ -753,7 +760,7 @@ def display_menu():
 def display_play():
     global load_time, count, WINDOW, load_text, loading_text, pause, WINDOW_HEIGHT, WINDOW_WIDTH, pause_delay, game_state
     global menu_optn, save_datas, current_font, the_font, save_num, save_hp, save_time, choosing_key, htp_text, keybinds
-    global tree_sheet, grass_loop, prev_location, active_save_info, slash_unlocking
+    global tree_sheet, grass_loop, prev_location, active_save_info, slash_unlocking,back_to_menu_text
     WINDOW.fill((255,255,255)) #White background
     key_press = pg.key.get_pressed()
     if load_time <= 0:#CHANGE TO 300 FOR LOAD TIME
@@ -964,6 +971,8 @@ def display_play():
             bullet_group.draw(WINDOW)
             player.draw(WINDOW)
             grass_group.draw(WINDOW)
+            if not enemy_group:
+                game_state = "win"
 
         if not pause:
             if not slash_unlocking:
@@ -1030,7 +1039,7 @@ def display_play():
                 resume_text.process(WINDOW,(117, 61, 8),(158, 84, 14),(64, 39, 8))
                 how_to_play_text.process(WINDOW,(117, 61, 8),(158, 84, 14),(64, 39, 8))
                 settings_text.process(WINDOW,(117, 61, 8),(158, 84, 14),(64, 39, 8))
-                exit_text.process(WINDOW,(117, 61, 8),(158, 84, 14),(64, 39, 8))
+                back_to_menu_text.process(WINDOW,(117, 61, 8),(158, 84, 14),(64, 39, 8))
             elif menu_optn == "htp":
                 temp_width2 = htp_title_text.get_width()
                 temp_height2 = htp_title_text.get_height()
@@ -1060,6 +1069,30 @@ def display_dead():
     exit_text.process(WINDOW,(255, 180, 18),(158, 84, 14),(64, 39, 8))
     respawn_text.process(WINDOW,(255, 180, 18),(158, 84, 14),(64, 39, 8))
 
+def display_win():
+    WINDOW.blit(img.woodd,(0,0))
+    current_font = 1
+    the_font = pg.font.Font(fonts[current_font],140)
+    win_title = the_font.render("You Win!", True, (255, 180, 18))
+    temp_width4 = win_title.get_width()
+    temp_height4 = win_title.get_height()
+    WINDOW.blit(win_title, ((WINDOW_WIDTH/2)-(temp_width4/2),300-(temp_height4/2)))
+    
+    current_font = 2
+    the_font = pg.font.Font(fonts[current_font],40)
+
+    lore1 = the_font.render("You successfully defeated the champion of the fog!", True, (255, 180, 18))
+    lore1_w, lore1_h = lore1.get_width(),lore1.get_height()
+    WINDOW.blit(lore1, ((WINDOW_WIDTH/2)-(lore1_w/2),450-(lore1_h/2)))
+    lore2 = the_font.render("Beta complete!", True, (255, 180, 18))
+    lore2_w, lore2_h = lore2.get_width(),lore2.get_height()
+    WINDOW.blit(lore2, ((WINDOW_WIDTH/2)-(lore2_w/2),525-(lore2_h/2)))
+    lore3 = the_font.render("To be continued in the full release.", True, (255, 180, 18))
+    lore3_w, lore3_h = lore3.get_width(),lore3.get_height()
+    WINDOW.blit(lore3, ((WINDOW_WIDTH/2)-(lore3_w/2),575-(lore3_h/2)))
+
+    back_to_menu_text.process(WINDOW,(117, 61, 8),(158, 84, 14),(64, 39, 8))
+
 
 while True:
     if game_state == "playing":
@@ -1068,6 +1101,8 @@ while True:
         display_dead() 
     elif game_state == "menu":
         display_menu()
+    elif game_state == "win":
+        display_win()
 
     for event in pg.event.get():
         if event.type == pg.QUIT:
