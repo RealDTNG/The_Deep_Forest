@@ -183,7 +183,8 @@ def key_change_sprint():
     global choosing_key
     sprint_key_btn.update_text('press new binding')
     choosing_key=[True,'SPRINT',sprint_key_btn]
-    
+
+
 def make_grass():
     global grass_group, grass_loop
     while grass_loop <= 840:
@@ -203,7 +204,7 @@ def make_grass():
         grass_group.add(grass_sprite6)
         grass_loop += 40
     grass_loop = 680
-        
+
 
 def load_game():
     global wall_group,player_group,tool_group,enemy_group,player,sword, grass_group, grass_loop, prev_location, active_save_info
@@ -441,12 +442,12 @@ def load_game():
         destructable = pg.transform.rotate(img.destructable,90)
         wall_group.add(Barrier(500,50,50,300,destructable))
 
-        
-        
+
 def respawn():
     global game_state
     game_state = "playing"
     load_game()
+
 
 def return_to_main():
     global menu_optn
@@ -457,7 +458,7 @@ def draw_rect_alpha(surface, color, rect):
     shape_surf = pg.Surface(pg.Rect(rect).size, pg.SRCALPHA)
     pg.draw.rect(shape_surf, color, shape_surf.get_rect())
     surface.blit(shape_surf, rect)
-    
+
 
 def play_pause():
     global pause_delay, pause, menu_optn
@@ -468,8 +469,8 @@ def play_pause():
     else:
         pause = True
         pause_delay = 0
-        
-        
+
+
 def slash_unlock():
     global slash_unlocking,active_save_info
     draw_rect_alpha(WINDOW,(191, 153, 29,130),((WINDOW_WIDTH/2-WINDOW_WIDTH/4),(WINDOW_HEIGHT/2-WINDOW_HEIGHT/4),(WINDOW_WIDTH/2),(WINDOW_HEIGHT/2)))
@@ -484,7 +485,7 @@ def slash_unlock():
     for event in pg.event.get(pg.KEYDOWN):
         slash_unlocking = False
         active_save_info[6] = 1
-    
+
 
 def keybindings():
     global resume_text, keybinds, WINDOW, choosing_key
@@ -523,7 +524,7 @@ def keybindings():
 def close_program():
     pg.quit()
     sys.exit()
-    
+
 
 def change_location(bound, side, new_location, last_location):
     global active_save_info, prev_location,player, tempx_vel, tempy_vel, temp_hp, temp_stamina
@@ -551,6 +552,7 @@ def change_location(bound, side, new_location, last_location):
                 prev_location = last_location
                 load_game()
 
+
 def save_exit():
     global active_save_info, save1_data,save2_data,save3_data, current_save
     done = True
@@ -560,8 +562,8 @@ def save_exit():
     else:
         pg.quit()
         sys.exit()
-    
-    
+
+
 #^-------------------Button Functions-------------------^
 
 game_text = the_font.render("The Deep Forest", True, (133, 69, 9))
@@ -884,11 +886,6 @@ def display_play():
             bullet_group.draw(WINDOW)
             player.draw(WINDOW)
             grass_group.draw(WINDOW)
-            
-            
-            
-            
-            
             
         elif active_save_info[5] == "L1-1":#---------------------------------------------------------------------------------------------------
             
