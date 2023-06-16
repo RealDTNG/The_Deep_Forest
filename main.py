@@ -276,6 +276,7 @@ def load_game():
             player.rect.y = 700
         elif prev_location == "L1-2":
             player.rect.y = 20
+            player.rect.x = 1150
         else:
             player.rect.x = 50
         wall_group.add(Barrier(0,0,500,300,img.flat_log))
@@ -384,7 +385,7 @@ def load_game():
             player.rect.y = 650
         elif prev_location == "L1-5":
             player.rect.y = 650
-            player.rect.x = 900
+            player.rect.x = 800
     
         elif prev_location == "L1-3":
             player.rect.x = 1310
