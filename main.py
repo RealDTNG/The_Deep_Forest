@@ -379,20 +379,22 @@ def load_game():
         bullet_group.empty()
         heal_group.empty()
 
-        if prev_location == "L1-5":
+        if prev_location == "L1-1":
+            player.rect.x = 100
+            player.rect.y = 650
+        elif prev_location == "L1-5":
             player.rect.y = 650
             player.rect.x = 900
-        elif prev_location == "L1-1":
-            player.rect.x = 50
-        if prev_location == "L1-3":
+    
+        elif prev_location == "L1-3":
             player.rect.x = 1310
             player.rect.y = 100
         else:
             player.rect.x = 800
             player.rect.y = 650
 
-        #if not active_save_info[7] == 1:
-        enemy_group.add(Enemy(0,650,50,200,img.you_diedd,img.big_rock,1,0,0,0)) #destrutable wall
+        if not active_save_info[7] == 1:
+            enemy_group.add(Enemy(0,650,50,200,img.you_diedd,img.big_rock,1,0,0,0)) #destrutable wall
         
         wall_group.add(Barrier(0,850,900,50,img.flat_log))
         wall_group.add(Barrier(1140,850,340,50,img.flat_log))
@@ -408,7 +410,7 @@ def load_game():
         wall_group.add(Barrier(500,50,50,300,destructable))
         
         enemy_group.add(Enemy(600,500,100,70,img.slime,img.big_rock,2,400,1,1))
-        enemy_group.add(Enemy(500,700,140,80,img.wolf,img.big_rock,3,500,3,2))
+        enemy_group.add(Enemy(400,700,140,80,img.wolf,img.big_rock,3,500,3,2))
 
     elif active_save_info[5] == "L1-1":
         wall_group.empty()
