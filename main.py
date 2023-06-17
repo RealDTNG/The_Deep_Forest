@@ -119,6 +119,19 @@ def start():
     save_time = []
     save_hp = []
     save_datas = data.select_db(connection,"Player_Save_Info").fetchall()
+    sorting = True
+    while sorting:
+        correct_spots = 3
+        ps = save_datas[0]
+        for i,s in enumerate(save_datas):
+            if s[1]<ps[1]:
+                save_datas[i-1] = s
+                save_datas[i] = ps
+                correct_spots -= 1
+        if correct_spots == 3:
+            sorting = False
+                
+        
     '''              SAVE NUM         PLAY TIME           HP             MAX HP          DMG MULT         LOCATION        SLASH UNLOC     SPRINT UNLOC      DJUMP UNLOC      SHOOT UNLOC      '''
     save1_data = [save_datas[0][1],save_datas[0][2],save_datas[0][3],save_datas[0][4],save_datas[0][5],save_datas[0][6],save_datas[0][7],save_datas[0][8],save_datas[0][9],save_datas[0][10]]
     save2_data = [save_datas[1][1],save_datas[1][2],save_datas[1][3],save_datas[1][4],save_datas[1][5],save_datas[1][6],save_datas[1][7],save_datas[1][8],save_datas[1][9],save_datas[1][10]]
@@ -132,17 +145,17 @@ def start():
 def save_location(save_num):
     global save1_data,save2_data,save3_data, active_save_info
     if save_num == 1:
-        data.update(connection,"Player_Save_Info","P_Loc",active_save_info[5],save1_data[5])
-        data.update(connection,"Player_Save_Info","Slash_Unlock",active_save_info[6],save1_data[6])
-        data.update(connection,"Player_Save_Info","Sprint_Unlock",active_save_info[7],save1_data[7])
+        data.update(connection,"Player_Save_Info","P_Loc",active_save_info[5],"Save_Number",1)
+        data.update(connection,"Player_Save_Info","Slash_Unlock",active_save_info[6],"Save_Number",1)
+        data.update(connection,"Player_Save_Info","Sprint_Unlock",active_save_info[7],"Save_Number",1)
     elif save_num == 2:
-        data.update(connection,"Player_Save_Info","P_Loc",active_save_info[5],save2_data[5])
-        data.update(connection,"Player_Save_Info","Slash_Unlock",active_save_info[6],save2_data[6])
-        data.update(connection,"Player_Save_Info","Sprint_Unlock",active_save_info[7],save2_data[7])
+        data.update(connection,"Player_Save_Info","P_Loc",active_save_info[5],"Save_Number",2)
+        data.update(connection,"Player_Save_Info","Slash_Unlock",active_save_info[6],"Save_Number",2)
+        data.update(connection,"Player_Save_Info","Sprint_Unlock",active_save_info[7],"Save_Number",2)
     elif save_num == 3:
-        data.update(connection,"Player_Save_Info","P_Loc",active_save_info[5],save3_data[5])
-        data.update(connection,"Player_Save_Info","Slash_Unlock",active_save_info[6],save3_data[6])
-        data.update(connection,"Player_Save_Info","Sprint_Unlock",active_save_info[7],save3_data[7])
+        data.update(connection,"Player_Save_Info","P_Loc",active_save_info[5],"Save_Number",3)
+        data.update(connection,"Player_Save_Info","Slash_Unlock",active_save_info[6],"Save_Number",3)
+        data.update(connection,"Player_Save_Info","Sprint_Unlock",active_save_info[7],"Save_Number",3)
 
 
 def how_to_play():
@@ -213,7 +226,8 @@ def make_grass():
 
 
 def load_game():
-    global wall_group,tool_group,enemy_group,player,sword, grass_group, grass_loop, prev_location, active_save_info
+    global wall_group,tool_group,enemy_group,player,sword, grass_group, grass_loop, prev_location, active_save_info, pause
+    pause = False
     if active_save_info[5] == "T1":
         wall_group.empty()
         enemy_group.empty()
@@ -490,8 +504,9 @@ def load_game():
 
 
 def respawn():
-    global game_state
+    global game_state, player
     game_state = "playing"
+    player.hp = 2
     load_game()
 
 
@@ -571,7 +586,7 @@ def keybindings():
         for event in pg.event.get(pg.KEYDOWN):
             key_name = pg.key.name(event.key)
             if key_name.upper() in keys:
-                data.update(connection, "Keybinds", choosing_key[1], key_name.upper(), keybinds[choosing_key[1]])
+                data.update(connection, "Keybinds", choosing_key[1], key_name.upper(), choosing_key[1], keybinds[choosing_key[1]])
                 saved_keys = data.select_db(connection,"Keybinds").fetchall()
                 for id in saved_keys:
                     keybinds = {"LEFT":id[1],"RIGHT":id[2],"JUMP":id[3],"CROUCH":id[4],"SPRINT":id[6],"ATTACK":id[5]}
@@ -706,6 +721,12 @@ def display_menu():
 
     elif menu_optn == "start":
         mousePos = pg.mouse.get_pos()
+        
+        current_font = 2
+        the_font = pg.font.Font(fonts[current_font],30)
+        wipe = the_font.render("Right Click To Wipe", True, (255, 180, 18))
+        wipe_w, wipe_h = wipe.get_width(),wipe.get_height()
+        
         for i,t in enumerate(save_time):
             if i == 0:
                 temp_saves_width1 = t.get_width()
@@ -732,8 +753,13 @@ def display_menu():
                         player = Player(0,0,90,160,img.player,img.big_rock,img.player_crouching,img.player_jumping,img.player_walk,active_save_info[2],5,sprint_unlocking,sprint_unlocking,300)
                         sword = Sword(20,78,img.sword1,50,250,img.sword1_slash,1)
                         load_game()
+                    elif pg.mouse.get_pressed(num_buttons=3)[2]:
+                        data.delete_db(connection,"Player_Save_Info","Save_Number",1)
+                        data.insert_db(connection,"Player_Save_Info",["Save_Number","Play_Time", "Player_Hp","Player_Max_Hp","Player_Dmg_Mult","P_Loc","Slash_Unlock","Sprint_Unlock","Djump_Unlock","Shoot_Unlock"],[int(1),float(0.00),int(5),int(5),float(0.0),str("T1"),bool(False),bool(False),bool(False),bool(False)])
+                        start()
                     else:
                         rec1 = draw_rect_alpha(WINDOW, (161, 161, 161, 100), (temp_x-(rec1x/2), 375, rec1x, 205))
+                        WINDOW.blit(wipe, (340-(wipe_w/2),325-(wipe_h/2)))
                 WINDOW.blit(t, (temp_x-(temp_saves_width1/2),450))
         for i,t in enumerate(save_time):
             if i == 1:
@@ -760,8 +786,13 @@ def display_menu():
                         player = Player(0,0,90,160,img.player,img.big_rock,img.player_crouching,img.player_jumping,img.player_walk,active_save_info[2],5,sprint_unlocking,sprint_unlocking,300)                        
                         sword = Sword(20,78,img.sword1,50,250,img.sword1_slash,1)
                         load_game()
+                    elif pg.mouse.get_pressed(num_buttons=3)[2]:
+                        data.delete_db(connection,"Player_Save_Info","Save_Number",2)
+                        data.insert_db(connection,"Player_Save_Info",["Save_Number","Play_Time", "Player_Hp","Player_Max_Hp","Player_Dmg_Mult","P_Loc","Slash_Unlock","Sprint_Unlock","Djump_Unlock","Shoot_Unlock"],[int(2),float(0.00),int(5),int(5),float(0.0),str("T1"),bool(False),bool(False),bool(False),bool(False)])
+                        start()
                     else:
                         rec2 = draw_rect_alpha(WINDOW, (161, 161, 161, 100), (temp_x-(rec2x/2), 375, rec2x, 205))
+                        WINDOW.blit(wipe, (720-(wipe_w/2),325-(wipe_h/2)))
                 WINDOW.blit(t, (temp_x-(temp_saves_width2/2),450))
         for i,t in enumerate(save_time):
             if i == 2:
@@ -790,8 +821,13 @@ def display_menu():
                         player = Player(0,0,90,160,img.player,img.big_rock,img.player_crouching,img.player_jumping,img.player_walk,active_save_info[2],5,sprint_unlocking,sprint_unlocking,300)                        
                         sword = Sword(20,78,img.sword1,50,250,img.sword1_slash,1)
                         load_game()
+                    elif pg.mouse.get_pressed(num_buttons=3)[2]:
+                        data.delete_db(connection,"Player_Save_Info","Save_Number",3)
+                        data.insert_db(connection,"Player_Save_Info",["Save_Number","Play_Time", "Player_Hp","Player_Max_Hp","Player_Dmg_Mult","P_Loc","Slash_Unlock","Sprint_Unlock","Djump_Unlock","Shoot_Unlock"],[int(3),float(0.00),int(5),int(5),float(0.0),str("T1"),bool(False),bool(False),bool(False),bool(False)])
+                        start()
                     else:
                         rec3 = draw_rect_alpha(WINDOW, (161, 161, 161, 100), (temp_x-(rec3x/2), 375, rec3x, 205))
+                        WINDOW.blit(wipe, (1100-(wipe_w/2),325-(wipe_h/2)))
                 WINDOW.blit(t, (temp_x-(temp_saves_width3/2) ,450))
         for i,t in enumerate(save_num):
             temp_saves_width = t.get_width()
@@ -847,6 +883,8 @@ def display_play():
             
             heal_group.draw(WINDOW)
             wall_group.draw(WINDOW)
+            if active_save_info[6] == 1:
+                sword.draw(WINDOW)
             enemy_group.draw(WINDOW)
             bullet_group.draw(WINDOW)
             player.draw(WINDOW)
@@ -1078,6 +1116,8 @@ def display_play():
                 if b.hit_check([player]) == player:
                     if player.hit(b):
                         game_state = "dead"
+            time = data.select_db(connection,"Player_Save_Info").fetchall()[int(current_save)][1]
+            data.update(connection,"Player_Save_Info","Play_Time",time+0.1,"Save_Number", int(current_save))
         elif pause:
             draw_rect_alpha(WINDOW, (0, 0, 0, 190), (0, 0, WINDOW_WIDTH, WINDOW_HEIGHT))
             if menu_optn == "main":

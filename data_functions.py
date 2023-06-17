@@ -27,9 +27,9 @@ def create_table(conn,table, columns):
     conn.execute(sql)
 
 
-def update(conn,table,collum,new_value,current_value):
+def update(conn,table,collum_to_change,new_value,collum_to_check,current_value):
     cur=conn.cursor()
-    com = f"UPDATE {table} SET {collum} = '{new_value}' WHERE {collum} = '{current_value}'"
+    com = f"UPDATE {table} SET {collum_to_change} = '{new_value}' WHERE {collum_to_check} = '{current_value}'"
     try:
         cur.execute(com)
         conn.commit()
@@ -66,10 +66,10 @@ def tuple_list(list):
 
 
 def delete_db(conn,table,column,what_to_remove):
-    sql=f'''DELETE FROM {table} WHERE {column} = ?''',(what_to_remove,)
-    conn.execute(sql)
+    sql=f'''DELETE FROM {table} WHERE {column} = ?'''
+    conn.execute(sql,(what_to_remove,))
     conn.commit()  
-    
+  
     
 connection = create_connection('game_data.db')
 create_table(connection,"Player_Save_Info",["Save_Number INTEGER","Play_Time FLOAT", "Player_Hp INTEGER","Player_Max_Hp INTEGER","Player_Dmg_Mult FLOAT","P_Loc STRING","Slash_Unlock BOOLEAN","Sprint_Unlock BOOLEAN","Djump_Unlock BOOLEAN","Shoot_Unlock BOOLEAN"])   
