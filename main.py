@@ -64,7 +64,7 @@ FPS = 60
 fpsClock = pg.time.Clock()
 WINDOW_WIDTH = 1440
 WINDOW_HEIGHT = 900
-WINDOW = pg.display.set_mode((WINDOW_WIDTH,WINDOW_HEIGHT), pg.SCALED | pg.RESIZABLE | pg.NOFRAME, vsync=1)
+WINDOW = pg.display.set_mode((WINDOW_WIDTH,WINDOW_HEIGHT), pg.SCALED | pg.FULLSCREEN | pg.NOFRAME, vsync=1)
 pg.display.set_caption("The Deep Forest")
 
 #v-----------------------Variables-----------------------v
@@ -494,11 +494,11 @@ def load_game():
         heal_group.empty()
         player.rect.x,player.rect.y = 20,20
         wall_group.add(Barrier(250,325,300,50,img.flat_log))
-        wall_group.add(Barrier(850,375,300,50,img.flat_log))
+        wall_group.add(Barrier(850,330,300,50,img.flat_log))
         wall_group.add(Barrier(0,700,1440,50,img.flat_log))
         wall_group.add(Barrier(0,-500,20,1400,pg.transform.rotate(img.log,-180)))
         wall_group.add(Barrier(1420,-500,20,1400,img.log))
-        enemy_group.add(Enemy(600,400,200,300,img.hehe,img.hehe,10,1440,2,2,False,True,5))
+        enemy_group.add(Enemy(600,400,200,300,img.hehe,img.hehe,15,1440,3,3,False,True,10))
 
         make_grass()
 
@@ -657,7 +657,7 @@ exit_text = Text((WINDOW_WIDTH/2),650,"Exit To Desktop",70,fonts[current_font],c
 save_exit_text = Text((WINDOW_WIDTH/2),650,"Save And Exit",70,fonts[current_font],save_exit)
 return_text = Text(125,60,"Return",70,fonts[current_font],return_to_main)
 respawn_text = Text(WINDOW_WIDTH/2,500,"Respawn",70,fonts[current_font],respawn)
-back_to_menu_text = Text(WINDOW_WIDTH/2,650,"Back To Menu",70,fonts[current_font],return_to_menu)
+back_to_menu_text = Text(WINDOW_WIDTH/2,600,"Back To Menu",70,fonts[current_font],save_exit)
 
 current_font = 1
 the_font = pg.font.Font(fonts[current_font],140)
@@ -1162,7 +1162,7 @@ def display_dead():
     current_save_loaded = the_font.render(f"Save {current_save}", True, (255, 180, 18))
     temp_save_w = current_save_loaded.get_width()
     WINDOW.blit(current_save_loaded, ((125 - temp_save_w/2), 20))
-    exit_text.process(WINDOW,(255, 180, 18),(158, 84, 14),(64, 39, 8))
+    back_to_menu_text.process(WINDOW,(255, 180, 18),(158, 84, 14),(64, 39, 8))
     respawn_text.process(WINDOW,(255, 180, 18),(158, 84, 14),(64, 39, 8))
 
 def display_win():
@@ -1179,13 +1179,13 @@ def display_win():
 
     lore1 = the_font.render("You successfully defeated the champion of the fog!", True, (255, 180, 18))
     lore1_w, lore1_h = lore1.get_width(),lore1.get_height()
-    WINDOW.blit(lore1, ((WINDOW_WIDTH/2)-(lore1_w/2),450-(lore1_h/2)))
+    WINDOW.blit(lore1, ((WINDOW_WIDTH/2)-(lore1_w/2),430-(lore1_h/2)))
     lore2 = the_font.render("Beta complete!", True, (255, 180, 18))
     lore2_w, lore2_h = lore2.get_width(),lore2.get_height()
-    WINDOW.blit(lore2, ((WINDOW_WIDTH/2)-(lore2_w/2),525-(lore2_h/2)))
+    WINDOW.blit(lore2, ((WINDOW_WIDTH/2)-(lore2_w/2),480-(lore2_h/2)))
     lore3 = the_font.render("To be continued in the full release.", True, (255, 180, 18))
     lore3_w, lore3_h = lore3.get_width(),lore3.get_height()
-    WINDOW.blit(lore3, ((WINDOW_WIDTH/2)-(lore3_w/2),575-(lore3_h/2)))
+    WINDOW.blit(lore3, ((WINDOW_WIDTH/2)-(lore3_w/2),530-(lore3_h/2)))
 
     back_to_menu_text.process(WINDOW,(117, 61, 8),(158, 84, 14),(64, 39, 8))
 

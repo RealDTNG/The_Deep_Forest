@@ -57,7 +57,7 @@ class Player(pygame.sprite.Sprite):
             if key_input[keys[keybinds['SPRINT']]] and self.stamina > 4 and self.sprint_unlock:
                 if self.movex != 0:
                     self.movex = 10*self.movex/abs(self.movex)
-                    self.stamina -= 5
+                    self.stamina -= 3
                     self.walk_count += 1
         else:
             if self.stamina < self.max_stamina:
