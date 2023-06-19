@@ -64,7 +64,7 @@ FPS = 60
 fpsClock = pg.time.Clock()
 WINDOW_WIDTH = 1440
 WINDOW_HEIGHT = 900
-WINDOW = pg.display.set_mode((WINDOW_WIDTH,WINDOW_HEIGHT), pg.SCALED | pg.FULLSCREEN | pg.NOFRAME, vsync=1)
+WINDOW = pg.display.set_mode((WINDOW_WIDTH,WINDOW_HEIGHT), pg.SCALED | pg.RESIZABLE, vsync=1)
 pg.display.set_caption("The Deep Forest")
 
 #v-----------------------Variables-----------------------v
