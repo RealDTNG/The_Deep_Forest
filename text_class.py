@@ -12,9 +12,9 @@ class Text(pygame.sprite.Sprite):
         self.font_type = font_type
         self.onclickFunction = onclickFunction
         self.onePress = onePress
-        self.text = Text
+        self.text = str(Text)
         
-        self.buttonSurf = self.font.render(Text, True, (255, 255, 255))
+        self.buttonSurf = self.font.render(self.text, True, (255, 255, 255))
         
         self.width = self.buttonSurf.get_width()
         self.height = self.buttonSurf.get_height()
@@ -27,8 +27,8 @@ class Text(pygame.sprite.Sprite):
         self.alreadyPressed = False
     
     def update_text(self,text):
-        self.text = text
-        self.buttonSurf = self.font.render(text,True,(255,255,255))
+        self.text = str(text)
+        self.buttonSurf = self.font.render(self.text,True,(255,255,255))
 
     def process(self,window,none = (255,255,25), hover = (255,255,255), click = (255,255,255)):
         mousePos = pygame.mouse.get_pos()

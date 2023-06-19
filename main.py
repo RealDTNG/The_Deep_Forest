@@ -64,7 +64,7 @@ FPS = 60
 fpsClock = pg.time.Clock()
 WINDOW_WIDTH = 1440
 WINDOW_HEIGHT = 900
-WINDOW = pg.display.set_mode((WINDOW_WIDTH,WINDOW_HEIGHT), pg.SCALED | pg.RESIZABLE, vsync=1)
+WINDOW = pg.display.set_mode((WINDOW_WIDTH,WINDOW_HEIGHT), pg.SCALED | pg.FULLSCREEN, vsync=1)
 pg.display.set_caption("The Deep Forest")
 
 #v-----------------------Variables-----------------------v
@@ -317,8 +317,12 @@ def load_game():
         grass_group.empty()
         bullet_group.empty()
         heal_group.empty()
-        player.rect.x = 50
-        player.rect.y = 300
+        if prev_location == "L1-5":
+            player.rect.x = 50
+            player.rect.y = 300
+        else:
+            player.rect.y = 800
+            player.rect.x = 1000
         wall_group.add(Barrier(0,0,300,200,img.log))
         wall_group.add(Barrier(300,0,1140,20,img.flat_log))
         wall_group.add(Barrier(0,520,750,380,img.log))
@@ -1032,7 +1036,7 @@ def display_play():
             
             WINDOW.blit(img.fogg,(0,0))
             change_location(850, "B","L1-5","L1-2")
-            change_location(50, "L","L1-1","L1-2")
+            change_location(20, "L","L1-1","L1-2")
             change_location(1310, "R","L1-3","L1-2")
             heal_group.draw(WINDOW)
             wall_group.draw(WINDOW)
@@ -1116,8 +1120,8 @@ def display_play():
                 if b.hit_check([player]) == player:
                     if player.hit(b):
                         game_state = "dead"
-            time = data.select_db(connection,"Player_Save_Info").fetchall()[int(current_save)][1]
-            data.update(connection,"Player_Save_Info","Play_Time",time+0.1,"Save_Number", int(current_save))
+            #time = data.select_db(connection,"Player_Save_Info").fetchall()[int(current_save)][1]
+            #data.update(connection,"Player_Save_Info","Play_Time",time+0.1,"Save_Number", int(current_save))
         elif pause:
             draw_rect_alpha(WINDOW, (0, 0, 0, 190), (0, 0, WINDOW_WIDTH, WINDOW_HEIGHT))
             if menu_optn == "main":
