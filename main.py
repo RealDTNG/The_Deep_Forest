@@ -138,21 +138,24 @@ def start():
     save3_data = [save_datas[2][1],save_datas[2][2],save_datas[2][3],save_datas[2][4],save_datas[2][5],save_datas[2][6],save_datas[2][7],save_datas[2][8],save_datas[2][9],save_datas[2][10]]
     for id in save_datas:
             save_num.append(the_font.render(f"Save {id[1]}", True, (130, 93, 14)))
-            save_time.append(the_font.render(f"Play Time: [{id[2]}s]", True, (130, 93, 14)))
+            save_time.append(the_font.render(f"Play Time: [{'{0:.2f}'.format(float(id[2])/FPS)}s]", True, (130, 93, 14)))
             save_hp.append(the_font.render(f"Current Health: [{id[3]}]", True, (130, 93, 14)))
 
 
-def save_location(save_num):
+def save_data(save_num):
     global save1_data,save2_data,save3_data, active_save_info
     if save_num == 1:
+        data.update(connection,"Player_Save_Info","Play_Time",active_save_info[0],"Save_Number",1)
         data.update(connection,"Player_Save_Info","P_Loc",active_save_info[5],"Save_Number",1)
         data.update(connection,"Player_Save_Info","Slash_Unlock",active_save_info[6],"Save_Number",1)
         data.update(connection,"Player_Save_Info","Sprint_Unlock",active_save_info[7],"Save_Number",1)
     elif save_num == 2:
+        data.update(connection,"Player_Save_Info","Play_Time",active_save_info[0],"Save_Number",2)
         data.update(connection,"Player_Save_Info","P_Loc",active_save_info[5],"Save_Number",2)
         data.update(connection,"Player_Save_Info","Slash_Unlock",active_save_info[6],"Save_Number",2)
         data.update(connection,"Player_Save_Info","Sprint_Unlock",active_save_info[7],"Save_Number",2)
     elif save_num == 3:
+        data.update(connection,"Player_Save_Info","Play_Time",active_save_info[0],"Save_Number",3)
         data.update(connection,"Player_Save_Info","P_Loc",active_save_info[5],"Save_Number",3)
         data.update(connection,"Player_Save_Info","Slash_Unlock",active_save_info[6],"Save_Number",3)
         data.update(connection,"Player_Save_Info","Sprint_Unlock",active_save_info[7],"Save_Number",3)
@@ -643,7 +646,8 @@ def change_location(bound, side, new_location, last_location):
 def save_exit():
     global active_save_info, save1_data,save2_data,save3_data, current_save, game_state, save_number
 
-    save_location(save_number)
+    save_data(save_number)
+
     game_state = "menu"
     
     
@@ -846,6 +850,7 @@ def display_play():
     global load_time, count, WINDOW, load_text, loading_text, pause, WINDOW_HEIGHT, WINDOW_WIDTH, pause_delay, game_state
     global menu_optn, save_datas, current_font, the_font, save_num, save_hp, save_time, choosing_key, htp_text, keybinds
     global tree_sheet, grass_loop, prev_location, active_save_info, slash_unlocking,back_to_menu_text,sprint_unlocking
+    global FPS
     WINDOW.fill((255,255,255)) #White background
     key_press = pg.key.get_pressed()
     if load_time <= 0:#CHANGE TO 300 FOR LOAD TIME
@@ -1120,6 +1125,7 @@ def display_play():
                 if b.hit_check([player]) == player:
                     if player.hit(b):
                         game_state = "dead"
+            active_save_info[0] += 1
             #time = data.select_db(connection,"Player_Save_Info").fetchall()[int(current_save)][1]
             #data.update(connection,"Player_Save_Info","Play_Time",time+0.1,"Save_Number", int(current_save))
         elif pause:
