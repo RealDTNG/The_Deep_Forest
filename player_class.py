@@ -132,9 +132,6 @@ class Player(pygame.sprite.Sprite):
                             self.grounded = True
                             self.landed = True
         
-        
-
-        print(self.rect.x,self.rect.y)
 
         if key_input[keys[keybinds['CROUCH']]]:
             if not self.happend_once:
