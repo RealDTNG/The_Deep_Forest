@@ -46,7 +46,7 @@ T1-T2 -- L1-4 - L1-5 _ L1-6 -- L2-4 - L2-5 _ L2-6
 """
 #v---------------------Imports------------------------v
 
-import pygame as pg, data_functions as data, sys, Imgs.img as img, random, math # pip install pygame
+import pygame as pg, data_functions as data, sys, img as img, random, math # pip install pygame
 from button_class import Button
 from text_class import Text
 from wall_class import Barrier
@@ -88,7 +88,7 @@ bullet_group = pg.sprite.Group()
 grass_loop = 680
 slash_unlocking = False
 sprint_unlocking = False
-fonts = {1:'texts\menu_main.ttf',2:'texts\menu_sec.ttf',3:'texts\extra.ttf'}
+fonts = {1:'texts/menu_main.ttf',2:'texts/menu_sec.ttf',3:'texts/extra.ttf'}
 the_font = pg.font.Font(fonts[current_font],140)
 keys = {"~":pg.K_BACKQUOTE,"1":pg.K_1,"2":pg.K_2,"3":pg.K_3,"4":pg.K_4,"5":pg.K_5,"6":pg.K_6,"7":pg.K_7,"8":pg.K_8,"9":pg.K_9,
         "0":pg.K_0,"-":pg.K_MINUS,"=":pg.K_EQUALS,"BACKSPACE":pg.K_BACKSPACE,"TAB":pg.K_TAB,"Q":pg.K_q,"W":pg.K_w,"E":pg.K_e,

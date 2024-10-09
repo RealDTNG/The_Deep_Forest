@@ -9,11 +9,11 @@ def imgs():
     global tree2, tree3, tree4, sword2, sword1_slash, sword2_slash, fogg, wolf, bat, player_crouching, player_jumping, heal,player_walk, destructable
     global flat_log, projectile, woodd, you_diedd, hehe, power
     
-    tree_sheet = spritesheet('Imgs\Tree_SpriteSheet.png')
+    tree_sheet = spritesheet('Imgs/Tree_SpriteSheet.png')
     
-    toolsheet = spritesheet('Imgs\Tool_SpriteSheet.png')
+    toolsheet = spritesheet('Imgs/Tool_SpriteSheet.png')
     
-    playersheet = spritesheet('Imgs\Player_SpriteSheet.png')
+    playersheet = spritesheet('Imgs/Player_SpriteSheet.png')
     
     menu_backdrop = pg.transform.scale(pg.image.load('Imgs/menu_backdrop.png'),(1440,900))
     
